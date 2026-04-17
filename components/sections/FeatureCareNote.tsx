@@ -10,12 +10,19 @@ export default function FeatureCareNote() {
       index="0.3"
       category="CARE NOTE"
       title={["수술이 끝난 뒤의 시간을,", "환자분에게 이어드려요"]}
-      description='"원장님이 저를 계속 보고 계신 것 같아요" — 환자분이 가장 듣고 싶어 하는 말이죠. 환자분이 보낸 증상과 사진을 AI가 먼저 분류해 드리면, 원장님은 중요한 케어에만 집중하실 수 있어요.'
+      description='수술이 끝이 아닙니다. 환자분이 "잊히지 않았다"고 느끼게 해드리는 시스템이에요. 귀가 당일부터 1년 후까지, 이음이 자연스럽게 이어드려요.'
       bullets={[
-        "환자 링크로 증상·사진 직접 업로드",
-        "AI 트리아지 — 응급 · 관찰 · 정상 분류",
-        "환자별 타임라인 자동 정리",
-        "의료진 확인 기록 남김",
+        {
+          text: "사진 업로드 → AI 초안 답변 → 병원·원장 확인",
+          status: "ready",
+        },
+        { text: "통증 0~10 색상 피드백 + AI 응급도 분류", status: "ready" },
+        { text: "상담 기록 통합 타임라인", status: "ready" },
+        { text: "귀가 당일 주의사항 자동 발송", status: "pilot" },
+        {
+          text: "1개월·6개월·1년 정기 케어 메시지 자동 발송",
+          status: "pilot",
+        },
       ]}
       mock={
         <SmartMock

@@ -10,13 +10,19 @@ export default function FeatureReviewBuilder() {
       index="0.2"
       category="REVIEW BUILDER"
       title={["환자분의 만족을,", "자연스러운 후기로 이어드려요"]}
-      description="체크 10개만 하면 AI가 환자분 말투에 맞는 후기 초안을 만들어 드려요. 환자분이 검토하고 본인이 직접 올리시니까, 실장님은 확인만 하시면 돼요."
+      description="후기가 안 써지는 건 환자도 똑같아요. 1·2·3차 상담 경험과 간단한 설문만으로 후기 초안이 완성돼요. 글솜씨가 없어도 환자 본인 이야기가 그대로 담깁니다."
       bullets={[
-        "4가지 페르소나 (20대 여성 / 30대 직장인 / 40대 주부 / 30대 남성)",
-        "네이버 플레이스 · 카카오맵 · 강남언니 딥링크",
-        "QR 코드 한 번에 전달",
-        "환자 본인 계정 게시 (의료법 27조3항 준수)",
+        "상담 경험 + 설문 기반 초안 자동 생성",
+        "4개 페르소나 × 3단계 길이 선택",
+        "QR · 카카오 · 네이버 · 강남언니 딥링크",
+        "홈페이지 기록 + 중복 후기 자동 감지",
       ]}
+      footerNote={
+        <p className="text-xs leading-relaxed" style={{ color: "#9CA3AF" }}>
+          ※ 후기는 AI 초안 제안 → 환자 본인 확인 → 환자 직접 게시 흐름입니다.
+          의료법 제27조 제3항을 준수합니다.
+        </p>
+      }
       mock={
         <SmartMock
           screenshot={SCREENSHOTS.reviewBuilder}

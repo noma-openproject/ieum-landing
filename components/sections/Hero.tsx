@@ -58,8 +58,9 @@ export default function Hero() {
 
           <Reveal delay={180}>
             <p className="mt-7 text-[17px] text-slate-600 leading-[1.7] max-w-xl">
-              실장님의 상담·후기·케어를 이어주는
+              베테랑의 감각을 딸깍 한 번으로,
               <br />
+              모든 실장님께 이어드리는{" "}
               <span className="font-semibold text-slate-800">
                 AI 상담 어시스턴트, 이음
               </span>
