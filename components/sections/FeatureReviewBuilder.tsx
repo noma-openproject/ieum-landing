@@ -17,12 +17,6 @@ export default function FeatureReviewBuilder() {
         "QR · 카카오 · 네이버 · 강남언니 딥링크",
         "홈페이지 기록 + 중복 후기 자동 감지",
       ]}
-      footerNote={
-        <p className="text-xs leading-relaxed" style={{ color: "#9CA3AF" }}>
-          ※ 후기는 AI 초안 제안 → 환자 본인 확인 → 환자 직접 게시 흐름입니다.
-          의료법 제27조 제3항을 준수합니다.
-        </p>
-      }
       mock={
         <SmartMock
           screenshot={SCREENSHOTS.reviewBuilder}
