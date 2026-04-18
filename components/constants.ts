@@ -35,7 +35,7 @@ export function ctaHref(subject: string): string | null {
    PNG를 준비해 public/screenshots/ 폴더에 넣고 경로를 지정하면 자동 교체.
 */
 export const SCREENSHOTS = {
-  consultCoach: "", // 예: "/screenshots/consult-coach.png"
-  reviewBuilder: "", // 예: "/screenshots/review-builder.png"
-  careNote: "", // 예: "/screenshots/care-note.png"
+  consultCoach: "/screenshots/consult-coach.png",
+  reviewBuilder: "/screenshots/review-builder.png",
+  careNote: "/screenshots/care-note.png",
 } as const;
