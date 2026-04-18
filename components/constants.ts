@@ -1,0 +1,41 @@
+/* =========================================================
+   이음 (ieum) — 공통 상수 · 연락 설정 · CTA href 해석
+   ========================================================= */
+
+export const BRAND_BLUE = "#1E6FD9";
+export const BRAND_BLUE_DARK = "#1558B5";
+export const BRAND_BLUE_FAINT = "#E8F1FC";
+
+/* -------- 연락 채널 설정 --------
+   실제 운영 시 이 객체만 교체하면 전체 CTA가 업데이트됨.
+   모든 값이 비어있으면 CTA 버튼이 자동으로 숨겨짐.
+
+   우선순위: demoFormUrl > kakaoChannelUrl > email
+   - demoFormUrl: Tally / Typeform / Google Form 등 외부 폼 링크 (권장)
+   - kakaoChannelUrl: 카카오톡 채널 1:1 채팅 URL
+   - email: 지정 시 mailto: 링크 생성
+*/
+export const CONTACT = {
+  demoFormUrl: "", // 외부 폼 생기면 최우선
+  kakaoChannelUrl: "", // 카카오톡 채널 URL
+  email: "idforshots@gmail.com", // 기본 연락처
+  showBrochureButton: false, // 상품 소개서 PDF 준비되면 true
+} as const;
+
+export function ctaHref(subject: string): string | null {
+  if (CONTACT.demoFormUrl) return CONTACT.demoFormUrl;
+  if (CONTACT.kakaoChannelUrl) return CONTACT.kakaoChannelUrl;
+  if (CONTACT.email)
+    return `mailto:${CONTACT.email}?subject=${encodeURIComponent(subject)}`;
+  return null;
+}
+
+/* -------- 실제 앱 스크린샷 (선택) --------
+   값이 비어있으면 HTML 목업(MockConsultCoach 등)이 그대로 표시됨.
+   PNG를 준비해 public/screenshots/ 폴더에 넣고 경로를 지정하면 자동 교체.
+*/
+export const SCREENSHOTS = {
+  consultCoach: "", // 예: "/screenshots/consult-coach.png"
+  reviewBuilder: "", // 예: "/screenshots/review-builder.png"
+  careNote: "", // 예: "/screenshots/care-note.png"
+} as const;
