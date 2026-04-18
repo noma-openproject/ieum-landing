@@ -2,7 +2,7 @@ import React from "react";
 import type { LucideIcon } from "lucide-react";
 import { Building2, TrendingUp, Link2 } from "lucide-react";
 import Reveal from "../primitives/Reveal";
-import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
+import { BRAND_BLUE, BRAND_BLUE_DARK, BRAND_BLUE_FAINT } from "../constants";
 
 type AudienceCard = {
   icon: LucideIcon;
@@ -81,6 +81,20 @@ export default function Audience() {
             </div>
           </Reveal>
         ))}
+      </div>
+
+      <div className="max-w-3xl mx-auto px-6 mt-14 md:mt-16 text-center">
+        <Reveal delay={300}>
+          <p
+            className="text-sm md:text-base leading-[1.8]"
+            style={{ color: "#6B7280" }}
+          >
+            <strong style={{ color: BRAND_BLUE_DARK }}>누구든</strong>
+            {" — 소극적이든 적극적이든, 경력 10년이든 첫날이든."}
+            <br />
+            {"상담 실력의 편차를 기술로 이어드려요."}
+          </p>
+        </Reveal>
       </div>
     </section>
   );
