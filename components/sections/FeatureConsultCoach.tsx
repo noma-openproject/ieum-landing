@@ -23,6 +23,14 @@ type ConsultTab = {
   checklist: { text: string; status: TabStatus }[];
 };
 
+// Phase 1 재시도: 1/2/3차 탭별 실제 제품 스크린샷 매핑.
+// activeTab === stage{N} 일 때 해당 PNG 노출. 매칭 실패 시 기존 consult-coach.png fallback.
+const STAGE_IMAGES: Record<string, string> = {
+  stage1: "/screenshots/consult-coach-stage1.png",
+  stage2: "/screenshots/consult-coach-stage2.png",
+  stage3: "/screenshots/consult-coach-stage3.png",
+};
+
 const CONSULT_TABS: ConsultTab[] = [
   {
     id: "stage1",
@@ -171,9 +179,9 @@ export default function FeatureConsultCoach() {
         <div className="lg:col-span-6 lg:order-2">
           <Reveal delay={100}>
             <SmartMock
-              screenshot={SCREENSHOTS.consultCoach}
+              screenshot={STAGE_IMAGES[activeTab] ?? SCREENSHOTS.consultCoach}
               fallback={<MockConsultCoach />}
-              alt="이음 상담 코치 화면"
+              alt={`이음 상담 코치 ${current.label} 화면`}
             />
           </Reveal>
         </div>
