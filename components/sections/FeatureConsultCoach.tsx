@@ -45,7 +45,7 @@ const CONSULT_TABS: ConsultTab[] = [
     heading: ["1차 데이터 그대로,", "현장 상담으로 이어드려요"],
     body: "1차에서 파악한 환자 정보가 2차 화면에 그대로 떠요. 환자가 원하는 모습과 실제 얼굴을 나란히 보며 설명하면, 만족도는 올라가고 불만은 줄어듭니다.",
     checklist: [
-      { text: "1차 needProfile·전사 자동 연결", status: "ready" },
+      { text: "1차 상담에서 파악한 환자 정보 자동 연결", status: "ready" },
       {
         text: "연예인 기대 사진 vs 실제 환자 사진 동시 비교",
         status: "ready",
