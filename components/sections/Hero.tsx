@@ -57,7 +57,7 @@ export default function Hero() {
 
           <Reveal delay={180}>
             <p className="mt-7 text-[17px] text-slate-600 leading-[1.7] max-w-xl">
-              베테랑의 감각을 모든 실장님 손에 이어드려서,
+              베테랑 실장님이 떠나도, 그 감각은 병원에 남아요.
               <br />
               환자분이 다시 찾아오는 병원, 친구에게 소개하는 병원으로.
             </p>

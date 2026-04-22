@@ -32,9 +32,7 @@ export default function ProblemIntro() {
         </Reveal>
         <Reveal delay={100}>
           <p className="mt-5 text-slate-500 text-base leading-[1.7]">
-            매달 반복되는데, 매달 해결은 안 되는 세 장면.
-            <br />
-            실장이 바뀌어도, 환자가 바뀌어도 똑같이 돌아오는.
+            계속 반복되지만, 해결되지 않는 고민들.
           </p>
         </Reveal>
       </div>
