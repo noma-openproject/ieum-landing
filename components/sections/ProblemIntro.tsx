@@ -73,14 +73,14 @@ export default function ProblemIntro() {
           <p className="text-[17px] text-slate-700 leading-[1.8]">
             광고로 환자분을 모셔올 수는 있어요.
             <br />
-            하지만 그 환자분이{" "}
+            하지만{" "}
             <span className="font-semibold">
-              친구에게 우리 병원을 소개하실지는
+              환자분이 계속 찾아오실 이유까지
             </span>
-            , 광고로는 안 돼요.
+            , 광고가 만들어주진 않아요.
             <br />
             <span style={{ color: BRAND_BLUE }} className="font-semibold">
-              이음은 그 한 장면을 실장님 곁에서 같이 만들어드려요.
+              이음은 그 이유를, 우리 병원 안에서 만들어드려요.
             </span>
           </p>
         </Reveal>

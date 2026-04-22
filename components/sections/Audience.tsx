@@ -2,7 +2,7 @@ import React from "react";
 import type { LucideIcon } from "lucide-react";
 import { Building2, TrendingUp, Link2 } from "lucide-react";
 import Reveal from "../primitives/Reveal";
-import { BRAND_BLUE, BRAND_BLUE_DARK, BRAND_BLUE_FAINT } from "../constants";
+import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
 
 type AudienceCard = {
   icon: LucideIcon;
@@ -21,7 +21,7 @@ const AUDIENCE_CARDS: AudienceCard[] = [
   {
     icon: TrendingUp,
     label: "환자분 만족도는 높은데 후기는 안 쌓이는 병원",
-    quote: "잘 치료해드렸는데 온라인에서는 안 보여요",
+    quote: "잘 시술해드렸는데 온라인에서는 안 보여요",
     body: "환자분이 친구에게 소개하고 싶은 이야기를, 후기로 옮겨드려요.",
   },
   {
@@ -89,10 +89,10 @@ export default function Audience() {
             className="text-sm md:text-base leading-[1.8]"
             style={{ color: "#6B7280" }}
           >
-            <strong style={{ color: BRAND_BLUE_DARK }}>누구든</strong>
-            {" — 소극적이든 적극적이든, 경력 10년이든 첫날이든."}
+            {"누구를 뽑아도, 누가 그만둬도,"}
             <br />
-            {"상담 실력의 편차를 기술로 메워드려요."}
+            <strong style={{ color: BRAND_BLUE }}>병원의 상담 품질</strong>
+            {"은 흔들리지 않아요."}
           </p>
         </Reveal>
       </div>

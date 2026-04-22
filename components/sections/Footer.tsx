@@ -12,7 +12,7 @@ export default function Footer() {
             <Logo />
           </div>
           <p className="mt-3 text-sm text-slate-500">
-            실장님의 상담·후기·케어를 이어드려요
+            환자분의 상담부터 후기·케어까지, 병원의 모든 순간을 이어드려요.
           </p>
           <p className="mt-6 text-xs text-slate-400">Noma OpenProject</p>
         </div>

@@ -31,11 +31,13 @@ export default function FinalCTA() {
       <div className="relative max-w-4xl mx-auto px-6 text-center">
         <Reveal>
           <h2 className="font-display text-3xl sm:text-[42px] leading-[1.2] tracking-[-0.02em] font-extrabold text-slate-900">
-            실장님의 실력이,
+            실장이 바뀌어도,
             <br />
             <span style={{ color: BRAND_BLUE }}>
-              병원의 자산으로 이어져요
+              환자분 경험은 바뀌지 않는 병원으로
             </span>
+            <br />
+            만들어드릴게요
           </h2>
         </Reveal>
         <Reveal delay={100}>
