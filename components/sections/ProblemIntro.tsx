@@ -11,11 +11,11 @@ const PAIN_CARDS: PainCard[] = [
   },
   {
     title: "광고비는 또 나가는 달",
-    quote: "치료는 잘 해드렸는데, 왜 우리 병원 후기는 늘 부족할까요?",
+    quote: "수술·시술은 잘 됐는데, 왜 우리 병원 후기는 안 쌓일까요?",
   },
   {
     title: "주말 밤, 환자분의 전화",
-    quote: "수술은 잘 끝났는데, 퇴근 후 불안한 전화는 누가 받죠?",
+    quote: "수술·시술은 잘 됐는데, 퇴근 후 불안한 전화는 누가 받죠?",
   },
 ];
 
@@ -77,7 +77,7 @@ export default function ProblemIntro() {
             <span className="font-semibold">
               친구에게 우리 병원을 소개하실지는
             </span>
-            , 광고가 해주지 않아요.
+            , 광고로는 안 돼요.
             <br />
             <span style={{ color: BRAND_BLUE }} className="font-semibold">
               이음은 그 한 장면을 실장님 곁에서 같이 만들어드려요.
