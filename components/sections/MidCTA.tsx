@@ -40,7 +40,7 @@ export default function MidCTA() {
             <h3 className="font-display text-2xl lg:text-[28px] tracking-[-0.02em] font-bold text-white leading-snug">
               원장님의 고민,
               <br />
-              10분이면 이음에서 어떻게 풀리는지 보여드릴게요
+              이음에서 어떻게 풀리는지 보여드릴게요
             </h3>
           </div>
           <div className="relative z-10">
@@ -49,7 +49,7 @@ export default function MidCTA() {
               className="inline-flex items-center gap-2 bg-white px-5 py-3 rounded-lg text-sm font-medium tracking-tight hover:bg-slate-50 transition whitespace-nowrap"
               style={{ color: BRAND_BLUE }}
             >
-              10분 데모 신청하기
+              데모 신청하기
               <ArrowRight className="w-4 h-4" />
             </a>
           </div>

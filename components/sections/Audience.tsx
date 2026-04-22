@@ -16,19 +16,19 @@ const AUDIENCE_CARDS: AudienceCard[] = [
     icon: Building2,
     label: "실장님 이직이 잦은 병원",
     quote: "이번 달도 새 실장 교육 중이에요",
-    body: "신입과 베테랑을 이어드려요.",
+    body: "신입과 베테랑을 같은 출발선에 세워드려요.",
   },
   {
     icon: TrendingUp,
-    label: "환자분 후기 마케팅이 어려운 병원",
-    quote: "바쁘게 나가시는 분들 붙잡기가 참 민망해요",
-    body: "환자의 만족과 후기를 이어드려요.",
+    label: "환자분 만족도는 높은데 후기는 안 쌓이는 병원",
+    quote: "잘 치료해드렸는데 온라인에서는 안 보여요",
+    body: "환자분이 친구에게 소개하고 싶은 이야기를, 후기로 옮겨드려요.",
   },
   {
     icon: Link2,
     label: "지점이 여러 개인 네트워크 병원",
     quote: "지점마다 상담 품질이 다 달라요",
-    body: "지점과 지점을 같은 기준으로 이어드려요.",
+    body: "지점마다 다르던 상담 품질을 같은 기준 위에 맞춰드려요.",
   },
 ];
 
@@ -92,7 +92,7 @@ export default function Audience() {
             <strong style={{ color: BRAND_BLUE_DARK }}>누구든</strong>
             {" — 소극적이든 적극적이든, 경력 10년이든 첫날이든."}
             <br />
-            {"상담 실력의 편차를 기술로 이어드려요."}
+            {"상담 실력의 편차를 기술로 메워드려요."}
           </p>
         </Reveal>
       </div>

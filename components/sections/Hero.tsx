@@ -43,24 +43,29 @@ export default function Hero() {
                 className="w-1.5 h-1.5 rounded-full"
                 style={{ backgroundColor: BRAND_BLUE }}
               />
-              파일럿 파트너 모집 중
+              신규 병원 모집 중
             </div>
           </Reveal>
 
           <Reveal delay={80}>
             <h1 className="font-display text-[40px] sm:text-5xl lg:text-[56px] leading-[1.15] tracking-[-0.03em] font-extrabold text-slate-900">
-              잘하는 실장님의 하루를,
+              베테랑 실장님의 하루를,
               <br />
-              모든 실장님의 하루로{" "}
-              <span style={{ color: BRAND_BLUE }}>이어드릴게요</span>
+              모든 실장님의 하루로
+              <br />
+              <span style={{ color: BRAND_BLUE }}>자연스럽게 이어드려요</span>
             </h1>
           </Reveal>
 
           <Reveal delay={180}>
             <p className="mt-7 text-[17px] text-slate-600 leading-[1.7] max-w-xl">
-              베테랑의 감각을 딸깍 한 번으로,
+              15년차의 질문, 15년차의 손끝 감각.
               <br />
-              모든 실장님께 이어드리는{" "}
+              오늘 첫 출근한 실장님 손에도 그대로 들려드려요.
+              <br />
+              환자분이 다시 찾아오는 병원, 친구에게 소개하는 병원으로요.
+            </p>
+            <p className="mt-4 text-[17px] leading-[1.7] max-w-xl">
               <span className="font-semibold text-slate-800">
                 AI 상담 어시스턴트, 이음
               </span>

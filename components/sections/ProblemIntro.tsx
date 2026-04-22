@@ -7,17 +7,15 @@ type PainCard = { title: string; quote: string; note?: string };
 const PAIN_CARDS: PainCard[] = [
   {
     title: "실장님이 또 그만둔 날",
-    quote: "기껏 일 다 가르쳐 놨더니 또 퇴사네요. 내일 당장 상담은 누가 하죠?",
+    quote: "기껏 가르쳐 놨더니 또 퇴사네요. 내일 당장 상담은 누가 하죠?",
   },
   {
-    title: "환자분께 후기 요청을 미룬 일주일",
-    quote:
-      "결제하고 바쁘게 나가시는 분 붙잡고 후기 써달라 매달리기 눈치 보여요…",
+    title: "광고비는 또 나가는 달",
+    quote: "치료는 잘 해드렸는데, 왜 우리 병원 후기는 늘 부족할까요?",
   },
   {
-    title: "수술 7일째, 환자분의 전화",
-    quote:
-      "병원 문 닫았는데 수술 부위가 부어올라요. 원장님, 이거 부작용 아닌가요?",
+    title: "주말 밤, 환자분의 전화",
+    quote: "수술은 잘 끝났는데, 퇴근 후 불안한 전화는 누가 받죠?",
   },
 ];
 
@@ -33,8 +31,10 @@ export default function ProblemIntro() {
           </h2>
         </Reveal>
         <Reveal delay={100}>
-          <p className="mt-5 text-slate-500 text-base">
-            실장님도 환자도 피곤한 세 순간.
+          <p className="mt-5 text-slate-500 text-base leading-[1.7]">
+            매달 반복되는데, 매달 해결은 안 되는 세 장면.
+            <br />
+            실장이 바뀌어도, 환자가 바뀌어도 똑같이 돌아오는.
           </p>
         </Reveal>
       </div>
@@ -71,13 +71,16 @@ export default function ProblemIntro() {
       <div className="max-w-3xl mx-auto px-6 mt-16 text-center">
         <Reveal>
           <p className="text-[17px] text-slate-700 leading-[1.8]">
-            환자 전환은 광고비가 아니라,
-            <br className="md:hidden" />{" "}
-            <span className="font-semibold">실장님의 실력에서 결정돼요.</span>
+            광고로 환자분을 모셔올 수는 있어요.
             <br />
-            이음은 그 실력을{" "}
+            하지만 그 환자분이{" "}
+            <span className="font-semibold">
+              친구에게 우리 병원을 소개하실지는
+            </span>
+            , 광고가 해주지 않아요.
+            <br />
             <span style={{ color: BRAND_BLUE }} className="font-semibold">
-              병원의 자산으로 이어드릴게요.
+              이음은 그 한 장면을 실장님 곁에서 같이 만들어드려요.
             </span>
           </p>
         </Reveal>

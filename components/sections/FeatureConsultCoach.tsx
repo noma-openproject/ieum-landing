@@ -1,202 +1,167 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Check } from "lucide-react";
 import Reveal from "../primitives/Reveal";
 import SectionLabel from "../primitives/SectionLabel";
 import SmartMock from "../primitives/SmartMock";
 import MockConsultCoach from "../mocks/MockConsultCoach";
-import {
-  BRAND_BLUE,
-  BRAND_BLUE_DARK,
-  BRAND_BLUE_FAINT,
-  SCREENSHOTS,
-} from "../constants";
+import { BRAND_BLUE, BRAND_BLUE_FAINT, SCREENSHOTS } from "../constants";
 
-type TabStatus = "ready" | "pilot";
+type Orientation = "text-left" | "text-right";
 
-type ConsultTab = {
-  id: string;
-  label: string;
-  heading: string[];
+type ConsultStage = {
+  key: string;
+  caption: string;
+  heading: string;
   body: string;
-  checklist: { text: string; status: TabStatus }[];
+  checklist: string[];
+  image: string;
+  orientation: Orientation;
 };
 
-// Phase 1 재시도: 1/2/3차 탭별 실제 제품 스크린샷 매핑.
-// activeTab === stage{N} 일 때 해당 PNG 노출. 매칭 실패 시 기존 consult-coach.png fallback.
 const STAGE_IMAGES: Record<string, string> = {
   stage1: "/screenshots/consult-coach-stage1.png",
   stage2: "/screenshots/consult-coach-stage2.png",
   stage3: "/screenshots/consult-coach-stage3.png",
 };
 
-const CONSULT_TABS: ConsultTab[] = [
+const CONSULT_STAGES: ConsultStage[] = [
   {
-    id: "stage1",
-    label: "1차 · 온라인 상담",
-    heading: [
-      "통화와 문의를 디지털로 정리해",
-      "환자만을 위한 준비를 이어드려요",
-    ],
-    body: "콜 녹취와 예약 문의를 AI가 듣고 정리해, 실장님 손에는 그 환자만을 위한 상담 준비가 이미 들려 있어요.",
+    key: "stage1",
+    caption: "1차 · 온라인 상담 / 전화·카톡",
+    heading:
+      "전화 한 통이 끝나면, 그 환자분만을 위한 상담 준비가 끝나 있어요",
+    body: "AI가 통화와 카톡을 듣고 정리해요. 실장님은 환자 이름만 누르면 바로 상담을 시작할 수 있어요. 처음 만나는 환자분인데도, 오래 봐온 분처럼 자연스럽게 이야기가 이어집니다.",
     checklist: [
-      { text: "통화 녹음 업로드 또는 실시간 녹음 전사", status: "ready" },
-      { text: "방문 목적·걱정·예산 자동 정리", status: "ready" },
-      { text: "환자별 맞춤 질문 10개 자동 생성", status: "ready" },
-      { text: "콜센터 통화 패턴 분석", status: "pilot" },
+      "환자분별 맞춤 질문 10개 자동 생성",
+      "통화 녹음 업로드 또는 실시간 전사",
+      "방문 목적·걱정·예산 자동 정리",
+      "콜센터 통화 패턴 분석 (베타 운영 중)",
     ],
+    image: STAGE_IMAGES.stage1,
+    orientation: "text-left",
   },
   {
-    id: "stage2",
-    label: "2차 · 오프라인 현장",
-    heading: ["1차 데이터 그대로,", "현장 상담으로 이어드려요"],
-    body: "1차에서 파악한 환자 정보가 2차 화면에 그대로 떠요. 환자가 원하는 모습과 실제 얼굴을 나란히 보며 설명하면, 만족도는 올라가고 불만은 줄어듭니다.",
+    key: "stage2",
+    caption: "2차 · 오프라인 현장 / 내원 당일",
+    heading:
+      "환자분이 의자에 앉기 전에, 실장님 손에는 그분의 이야기가 들려 있어요",
+    body: `1차 상담에서 나눈 모든 이야기가 2차로 그대로 이어져요. 환자분이 어제 무엇을 걱정했고, 무엇을 듣고 싶어하셨는지 — 다시 묻지 않아도 돼요.
+
+"내 이야기를 기억해주는 병원이네." — 환자분의 그 한마디는, 여기서 시작돼요.`,
     checklist: [
-      { text: "1차 상담에서 파악한 환자 정보 자동 연결", status: "ready" },
-      {
-        text: "연예인 기대 사진 vs 실제 환자 사진 동시 비교",
-        status: "ready",
-      },
-      { text: "오버랩 캔버스 (투명도·회전·캡처)", status: "ready" },
-      { text: "현장 녹음 자동 분석", status: "ready" },
+      "1차 상담 내용 자동 인계",
+      "환자분별 핵심 고민 카드",
+      "되는말·안되는말 가이드 (병원 자체 룰북 반영)",
     ],
+    image: STAGE_IMAGES.stage2,
+    orientation: "text-right",
   },
   {
-    id: "stage3",
-    label: "3차 · 원장님 상담",
-    heading: ["원장님의 전문성,", "환자에게 닿게 이어드려요"],
-    body: "원장님의 지식을 대체하지 않습니다. 닿게 도와드릴 뿐이에요. 1·2차에서 파악한 환자 걱정·예산·기대에 맞춰 마케팅 용어와 의학 근거가 균형 잡힌 스크립트를 준비해드려요.",
+    key: "stage3",
+    caption: "3차 · 원장님 상담 / 진료실",
+    heading:
+      "원장님이 들어가시기 전에, 이 환자분의 모든 이야기가 한 화면에",
+    body: `전화부터 내원까지의 모든 대화·기록·걱정·예산이 한 화면으로 정리돼요. 원장님은 차트 대신, 환자분 얼굴을 더 오래 마주볼 수 있어요.
+
+환자분이 가장 안심하시는 순간은, "이 원장님이 나를 알고 계시는구나" 싶을 때예요.`,
     checklist: [
-      { text: "1차 + 2차 데이터 통합 스크립트 자동 생성", status: "ready" },
-      {
-        text: "실제 대사 + 환자 반응 + 물리 액션 5개 섹션",
-        status: "ready",
-      },
-      { text: "연예인 유도 질문 자동 삽입", status: "ready" },
-      { text: "인라인 이미지 갤러리 + 오버랩 캔버스", status: "ready" },
+      "원장님 전용 진료 스크립트 자동 생성 (1·2차 대화 기반)",
+      "추천 사진/케이스 자동 첨부",
+      "환자분 통합 타임라인 (상담·후기·케어 한 화면)",
     ],
+    image: STAGE_IMAGES.stage3,
+    orientation: "text-left",
   },
 ];
 
-export default function FeatureConsultCoach() {
-  const [activeTab, setActiveTab] = useState<string>(CONSULT_TABS[0].id);
-  const current =
-    CONSULT_TABS.find((t) => t.id === activeTab) ?? CONSULT_TABS[0];
+function StageBlock({ stage }: { stage: ConsultStage }) {
+  const textCol =
+    stage.orientation === "text-left" ? "lg:order-1" : "lg:order-2";
+  const mockCol =
+    stage.orientation === "text-left" ? "lg:order-2" : "lg:order-1";
 
   return (
-    <section className="py-20 lg:py-28 border-t border-slate-100">
-      <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-12 gap-14 items-center">
-        <div className="lg:col-span-6 lg:order-1">
-          <Reveal>
-            <SectionLabel index="0.1">CONSULT COACH</SectionLabel>
-          </Reveal>
-
-          {/* 탭 버튼 */}
-          <Reveal delay={40}>
-            <div
-              role="tablist"
-              aria-label="상담 단계"
-              className="flex gap-2 mb-7 overflow-x-auto whitespace-nowrap"
+    <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+      <div className={`lg:col-span-6 ${textCol}`}>
+        <Reveal>
+          <div
+            className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold mb-5"
+            style={{
+              backgroundColor: BRAND_BLUE_FAINT,
+              color: BRAND_BLUE,
+            }}
+          >
+            {stage.caption}
+          </div>
+        </Reveal>
+        <Reveal delay={80}>
+          <h3 className="font-display text-2xl lg:text-[32px] leading-[1.3] tracking-[-0.02em] font-extrabold text-slate-900">
+            {stage.heading}
+          </h3>
+        </Reveal>
+        <Reveal delay={160}>
+          {stage.body.split("\n\n").map((para, i) => (
+            <p
+              key={i}
+              className={`text-[15.5px] text-slate-600 leading-[1.8] ${
+                i === 0 ? "mt-5" : "mt-4"
+              }`}
             >
-              {CONSULT_TABS.map((tab) => {
-                const isActive = tab.id === activeTab;
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={isActive}
-                    onClick={() => setActiveTab(tab.id)}
-                    className="px-4 py-2.5 rounded-full text-sm font-medium tracking-tight transition flex-shrink-0"
-                    style={
-                      isActive
-                        ? { backgroundColor: BRAND_BLUE, color: "#FFFFFF" }
-                        : {
-                            backgroundColor: BRAND_BLUE_FAINT,
-                            color: BRAND_BLUE_DARK,
-                          }
-                    }
-                  >
-                    {tab.label}
-                  </button>
-                );
-              })}
-            </div>
-          </Reveal>
-
-          {/* Heading */}
-          <Reveal delay={80}>
-            <h2 className="font-display text-3xl lg:text-[40px] leading-[1.2] tracking-[-0.02em] font-extrabold text-slate-900">
-              {current.heading.map((line, i) => (
-                <span key={i}>
-                  {line}
-                  {i < current.heading.length - 1 && <br />}
-                </span>
-              ))}
-            </h2>
-          </Reveal>
-
-          {/* Body */}
-          <Reveal delay={160}>
-            <p className="mt-6 text-[15.5px] text-slate-600 leading-[1.8]">
-              {current.body}
+              {para}
             </p>
-          </Reveal>
-
-          {/* Checklist */}
-          <Reveal delay={240}>
-            <ul className="mt-8 space-y-3">
-              {current.checklist.map((item) => (
-                <li key={item.text} className="flex items-start gap-3">
-                  <span
-                    className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
-                    style={{ backgroundColor: BRAND_BLUE_FAINT }}
-                  >
-                    <Check
-                      className="w-3 h-3"
-                      strokeWidth={3}
-                      style={{ color: BRAND_BLUE }}
-                    />
-                  </span>
-                  <span className="text-[14.5px] text-slate-700 leading-relaxed">
-                    {item.text}
-                    {item.status === "pilot" && (
-                      <span
-                        className="ml-2 text-xs italic"
-                        style={{ color: "#6B7280" }}
-                      >
-                        · 파일럿 협력 병원과 함께 개발 중
-                      </span>
-                    )}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </div>
-
-        <div className="lg:col-span-6 lg:order-2">
-          <Reveal delay={100}>
-            <SmartMock
-              screenshot={STAGE_IMAGES[activeTab] ?? SCREENSHOTS.consultCoach}
-              fallback={<MockConsultCoach />}
-              alt={`이음 상담 코치 ${current.label} 화면`}
-            />
-          </Reveal>
-        </div>
+          ))}
+        </Reveal>
+        <Reveal delay={240}>
+          <ul className="mt-7 space-y-3">
+            {stage.checklist.map((item) => (
+              <li key={item} className="flex items-start gap-3">
+                <span
+                  className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{ backgroundColor: BRAND_BLUE_FAINT }}
+                >
+                  <Check
+                    className="w-3 h-3"
+                    strokeWidth={3}
+                    style={{ color: BRAND_BLUE }}
+                  />
+                </span>
+                <span className="text-[14.5px] text-slate-700 leading-relaxed">
+                  {item}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
       </div>
 
-      {/* 탭 공통 하단 문구 */}
-      <div className="max-w-6xl mx-auto px-6 mt-10 lg:mt-14 text-center">
-        <Reveal delay={320}>
-          <p className="text-sm leading-[1.8]" style={{ color: "#6B7280" }}>
-            <strong style={{ color: BRAND_BLUE_DARK }}>누구든</strong>
-            {" — 소극적이든 적극적이든, 경력 10년이든 첫날이든."}
-            <br />
-            {"전환율을 올리는 데 필요한 준비는 이음이 이어드려요."}
-          </p>
+      <div className={`lg:col-span-6 ${mockCol}`}>
+        <Reveal delay={100}>
+          <SmartMock
+            screenshot={stage.image ?? SCREENSHOTS.consultCoach}
+            fallback={<MockConsultCoach />}
+            alt={`이음 상담 코치 ${stage.caption} 화면`}
+          />
         </Reveal>
+      </div>
+    </div>
+  );
+}
+
+export default function FeatureConsultCoach() {
+  return (
+    <section className="py-20 lg:py-28 border-t border-slate-100">
+      <div className="max-w-6xl mx-auto px-6">
+        <Reveal>
+          <SectionLabel index="0.1">CONSULT COACH</SectionLabel>
+        </Reveal>
+
+        <div className="space-y-20 lg:space-y-28 mt-12">
+          {CONSULT_STAGES.map((stage) => (
+            <StageBlock key={stage.key} stage={stage} />
+          ))}
+        </div>
       </div>
     </section>
   );

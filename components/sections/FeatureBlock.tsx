@@ -53,9 +53,16 @@ export default function FeatureBlock({
             </h2>
           </Reveal>
           <Reveal delay={160}>
-            <p className="mt-6 text-[15.5px] text-slate-600 leading-[1.8]">
-              {description}
-            </p>
+            {description.split("\n\n").map((para, i) => (
+              <p
+                key={i}
+                className={`text-[15.5px] text-slate-600 leading-[1.8] ${
+                  i === 0 ? "mt-6" : "mt-4"
+                }`}
+              >
+                {para}
+              </p>
+            ))}
           </Reveal>
           <Reveal delay={240}>
             <ul className="mt-8 space-y-3">
@@ -81,7 +88,7 @@ export default function FeatureBlock({
                           className="ml-2 text-xs italic"
                           style={{ color: "#6B7280" }}
                         >
-                          · 파일럿 협력 병원과 함께 개발 중
+                          · 초기 도입 병원과 함께 개발 중
                         </span>
                       )}
                     </span>

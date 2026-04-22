@@ -42,7 +42,7 @@ export default function FinalCTA() {
           <p className="mt-5 text-slate-600 text-[15px]">
             {CONTACT.showBrochureButton
               ? "상품 소개서와 데모를 준비해 드릴게요."
-              : "10분 데모로 바로 보여드릴게요."}
+              : "바로 보여드릴게요."}
           </p>
         </Reveal>
         <Reveal delay={180}>
