@@ -1,22 +1,15 @@
 import React from "react";
-import { Sparkles, MessageCircle } from "lucide-react";
-import { BRAND_BLUE, CONTACT, ctaHref } from "../constants";
+import { MessageCircle } from "lucide-react";
+import { CONTACT, ctaHref } from "../constants";
+import { Logo } from "../Logo";
 
 export default function Footer() {
   return (
     <footer className="bg-white border-t border-slate-100">
       <div className="max-w-6xl mx-auto px-6 py-14 grid md:grid-cols-12 gap-10">
         <div className="md:col-span-5">
-          <div className="flex items-center gap-2">
-            <span
-              className="w-7 h-7 rounded-lg flex items-center justify-center"
-              style={{ backgroundColor: BRAND_BLUE }}
-            >
-              <Sparkles className="w-4 h-4 text-white" />
-            </span>
-            <span className="font-display text-base font-bold tracking-tight text-slate-900">
-              이음
-            </span>
+          <div className="flex items-center">
+            <Logo />
           </div>
           <p className="mt-3 text-sm text-slate-500">
             실장님의 상담·후기·케어를 이어드려요

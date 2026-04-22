@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { PrimaryButton } from "../primitives/Button";
-import { BRAND_BLUE, ctaHref } from "../constants";
+import { ctaHref } from "../constants";
+import { Logo } from "../Logo";
 
 export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
@@ -12,16 +13,8 @@ export default function Nav() {
   return (
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-slate-100">
       <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-2">
-          <span
-            className="w-7 h-7 rounded-lg flex items-center justify-center"
-            style={{ backgroundColor: BRAND_BLUE }}
-          >
-            <Sparkles className="w-4 h-4 text-white" />
-          </span>
-          <span className="font-display text-base font-bold tracking-tight text-slate-900">
-            이음
-          </span>
+        <a href="#" className="flex items-center">
+          <Logo priority />
         </a>
 
         <nav className="hidden md:flex items-center gap-7 text-sm text-slate-600">
