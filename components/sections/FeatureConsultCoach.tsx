@@ -10,12 +10,17 @@ import { BRAND_BLUE, BRAND_BLUE_FAINT, SCREENSHOTS } from "../constants";
 
 type Orientation = "text-left" | "text-right";
 
+type ChecklistItem = {
+  text: string;
+  status?: "beta";
+};
+
 type ConsultStage = {
   key: string;
   caption: string;
   heading: string;
   body: string;
-  checklist: string[];
+  checklist: ChecklistItem[];
   image: string;
   orientation: Orientation;
 };
@@ -30,14 +35,13 @@ const CONSULT_STAGES: ConsultStage[] = [
   {
     key: "stage1",
     caption: "1차 · 온라인 상담 / 전화·카톡",
-    heading:
-      "전화 한 통이면, 그 환자분만의 상담 준비가 끝나요",
+    heading: "전화 한 통이면, 그 환자분만의 상담 준비가 끝나요",
     body: "AI가 통화와 카톡을 듣고 정리해요. 실장님은 환자 이름만 누르면 바로 상담을 시작할 수 있어요. 처음 만나는 환자분인데도, 오래 봐온 분처럼 자연스럽게 이야기가 이어집니다.",
     checklist: [
-      "환자분별 맞춤 질문 10개 자동 생성",
-      "통화 녹음 업로드 또는 실시간 전사",
-      "방문 목적·걱정·예산 자동 정리",
-      "콜센터 통화 패턴 분석 (베타 운영 중)",
+      { text: "환자분별 맞춤 질문 10개 자동 생성" },
+      { text: "통화 녹음 업로드 또는 실시간 전사" },
+      { text: "방문 목적·걱정·예산 자동 정리" },
+      { text: "콜센터 통화 패턴 분석", status: "beta" },
     ],
     image: STAGE_IMAGES.stage1,
     orientation: "text-left",
@@ -51,9 +55,9 @@ const CONSULT_STAGES: ConsultStage[] = [
 
 "내 이야기를 기억해주는 병원이네." — 환자분의 이 한마디는, 2차 상담에서 시작돼요.`,
     checklist: [
-      "1차 상담 내용 자동 인계",
-      "환자분별 핵심 고민 카드",
-      "되는말·안되는말 가이드 (병원 자체 룰북 반영)",
+      { text: "1차 상담 내용 자동 인계" },
+      { text: "환자분별 핵심 고민 카드" },
+      { text: "되는말·안되는말 가이드 (병원 자체 룰북 반영)" },
     ],
     image: STAGE_IMAGES.stage2,
     orientation: "text-right",
@@ -61,15 +65,14 @@ const CONSULT_STAGES: ConsultStage[] = [
   {
     key: "stage3",
     caption: "3차 · 원장님 상담 / 진료실",
-    heading:
-      "원장님이 들어가시기 전에, 환자분의 모든 이야기가 한 화면에",
+    heading: "원장님이 들어가시기 전에, 환자분의 모든 이야기가 한 화면에",
     body: `전화부터 내원까지의 모든 대화·기록·걱정·예산이 한 화면으로 정리돼요. 원장님은 차트 대신, 환자분 얼굴을 더 오래 마주볼 수 있어요.
 
 환자분이 가장 안심하시는 순간은, "원장님이 나를 알고 있구나" 싶을 때예요.`,
     checklist: [
-      "원장님 전용 진료 스크립트 자동 생성 (1·2차 대화 기반)",
-      "추천 사진/케이스 자동 첨부",
-      "환자분 통합 타임라인 (상담·후기·케어 한 화면)",
+      { text: "원장님 전용 진료 스크립트 자동 생성 (1·2차 대화 기반)" },
+      { text: "추천 사진/케이스 자동 첨부" },
+      { text: "환자분 통합 타임라인 (상담·후기·케어 한 화면)" },
     ],
     image: STAGE_IMAGES.stage3,
     orientation: "text-left",
@@ -116,7 +119,7 @@ function StageBlock({ stage }: { stage: ConsultStage }) {
         <Reveal delay={240}>
           <ul className="mt-7 space-y-3">
             {stage.checklist.map((item) => (
-              <li key={item} className="flex items-start gap-3">
+              <li key={item.text} className="flex items-start gap-3">
                 <span
                   className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
                   style={{ backgroundColor: BRAND_BLUE_FAINT }}
@@ -128,7 +131,15 @@ function StageBlock({ stage }: { stage: ConsultStage }) {
                   />
                 </span>
                 <span className="text-[14.5px] text-slate-700 leading-relaxed">
-                  {item}
+                  {item.text}
+                  {item.status === "beta" && (
+                    <span
+                      className="ml-2 text-xs italic"
+                      style={{ color: "#6B7280" }}
+                    >
+                      · 베타 운영 중
+                    </span>
+                  )}
                 </span>
               </li>
             ))}
