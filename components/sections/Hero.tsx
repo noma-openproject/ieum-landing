@@ -49,21 +49,17 @@ export default function Hero() {
 
           <Reveal delay={80}>
             <h1 className="font-display text-[40px] sm:text-5xl lg:text-[56px] leading-[1.15] tracking-[-0.03em] font-extrabold text-slate-900">
-              베테랑 실장님의 하루를,
+              실장이 바뀌어도
               <br />
-              모든 실장님의 하루로
-              <br />
-              <span style={{ color: BRAND_BLUE }}>자연스럽게 이어드려요</span>
+              <span style={{ color: BRAND_BLUE }}>흔들리지 않는 병원으로</span>
             </h1>
           </Reveal>
 
           <Reveal delay={180}>
             <p className="mt-7 text-[17px] text-slate-600 leading-[1.7] max-w-xl">
-              15년차의 질문, 15년차의 손끝 감각.
+              베테랑의 감각을 모든 실장님 손에 이어드려서,
               <br />
-              오늘 첫 출근한 실장님 손에도 그대로 들려드려요.
-              <br />
-              환자분이 다시 찾아오는 병원, 친구에게 소개하는 병원으로요.
+              환자분이 다시 찾아오는 병원, 친구에게 소개하는 병원으로.
             </p>
             <p className="mt-4 text-[17px] leading-[1.7] max-w-xl">
               <span className="font-semibold text-slate-800">
