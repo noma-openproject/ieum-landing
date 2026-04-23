@@ -15,7 +15,7 @@ const AUDIENCE_CARDS: AudienceCard[] = [
   {
     icon: Building2,
     label: "실장님 이직이 잦은 병원",
-    quote: "이번 달도 새 실장 교육 중이에요",
+    quote: "이번 달도 새 실장님 교육 중이에요",
     body: "신입과 베테랑을 같은 출발선에 세워드려요.",
   },
   {

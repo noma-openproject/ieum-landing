@@ -11,7 +11,7 @@ const PAIN_CARDS: PainCard[] = [
   },
   {
     title: "광고비는 또 나가는 달",
-    quote: "수술·시술은 잘 됐는데, 왜 우리 병원 후기는 안 쌓일까요?",
+    quote: "환자분들도 많고, 다들 만족한다고 하시는데\n왜 아무도 후기를 쓰지 않으실까요?",
   },
   {
     title: "주말 밤, 환자분의 전화",
@@ -51,7 +51,7 @@ export default function ProblemIntro() {
                 {p.title}
               </h3>
               <blockquote
-                className="mt-4 pl-4 text-[15px] text-slate-700 leading-[1.7] italic"
+                className="mt-4 pl-4 text-[15px] text-slate-700 leading-[1.7] italic whitespace-pre-line"
                 style={{ borderLeft: `3px solid ${BRAND_BLUE_FAINT}` }}
               >
                 “{p.quote}”

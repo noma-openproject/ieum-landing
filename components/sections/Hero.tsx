@@ -49,7 +49,7 @@ export default function Hero() {
 
           <Reveal delay={80}>
             <h1 className="font-display text-[40px] sm:text-5xl lg:text-[56px] leading-[1.15] tracking-[-0.03em] font-extrabold text-slate-900">
-              실장이 바뀌어도
+              실장님이 바뀌어도
               <br />
               <span style={{ color: BRAND_BLUE }}>흔들리지 않는 병원으로</span>
             </h1>

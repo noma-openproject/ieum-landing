@@ -31,7 +31,7 @@ export default function FinalCTA() {
       <div className="relative max-w-4xl mx-auto px-6 text-center">
         <Reveal>
           <h2 className="font-display text-3xl sm:text-[42px] leading-[1.2] tracking-[-0.02em] font-extrabold text-slate-900">
-            실장이 바뀌어도,
+            실장님이 바뀌어도,
             <br />
             <span style={{ color: BRAND_BLUE }}>
               환자분 경험은 바뀌지 않는 병원으로

@@ -18,7 +18,7 @@ export default function PilotBanner() {
                 지금은 초기 도입 병원을 모집하고 있어요.
               </p>
               <p className="mt-1 text-[14px] text-slate-500">
-                실장 1~2명 규모의 병원부터 함께 시작해요.
+                실장님 1~2명 규모의 병원부터 함께 시작해요.
               </p>
             </div>
             <SecondaryButton

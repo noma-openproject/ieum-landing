@@ -20,7 +20,7 @@ export default function FeatureCareNote() {
         },
         { text: "통증 0~10 색상 피드백 + AI 응급도 분류", status: "ready" },
         { text: "상담·후기·케어 통합 타임라인", status: "ready" },
-        { text: "환자분이 직접 사진 올리는 공개 링크", status: "ready" },
+        { text: "환자분이 직접 사진 올리시는 공개 링크", status: "ready" },
         { text: "귀가 당일 주의사항 자동 발송", status: "pilot" },
         {
           text: "1·6·12개월 정기 케어 메시지 자동 발송",
