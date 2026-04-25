@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import Reveal from "../primitives/Reveal";
 import { PrimaryButton, SecondaryButton } from "../primitives/Button";
 import { BRAND_BLUE, CONTACT, ctaHref } from "../constants";
+import { COPY } from "@/lib/copy";
 
 export default function FinalCTA() {
   return (
@@ -31,37 +32,37 @@ export default function FinalCTA() {
       <div className="relative max-w-4xl mx-auto px-6 text-center">
         <Reveal>
           <h2 className="font-display text-3xl sm:text-[42px] leading-[1.2] tracking-[-0.02em] font-extrabold text-slate-900">
-            실장님이 바뀌어도,
+            {COPY.finalCta.headline.line1}
             <br />
             <span style={{ color: BRAND_BLUE }}>
-              환자분 경험은 바뀌지 않는 병원으로
+              {COPY.finalCta.headline.line2Highlight}
             </span>
             <br />
-            만들어드릴게요
+            {COPY.finalCta.headline.line3}
           </h2>
         </Reveal>
         <Reveal delay={100}>
           <p className="mt-5 text-slate-600 text-[15px]">
             {CONTACT.showBrochureButton
-              ? "상품 소개서와 데모를 준비해 드릴게요."
-              : "바로 보여드릴게요."}
+              ? COPY.finalCta.subBrochure
+              : COPY.finalCta.subDefault}
           </p>
         </Reveal>
         <Reveal delay={180}>
           <div className="mt-10 flex flex-wrap gap-3 justify-center">
             {CONTACT.showBrochureButton ? (
               <>
-                <PrimaryButton href={ctaHref("이음 상품 소개서 요청")}>
-                  상품 소개서 받아보기
+                <PrimaryButton href={ctaHref(COPY.ctaSubject.brochure)}>
+                  {COPY.finalCta.ctaBrochure}
                   <ArrowRight className="w-4 h-4" />
                 </PrimaryButton>
-                <SecondaryButton href={ctaHref("이음 데모 신청")}>
-                  데모 신청하기
+                <SecondaryButton href={ctaHref(COPY.ctaSubject.demo)}>
+                  {COPY.finalCta.ctaPrimary}
                 </SecondaryButton>
               </>
             ) : (
-              <PrimaryButton href={ctaHref("이음 데모 신청")}>
-                데모 신청하기
+              <PrimaryButton href={ctaHref(COPY.ctaSubject.demo)}>
+                {COPY.finalCta.ctaPrimary}
                 <ArrowRight className="w-4 h-4" />
               </PrimaryButton>
             )}

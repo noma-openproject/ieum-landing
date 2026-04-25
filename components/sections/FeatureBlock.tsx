@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import Reveal from "../primitives/Reveal";
 import SectionLabel from "../primitives/SectionLabel";
 import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
+import { COPY } from "@/lib/copy";
 
 type Orientation = "text-left" | "text-right";
 
@@ -88,7 +89,7 @@ export default function FeatureBlock({
                           className="ml-2 text-xs italic"
                           style={{ color: "#6B7280" }}
                         >
-                          · 초기 도입 병원과 함께 개발 중
+                          · {COPY.shared.pilotBadge}
                         </span>
                       )}
                     </span>

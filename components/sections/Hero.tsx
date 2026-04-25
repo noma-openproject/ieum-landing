@@ -11,6 +11,7 @@ import {
   ctaHref,
   SCREENSHOTS,
 } from "../constants";
+import { COPY } from "@/lib/copy";
 
 export default function Hero() {
   return (
@@ -43,27 +44,32 @@ export default function Hero() {
                 className="w-1.5 h-1.5 rounded-full"
                 style={{ backgroundColor: BRAND_BLUE }}
               />
-              신규 병원 모집 중
+              {COPY.hero.badge}
             </div>
           </Reveal>
 
           <Reveal delay={80}>
             <h1 className="font-display text-[40px] sm:text-5xl lg:text-[56px] leading-[1.15] tracking-[-0.03em] font-extrabold text-slate-900">
-              실장님이 바뀌어도
-              <br />
-              <span style={{ color: BRAND_BLUE }}>흔들리지 않는 병원으로</span>
+              {COPY.hero.h1Lines.map((line, i) => (
+                <React.Fragment key={i}>
+                  {i === COPY.hero.h1HighlightLineIndex ? (
+                    <span style={{ color: BRAND_BLUE }}>{line}</span>
+                  ) : (
+                    line
+                  )}
+                  {i < COPY.hero.h1Lines.length - 1 && <br />}
+                </React.Fragment>
+              ))}
             </h1>
           </Reveal>
 
           <Reveal delay={180}>
-            <p className="mt-7 text-[17px] text-slate-600 leading-[1.7] max-w-xl">
-              베테랑 실장님이 떠나도, 그 감각은 병원에 남아요.
-              <br />
-              환자분이 다시 찾아오는 병원, 친구에게 소개하는 병원으로.
+            <p className="mt-7 text-[17px] text-slate-600 leading-[1.7] max-w-xl whitespace-pre-line">
+              {COPY.hero.sub}
             </p>
             <p className="mt-4 text-[17px] leading-[1.7] max-w-xl">
               <span className="font-semibold text-slate-800">
-                AI 상담 어시스턴트, 이음
+                {COPY.hero.productName}
               </span>
             </p>
           </Reveal>
@@ -72,17 +78,17 @@ export default function Hero() {
             <div className="mt-9 flex flex-wrap gap-3">
               {CONTACT.showBrochureButton ? (
                 <>
-                  <PrimaryButton href={ctaHref("이음 상품 소개서 요청")}>
-                    상품 소개서 받아보기
+                  <PrimaryButton href={ctaHref(COPY.ctaSubject.brochure)}>
+                    {COPY.hero.ctaSecondary}
                     <ArrowRight className="w-4 h-4" />
                   </PrimaryButton>
-                  <SecondaryButton href={ctaHref("이음 데모 신청")}>
-                    데모 신청하기
+                  <SecondaryButton href={ctaHref(COPY.ctaSubject.demo)}>
+                    {COPY.hero.ctaPrimary}
                   </SecondaryButton>
                 </>
               ) : (
-                <PrimaryButton href={ctaHref("이음 데모 신청")}>
-                  데모 신청하기
+                <PrimaryButton href={ctaHref(COPY.ctaSubject.demo)}>
+                  {COPY.hero.ctaPrimary}
                   <ArrowRight className="w-4 h-4" />
                 </PrimaryButton>
               )}
@@ -103,7 +109,7 @@ export default function Hero() {
               <SmartMock
                 screenshot={SCREENSHOTS.consultCoach}
                 fallback={<MockConsultCoach />}
-                alt="이음 상담 코치 화면"
+                alt={COPY.hero.mockAlt}
               />
             </div>
           </Reveal>

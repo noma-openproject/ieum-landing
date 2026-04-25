@@ -2,8 +2,10 @@ import React from "react";
 import { MessageCircle } from "lucide-react";
 import { CONTACT, ctaHref } from "../constants";
 import { Logo } from "../Logo";
+import { COPY } from "@/lib/copy";
 
 export default function Footer() {
+  const generalInquiryHref = ctaHref(COPY.ctaSubject.generalInquiry);
   return (
     <footer className="bg-white border-t border-slate-100">
       <div className="max-w-6xl mx-auto px-6 py-14 grid md:grid-cols-12 gap-10">
@@ -12,56 +14,45 @@ export default function Footer() {
             <Logo />
           </div>
           <p className="mt-3 text-sm text-slate-500">
-            환자분의 상담부터 후기·케어까지, 병원의 모든 순간을 이어드려요.
+            {COPY.footer.description}
           </p>
-          <p className="mt-6 text-xs text-slate-400">Noma OpenProject</p>
+          <p className="mt-6 text-xs text-slate-400">{COPY.footer.org}</p>
         </div>
 
         <div className="md:col-span-4">
           <div className="text-xs font-semibold text-slate-500 tracking-wider mb-3">
-            PRODUCT
+            {COPY.footer.productMenuLabel}
           </div>
           <ul className="space-y-2 text-sm text-slate-600">
-            <li>
-              <a href="#features" className="hover:text-slate-900">
-                기능
-              </a>
-            </li>
-            <li>
-              <a href="#audience" className="hover:text-slate-900">
-                도입 대상
-              </a>
-            </li>
-            <li>
-              <a href="#faq" className="hover:text-slate-900">
-                FAQ
-              </a>
-            </li>
+            {COPY.footer.productMenu.map((item) => (
+              <li key={item.href}>
+                <a href={item.href} className="hover:text-slate-900">
+                  {item.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
 
         <div className="md:col-span-3">
           <div className="text-xs font-semibold text-slate-500 tracking-wider mb-3">
-            COMPANY
+            {COPY.footer.companyMenuLabel}
           </div>
           <ul className="space-y-2 text-sm text-slate-600">
-            <li>
-              <a href="#" className="hover:text-slate-900">
-                이용약관
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-slate-900">
-                개인정보처리방침
-              </a>
-            </li>
-            {ctaHref("이음 문의") && (
+            {COPY.footer.companyMenu.map((item) => (
+              <li key={item.label}>
+                <a href={item.href} className="hover:text-slate-900">
+                  {item.label}
+                </a>
+              </li>
+            ))}
+            {generalInquiryHref && (
               <li>
                 <a
-                  href={ctaHref("이음 문의") ?? undefined}
+                  href={generalInquiryHref ?? undefined}
                   className="hover:text-slate-900"
                 >
-                  문의하기
+                  {COPY.footer.contactCta}
                 </a>
               </li>
             )}
@@ -70,14 +61,14 @@ export default function Footer() {
       </div>
       <div className="border-t border-slate-100">
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between text-xs text-slate-400">
-          <span>© 2026 Noma OpenProject. All rights reserved.</span>
+          <span>{COPY.footer.copyright}</span>
           {CONTACT.kakaoChannelUrl && (
             <span className="flex items-center gap-4">
               <a
                 href={CONTACT.kakaoChannelUrl}
                 className="hover:text-slate-600 inline-flex items-center gap-1"
               >
-                <MessageCircle className="w-3.5 h-3.5" /> 카카오톡
+                <MessageCircle className="w-3.5 h-3.5" /> {COPY.footer.kakaoLabel}
               </a>
             </span>
           )}

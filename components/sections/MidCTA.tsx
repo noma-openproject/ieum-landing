@@ -1,9 +1,10 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import { BRAND_BLUE, BRAND_BLUE_DARK, ctaHref } from "../constants";
+import { COPY } from "@/lib/copy";
 
 export default function MidCTA() {
-  const href = ctaHref("이음 데모 신청");
+  const href = ctaHref(COPY.ctaSubject.demo);
   if (!href) return null;
   return (
     <section className="py-6">
@@ -38,9 +39,9 @@ export default function MidCTA() {
 
           <div className="relative z-10">
             <h3 className="font-display text-2xl lg:text-[28px] tracking-[-0.02em] font-bold text-white leading-snug">
-              원장님의 고민,
+              {COPY.midCta.headline.line1}
               <br />
-              이음에서 어떻게 풀리는지 보여드릴게요
+              {COPY.midCta.headline.line2}
             </h3>
           </div>
           <div className="relative z-10">
@@ -49,7 +50,7 @@ export default function MidCTA() {
               className="inline-flex items-center gap-2 bg-white px-5 py-3 rounded-lg text-sm font-medium tracking-tight hover:bg-slate-50 transition whitespace-nowrap"
               style={{ color: BRAND_BLUE }}
             >
-              데모 신청하기
+              {COPY.midCta.cta}
               <ArrowRight className="w-4 h-4" />
             </a>
           </div>
