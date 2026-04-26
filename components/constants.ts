@@ -33,9 +33,11 @@ export function ctaHref(subject: string): string | null {
 /* -------- 실제 앱 스크린샷 (선택) --------
    값이 비어있으면 HTML 목업(MockConsultCoach 등)이 그대로 표시됨.
    PNG를 준비해 public/screenshots/ 폴더에 넣고 경로를 지정하면 자동 교체.
-*/
+
+   현재(2026-04-26): Laney 스타일 합성 mock으로 전환 — 모든 값 빈 문자열.
+   PNG로 되돌리려면 경로 채우면 됨. */
 export const SCREENSHOTS = {
-  consultCoach: "/screenshots/consult-coach.png",
-  reviewBuilder: "/screenshots/review-builder.png",
-  careNote: "/screenshots/care-note.png",
+  consultCoach: "",
+  reviewBuilder: "",
+  careNote: "",
 } as const;

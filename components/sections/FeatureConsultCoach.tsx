@@ -11,6 +11,14 @@ import { COPY } from "@/lib/copy";
 
 type ConsultStage = (typeof COPY.consultCoach.stages)[number];
 
+/** stage.key("stage1"/"stage2"/"stage3") → MockConsultCoach 의 stage prop(1|2|3) 매핑.
+    잘못된 키가 들어오면 1로 폴백. */
+function stageVariant(key: string): 1 | 2 | 3 {
+  if (key === "stage2") return 2;
+  if (key === "stage3") return 3;
+  return 1;
+}
+
 function StageBlock({ stage }: { stage: ConsultStage }) {
   const textCol =
     stage.orientation === "text-left" ? "lg:order-1" : "lg:order-2";
@@ -83,7 +91,7 @@ function StageBlock({ stage }: { stage: ConsultStage }) {
         <Reveal delay={100}>
           <SmartMock
             screenshot={stage.image ?? SCREENSHOTS.consultCoach}
-            fallback={<MockConsultCoach />}
+            fallback={<MockConsultCoach stage={stageVariant(stage.key)} />}
             alt={`이음 상담 코치 ${stage.caption} 화면`}
           />
         </Reveal>

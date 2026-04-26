@@ -88,7 +88,7 @@ export const COPY = {
           { text: "방문 목적·걱정·예산 자동 정리" },
           { text: "콜센터 통화 패턴 분석", status: "beta" as const },
         ],
-        image: "/screenshots/consult-coach-stage1.png",
+        image: "",
         orientation: "text-left" as const,
       },
       {
@@ -106,7 +106,7 @@ export const COPY = {
           { text: "녹화 정리로 차트 자동 작성" },
           { text: "원장님 인계용 환자분 핵심 요약" },
         ],
-        image: "/screenshots/consult-coach-stage2.png",
+        image: "",
         orientation: "text-right" as const,
       },
       {
@@ -122,7 +122,7 @@ export const COPY = {
           { text: "추천 사진/케이스 자동 첨부" },
           { text: "환자분 통합 타임라인 (상담·후기·케어 한 화면)" },
         ],
-        image: "/screenshots/consult-coach-stage3.png",
+        image: "",
         orientation: "text-left" as const,
       },
     ],
