@@ -3,13 +3,12 @@ import { ArrowRight } from "lucide-react";
 import Reveal from "../primitives/Reveal";
 import { PrimaryButton, SecondaryButton } from "../primitives/Button";
 import SmartMock from "../primitives/SmartMock";
-import MockConsultCoach from "../mocks/MockConsultCoach";
+import MockHeroComposite from "../mocks/MockHeroComposite";
 import {
   BRAND_BLUE,
   BRAND_BLUE_FAINT,
   CONTACT,
   ctaHref,
-  SCREENSHOTS,
 } from "../constants";
 import { COPY } from "@/lib/copy";
 
@@ -107,8 +106,8 @@ export default function Hero() {
                 }}
               />
               <SmartMock
-                screenshot={SCREENSHOTS.consultCoach}
-                fallback={<MockConsultCoach />}
+                screenshot=""
+                fallback={<MockHeroComposite />}
                 alt={COPY.hero.mockAlt}
               />
             </div>
