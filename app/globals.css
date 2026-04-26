@@ -18,4 +18,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  /* 한국어 단어 분절 방지 — 단어 단위 줄바꿈, 긴 단어(URL 등)만 예외적으로 분절 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
