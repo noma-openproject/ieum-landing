@@ -57,7 +57,7 @@ export default function FeatureBlock({
             {description.split("\n\n").map((para, i) => (
               <p
                 key={i}
-                className={`text-[15.5px] text-slate-600 leading-[1.8] ${
+                className={`text-[15.5px] text-slate-600 leading-[1.8] whitespace-pre-line ${
                   i === 0 ? "mt-6" : "mt-4"
                 }`}
               >

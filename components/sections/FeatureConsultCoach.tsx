@@ -40,7 +40,7 @@ function StageBlock({ stage }: { stage: ConsultStage }) {
           </div>
         </Reveal>
         <Reveal delay={80}>
-          <h3 className="font-display text-2xl lg:text-[32px] leading-[1.3] tracking-[-0.02em] font-extrabold text-slate-900">
+          <h3 className="font-display text-2xl lg:text-[32px] leading-[1.3] tracking-[-0.02em] font-extrabold text-slate-900 whitespace-pre-line">
             {stage.heading}
           </h3>
         </Reveal>
@@ -48,7 +48,7 @@ function StageBlock({ stage }: { stage: ConsultStage }) {
           {stage.body.split("\n\n").map((para, i) => (
             <p
               key={i}
-              className={`text-[15.5px] text-slate-600 leading-[1.8] ${
+              className={`text-[15.5px] text-slate-600 leading-[1.8] whitespace-pre-line ${
                 i === 0 ? "mt-5" : "mt-4"
               }`}
             >

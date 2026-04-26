@@ -33,7 +33,7 @@ export default function ProblemIntro() {
               >
                 0{i + 1}
               </div>
-              <h3 className="text-lg font-bold text-slate-900 leading-snug tracking-tight">
+              <h3 className="text-lg font-bold text-slate-900 leading-snug tracking-tight whitespace-pre-line">
                 {p.title}
               </h3>
               <blockquote

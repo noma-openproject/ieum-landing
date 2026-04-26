@@ -44,7 +44,7 @@ export default function Audience() {
                 >
                   <Icon className="w-5 h-5" style={{ color: BRAND_BLUE }} />
                 </div>
-                <h3 className="text-[17px] font-bold text-slate-900 leading-snug tracking-tight">
+                <h3 className="text-[17px] font-bold text-slate-900 leading-snug tracking-tight whitespace-pre-line">
                   {card.label}
                 </h3>
                 <blockquote
