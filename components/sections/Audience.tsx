@@ -72,7 +72,6 @@ export default function Audience() {
             style={{ color: "#6B7280" }}
           >
             {COPY.audience.footer.pre}
-            <br />
             <strong style={{ color: BRAND_BLUE }}>
               {COPY.audience.footer.highlight}
             </strong>
