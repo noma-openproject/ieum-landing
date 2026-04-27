@@ -30,12 +30,21 @@ export function ctaHref(subject: string): string | null {
   return null;
 }
 
-/* -------- 실제 앱 스크린샷 (선택) --------
+/* -------- 실제 앱 스크린샷·영상 (선택) --------
    값이 비어있으면 HTML 목업(MockConsultCoach 등)이 그대로 표시됨.
-   PNG를 준비해 public/screenshots/ 폴더에 넣고 경로를 지정하면 자동 교체.
+   파일을 public/screenshots/ 폴더에 넣고 경로를 지정하면 자동 교체.
 
-   현재(2026-04-26): Laney 스타일 합성 mock으로 전환 — 모든 값 빈 문자열.
-   PNG로 되돌리려면 경로 채우면 됨. */
+   ▎지원 형식 (SmartMock 이 확장자로 자동 분기):
+     · 이미지: .png / .jpg / .gif / .webp / .avif → <img>
+     · 영상:   .mp4 / .webm / .mov              → <video> 자동재생·무음·루프
+
+   ▎예시:
+     consultCoach: "/screenshots/hero-demo.mp4"     // 영상으로 시연
+     consultCoach: "/screenshots/consult-coach.png" // 정적 이미지
+     consultCoach: ""                                // HTML 목업 사용
+
+   현재(2026-04-27): Laney 스타일 합성 mock으로 전환 — 모든 값 빈 문자열.
+   파일로 교체하려면 경로 채우면 됨. */
 export const SCREENSHOTS = {
   consultCoach: "",
   reviewBuilder: "",
