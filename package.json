@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run check:copy-sync",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check:copy-sync": "node scripts/check-copy-sync.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.8.0",

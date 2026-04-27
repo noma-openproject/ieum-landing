@@ -2,13 +2,40 @@ import React from "react";
 import { Check, X } from "lucide-react";
 import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
 
-/* MockHeroComposite — Hero 우측에 들어가는 Laney 스타일 합성 목업.
-   - 좌측: 데스크톱 대시보드
-       · 사이드바 (환자 리스트)
-       · 메인 패널 (탭 + 환자 헤더 + 자동 carousel: Screen 1 ↔ Screen 2)
-   - 우측: 카카오톡 스타일 모바일 폰 (lg 이상에서만 노출)
-   원본 PNG 스크린샷 대신 SmartMock의 fallback으로 렌더된다.
-   carousel 키프레임은 app/globals.css 의 .mock-hero-screen-1/2 정의 */
+/* ═══════════════════════════════════════════════════════════════════
+   MockHeroComposite — Hero 우측 합성 목업
+   ═══════════════════════════════════════════════════════════════════
+   ▎구성
+   ─────────────────────────────────────────────────────────────────
+   • 좌측: 데스크톱 대시보드
+       1) 윈도우 크롬 (상단 빨강·노랑·초록 점)
+       2) 사이드바 — 오늘 환자분 리스트 (PATIENT_LIST 상수로 관리)
+       3) 메인 패널 — 단계 탭 + 환자 헤더 + 자동 carousel
+          · Screen 1: AI 가이드 카드 3개 (요구·권장·피해야 할 말)
+          · Screen 2: 환자분 시나리오 (발화 → 권장/피해야 할 응답)
+   • 우측: 카카오톡 스타일 모바일 폰 (lg 이상에서만 노출, KAKAO_MESSAGES)
+
+   ▎이 mock 안의 카피를 수정하고 싶다면?
+   ─────────────────────────────────────────────────────────────────
+   이 mock의 텍스트는 lib/copy.ts 에 없습니다 — 데모용 가공 데이터
+   라서 이 파일 안에 직접 작성되어 있어요. 수정하고 싶다면:
+     · 사이드바 환자 리스트 → 아래 PATIENT_LIST 상수 수정
+     · 카톡 메시지 → 아래 KAKAO_MESSAGES 상수 수정
+     · Screen 1 본문 → Screen1() 함수 안 카드 텍스트 수정
+     · Screen 2 시나리오 → Screen2() 함수 안 카드 텍스트 수정
+
+   ▎carousel 동작
+   ─────────────────────────────────────────────────────────────────
+   12초 주기로 Screen 1 ↔ Screen 2 가로 슬라이드 전환.
+   카톡 폰도 동기화되어 Screen 2 시점엔 fade out 됨.
+   keyframe 정의는 app/globals.css 의 .mock-hero-track / .mock-hero-phone.
+
+   ▎렌더 위치
+   ─────────────────────────────────────────────────────────────────
+   components/sections/Hero.tsx 에서 SmartMock 의 fallback 으로 사용.
+   PNG 스크린샷 사용 시(constants.ts SCREENSHOTS.consultCoach 채움)
+   이 mock 은 무시되고 PNG 가 보임.
+   ═══════════════════════════════════════════════════════════════════ */
 
 const KAKAO_YELLOW = "#FEE500";
 

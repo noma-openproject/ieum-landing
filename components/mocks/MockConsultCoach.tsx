@@ -2,10 +2,37 @@ import React from "react";
 import WindowFrame from "../primitives/WindowFrame";
 import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
 
-/* MockConsultCoach
-   - 0.1 CONSULT COACH 섹션의 3개 stage(1차/2차/3차)에서 fallback으로 사용.
-   - stage prop으로 각 단계의 다른 화면을 표시 (탭 활성화 + 본문 콘텐츠).
-   - prop 없이 호출하면 stage=1 기본값. */
+/* ═══════════════════════════════════════════════════════════════════
+   MockConsultCoach — 0.1 CONSULT COACH 3 stage mock
+   ═══════════════════════════════════════════════════════════════════
+   ▎구성
+   ─────────────────────────────────────────────────────────────────
+   FeatureConsultCoach 섹션의 stage 1/2/3 영역에서 SmartMock fallback.
+   stage prop(1|2|3)에 따라 다른 콘텐츠 렌더:
+     · stage=1: 1차 온라인 상담 — AI 가이드 카드 3개 + 녹음 중 표시
+     · stage=2: 2차 현장 — 자동 정리 4필드 + 원장 인계 박스
+     · stage=3: 3차 진료실 — 환자분 통합 타임라인 + 진료 스크립트
+   prop 없이 호출하면 stage=1 (기본값).
+
+   ▎구조
+   ─────────────────────────────────────────────────────────────────
+   상단:   단계 탭 (1차/2차/3차) — TAB_LABELS · TAB_ORDER
+   중간:   환자 헤더 (PatientHeader) — stage별 우측 상태 다름
+   하단:   stage별 본문 (Stage1Body / Stage2Body / Stage3Body)
+
+   ▎이 mock 안의 카피를 수정하고 싶다면?
+   ─────────────────────────────────────────────────────────────────
+   이 mock의 텍스트는 lib/copy.ts 에 없습니다 — 데모용 가공 데이터.
+     · 환자 이름·시술명 → PatientHeader 함수 안에서 수정
+     · stage별 카드 본문 → Stage1Body / Stage2Body / Stage3Body 안 수정
+     · stage별 우측 상태 텍스트(녹음 중/녹화 중/입실 직전) → PatientHeader 의 right 객체
+
+   ▎렌더 위치
+   ─────────────────────────────────────────────────────────────────
+   components/sections/FeatureConsultCoach.tsx 의 SmartMock fallback.
+   PNG(constants.ts SCREENSHOTS.consultCoach 또는 stage.image) 채우면
+   이 mock 무시되고 PNG 가 보임.
+   ═══════════════════════════════════════════════════════════════════ */
 
 type StageVariant = 1 | 2 | 3;
 
