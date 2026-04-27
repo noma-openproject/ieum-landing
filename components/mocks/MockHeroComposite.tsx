@@ -175,8 +175,9 @@ export default function MockHeroComposite() {
       </div>
 
       {/* ============ 모바일 카톡 폰 (lg 이상에서만) ============ */}
+      {/* mock-hero-phone: carousel과 동기화 — Screen 1 시점만 보이고 Screen 2 시점엔 fade out */}
       <div
-        className="hidden lg:block absolute -right-6 -bottom-10 w-[210px] select-none pointer-events-none"
+        className="mock-hero-phone hidden lg:block absolute -right-6 -bottom-10 w-[210px] select-none pointer-events-none"
         aria-hidden="true"
       >
         <div className="relative bg-white rounded-[28px] p-1.5 shadow-2xl shadow-black/20 ring-1 ring-slate-900/10">

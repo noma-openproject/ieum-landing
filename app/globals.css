@@ -35,6 +35,19 @@ body {
   width: 200%;
   animation: mockHeroTrack 12s ease-in-out infinite;
 }
+
+/* 카톡 폰 오버레이는 Screen 1 일 때만 보이고, Screen 2(시나리오) 일 때는
+   살짝 오른쪽으로 빠지며 fade out — 시나리오 콘텐츠를 가리지 않도록. */
+@keyframes mockHeroPhone {
+  0%, 40% { opacity: 1; transform: translateX(0); }
+  50%, 90% { opacity: 0; transform: translateX(24px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+.mock-hero-phone {
+  animation: mockHeroPhone 12s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mock-hero-track { animation: none; transform: translateX(0); }
+  .mock-hero-phone { animation: none; opacity: 1; transform: translateX(0); }
 }
