@@ -1,10 +1,14 @@
 import React from "react";
+import { Check, X } from "lucide-react";
 import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
 
 /* MockHeroComposite — Hero 우측에 들어가는 Laney 스타일 합성 목업.
-   - 좌측: 데스크톱 대시보드 (사이드바 + 1차 상담 메인 패널)
+   - 좌측: 데스크톱 대시보드
+       · 사이드바 (환자 리스트)
+       · 메인 패널 (탭 + 환자 헤더 + 자동 carousel: Screen 1 ↔ Screen 2)
    - 우측: 카카오톡 스타일 모바일 폰 (lg 이상에서만 노출)
-   원본 PNG 스크린샷 대신 SmartMock의 fallback으로 렌더된다. */
+   원본 PNG 스크린샷 대신 SmartMock의 fallback으로 렌더된다.
+   carousel 키프레임은 app/globals.css 의 .mock-hero-screen-1/2 정의 */
 
 const KAKAO_YELLOW = "#FEE500";
 
@@ -124,8 +128,8 @@ export default function MockHeroComposite() {
             </div>
           </aside>
 
-          {/* 메인 — 1차 상담 코치 */}
-          <main className="flex-1 min-w-0 p-4 overflow-hidden">
+          {/* 메인 — 1차 상담 코치 (탭 + 환자 헤더 + 자동 carousel 콘텐츠) */}
+          <main className="flex-1 min-w-0 p-4 overflow-hidden flex flex-col">
             {/* 단계 탭 */}
             <div className="flex items-center gap-1 mb-3 border-b border-slate-100 pb-2.5">
               <div
@@ -145,59 +149,23 @@ export default function MockHeroComposite() {
               </div>
             </div>
 
-            {/* 환자 + 녹음 상태 */}
-            <div className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 mb-3">
-              <div>
-                <div className="text-[12px] font-semibold text-slate-900 leading-tight">
-                  홍서연
-                </div>
-                <div className="text-[10px] text-slate-500 mt-0.5">
-                  눈밑지방재배치 · P-F9A1279B
-                </div>
+            {/* 환자 헤더 (녹음 중 표시 제거됨) */}
+            <div className="rounded-lg bg-slate-50 px-3 py-2 mb-3">
+              <div className="text-[12px] font-semibold text-slate-900 leading-tight">
+                홍서연
               </div>
-              <div className="flex items-center gap-1.5 text-[10px] font-medium text-rose-500">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75 animate-ping" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-rose-500" />
-                </span>
-                녹음 중 08:23
+              <div className="text-[10px] text-slate-500 mt-0.5">
+                눈밑지방재배치 · P-F9A1279B
               </div>
             </div>
 
-            {/* AI 결과 카드 3개 */}
-            <div className="space-y-2">
-              <div className="rounded-lg border border-slate-200 p-2.5">
-                <div className="text-[9px] font-semibold text-slate-400 tracking-wider mb-1">
-                  환자분 핵심 요구
-                </div>
-                <p className="text-[11px] text-slate-700 leading-snug">
-                  다크서클·애교살 자연스럽게, 회복기간 최소화 원함.
-                </p>
+            {/* 자동 carousel 영역 (Screen 1 ↔ Screen 2 cross-fade) */}
+            <div className="relative flex-1 min-h-0">
+              <div className="mock-hero-screen-1 absolute inset-0">
+                <Screen1 />
               </div>
-              <div
-                className="rounded-lg border p-2.5"
-                style={{
-                  borderColor: BRAND_BLUE_FAINT,
-                  backgroundColor: "#F8FBFF",
-                }}
-              >
-                <div
-                  className="text-[9px] font-semibold tracking-wider mb-1"
-                  style={{ color: BRAND_BLUE }}
-                >
-                  권장 멘트
-                </div>
-                <p className="text-[11px] text-slate-800 leading-snug">
-                  &ldquo;재배치로 하시면 꺼짐 없이 자연스럽게 마무리됩니다.&rdquo;
-                </p>
-              </div>
-              <div className="rounded-lg border border-slate-200 p-2.5">
-                <div className="text-[9px] font-semibold text-rose-500 tracking-wider mb-1">
-                  피해야 할 말
-                </div>
-                <p className="text-[11px] text-slate-600 leading-snug">
-                  타 병원 시술 결과와 직접 비교하는 표현은 삼가주세요.
-                </p>
+              <div className="mock-hero-screen-2 absolute inset-0">
+                <Screen2 />
               </div>
             </div>
           </main>
@@ -281,6 +249,107 @@ export default function MockHeroComposite() {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* Screen 1 — AI 가이드 카드 3개 (요구·권장·피해야 할 말, 작은 카드 3개) */
+function Screen1() {
+  return (
+    <div className="space-y-2">
+      <div className="rounded-lg border border-slate-200 p-2.5">
+        <div className="text-[9px] font-semibold text-slate-400 tracking-wider mb-1">
+          환자분 핵심 요구
+        </div>
+        <p className="text-[11px] text-slate-700 leading-snug">
+          다크서클·애교살 자연스럽게, 회복기간 최소화 원함.
+        </p>
+      </div>
+      <div
+        className="rounded-lg border p-2.5"
+        style={{
+          borderColor: BRAND_BLUE_FAINT,
+          backgroundColor: "#F8FBFF",
+        }}
+      >
+        <div
+          className="text-[9px] font-semibold tracking-wider mb-1"
+          style={{ color: BRAND_BLUE }}
+        >
+          권장 멘트
+        </div>
+        <p className="text-[11px] text-slate-800 leading-snug">
+          &ldquo;재배치로 하시면 꺼짐 없이 자연스럽게 마무리됩니다.&rdquo;
+        </p>
+      </div>
+      <div className="rounded-lg border border-slate-200 p-2.5">
+        <div className="text-[9px] font-semibold text-rose-500 tracking-wider mb-1">
+          피해야 할 말
+        </div>
+        <p className="text-[11px] text-slate-600 leading-snug">
+          타 병원 시술 결과와 직접 비교하는 표현은 삼가주세요.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* Screen 2 — 환자분 시나리오 형태 (환자 발화 + 권장 응답 큰 카드 + 피해야 할 응답 큰 카드) */
+function Screen2() {
+  return (
+    <div className="space-y-2.5">
+      {/* 환자 발화 */}
+      <div className="rounded-lg bg-slate-100 px-3 py-2">
+        <div className="text-[9px] font-semibold text-slate-500 tracking-wider mb-1">
+          환자분이 이렇게 물으시면…
+        </div>
+        <p className="text-[12px] text-slate-800 leading-snug font-medium">
+          &ldquo;다른 병원에서는 30만 원에 해준다는데, 여기는 왜 비싸요?&rdquo;
+        </p>
+      </div>
+
+      {/* 권장 응답 — 큰 카드 */}
+      <div
+        className="rounded-lg border p-2.5"
+        style={{
+          borderColor: BRAND_BLUE_FAINT,
+          backgroundColor: "#F8FBFF",
+        }}
+      >
+        <div className="flex items-center gap-1.5 mb-1.5">
+          <span
+            className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full"
+            style={{ backgroundColor: BRAND_BLUE }}
+          >
+            <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+          </span>
+          <span
+            className="text-[10px] font-semibold tracking-wider"
+            style={{ color: BRAND_BLUE }}
+          >
+            이렇게 응대해 보세요
+          </span>
+        </div>
+        <p className="text-[11.5px] text-slate-800 leading-snug">
+          &ldquo;병원마다 사용하는 약품과 시술 디테일이 달라서 단순 비교가
+          어려워요. 환자분께 맞는 방식부터 같이 봐드릴게요.&rdquo;
+        </p>
+      </div>
+
+      {/* 피해야 할 응답 — 큰 카드 */}
+      <div className="rounded-lg border border-rose-100 bg-rose-50/40 p-2.5">
+        <div className="flex items-center gap-1.5 mb-1.5">
+          <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-rose-500">
+            <X className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+          </span>
+          <span className="text-[10px] font-semibold tracking-wider text-rose-500">
+            이 답변은 피하세요
+          </span>
+        </div>
+        <p className="text-[11.5px] text-slate-700 leading-snug">
+          &ldquo;거기는 그 가격에 그만큼만 해주는 거예요.&rdquo;
+        </p>
       </div>
     </div>
   );

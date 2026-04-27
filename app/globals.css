@@ -22,3 +22,26 @@ body {
   word-break: keep-all;
   overflow-wrap: break-word;
 }
+
+/* Hero mockup 메인 패널 자동 carousel — Screen 1 ↔ Screen 2 cross-fade.
+   8초 주기: 0~45% Screen 1, 50% 전환, 55~95% Screen 2, 100% 다시 1번. */
+@keyframes mockHeroScreen1 {
+  0%, 45% { opacity: 1; }
+  50%, 95% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes mockHeroScreen2 {
+  0%, 45% { opacity: 0; }
+  50%, 95% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.mock-hero-screen-1 {
+  animation: mockHeroScreen1 8s ease-in-out infinite;
+}
+.mock-hero-screen-2 {
+  animation: mockHeroScreen2 8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mock-hero-screen-1 { animation: none; opacity: 1; }
+  .mock-hero-screen-2 { display: none; }
+}
