@@ -159,13 +159,15 @@ export default function MockHeroComposite() {
               </div>
             </div>
 
-            {/* 자동 carousel 영역 (Screen 1 ↔ Screen 2 cross-fade) */}
-            <div className="relative flex-1 min-h-0">
-              <div className="mock-hero-screen-1 absolute inset-0">
-                <Screen1 />
-              </div>
-              <div className="mock-hero-screen-2 absolute inset-0">
-                <Screen2 />
+            {/* 자동 carousel 영역 — 가로 트랙이 슬라이드해서 한 번에 한 화면만 보임 */}
+            <div className="relative flex-1 min-h-0 overflow-hidden">
+              <div className="mock-hero-track flex h-full">
+                <div className="w-1/2 shrink-0 pr-1">
+                  <Screen1 />
+                </div>
+                <div className="w-1/2 shrink-0 pl-1">
+                  <Screen2 />
+                </div>
               </div>
             </div>
           </main>
