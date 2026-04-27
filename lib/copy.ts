@@ -183,7 +183,7 @@ export const COPY = {
            status: "beta" 면 자동으로 "· 베타 운영 중" 회색 글씨가 붙습니다. */
         checklist: [
           { text: "환자분별 맞춤 질문 10개 자동 생성" },
-          { text: "통화 음성 업로드 또는 실시간 받아쓰기" },
+          { text: "통화 내용 업로드 또는 실시간 받아쓰기" },
           { text: "방문 목적·걱정·예산 자동 정리" },
           { text: "콜센터 통화 패턴 분석", status: "beta" as const },
         ],

@@ -92,10 +92,10 @@ export default function MockConsultCoach({
 function PatientHeader({ stage }: { stage: StageVariant }) {
   const right: Record<StageVariant, React.ReactNode> = {
     1: (
-      <div className="flex items-center gap-2 text-xs font-medium text-rose-500">
+      <div className="flex items-center gap-2 text-xs font-medium text-amber-600">
         <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75 animate-ping" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-rose-500" />
+          <span className="absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75 animate-ping" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
         </span>
         정리 중 08:23
       </div>
