@@ -97,7 +97,7 @@ function PatientHeader({ stage }: { stage: StageVariant }) {
           <span className="absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75 animate-ping" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-rose-500" />
         </span>
-        녹음 중 08:23
+        정리 중 08:23
       </div>
     ),
     2: (
@@ -106,7 +106,7 @@ function PatientHeader({ stage }: { stage: StageVariant }) {
           <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
         </span>
-        현장 녹화 03:42
+        현장 정리 03:42
       </div>
     ),
     3: (
