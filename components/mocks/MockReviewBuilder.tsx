@@ -3,36 +3,33 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { QrCode } from "lucide-react";
-import WindowFrame from "../primitives/WindowFrame";
 import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
 
 /* ═══════════════════════════════════════════════════════════════════
-   MockReviewBuilder — 0.2 REVIEW BUILDER mock (dashboard 형식)
+   MockReviewBuilder — 0.2 REVIEW BUILDER 3-column dashboard mock
    ═══════════════════════════════════════════════════════════════════
-   ▎구성 (3-column dashboard, lg+에서만 사이드바·우측 보임)
+   ▎구성 (afterdoc 톤 — multi-area dashboard)
    ─────────────────────────────────────────────────────────────────
-   좌 사이드바 (정적): 후기 대상 환자분 리스트 (4명, 진행 중 1명 highlight)
-   가운데 메인 (cycle): stepper 5단계 + 페르소나 4 카드 + QR/링크 박스
-   우 사이드 (정적): 이번 주 발송 통계 미니 카드 (전달·작성 카운터)
+   • 윈도우 크롬 (이음 · 후기 만들기 + 실시간 동기화 indicator)
+   • 3-column flex (lg+):
+       col 1: 후기 대기 환자분 4명 (작성중/대기/완료 chip + 시간)
+       col 2: 메인 — stepper 5단계 + 페르소나 4 카드 cycle (기존)
+       col 3: 우측 — QR + 환자 전달 링크 + 채널별 발송 통계 + 주간 KPI
 
-   모바일: 좌·우 사이드 hidden, 메인만 표시 (단일 column).
+   ▎모바일 (lg 미만): col 1·3 hidden, 메인만 노출
 
-   ▎시나리오 (메인만 cycle, 6초 주기)
+   ▎이 mock 안의 카피 수정
    ─────────────────────────────────────────────────────────────────
-   Step 1 (0~0.5s):     stepper [1] 활성, 카드 placeholder
-   Step 2 (0.5~1.0s):   stepper [1,2]
-   Step 3 (1.0~2.2s):   stepper [1,2,3], 페르소나 4카드 stagger 등장
-   Step 4 (2.2~2.7s):   stepper [1,2,3,4], 1번 페르소나 ring
-   Step 5 (2.7~5.5s):   stepper 모두, QR 박스 등장
-   Reset (5.5~6.0s):    페이드아웃
+     · 사이드바 → REVIEW_PATIENTS 상수
+     · stepper 단계 → STEPPER_LABELS 상수
+     · 페르소나 카드 → PERSONAS 상수
+     · 우측 QR/링크 → LINK_BAR 상수
+     · 채널 통계 → CHANNEL_STATS 상수
+     · 주간 KPI → WEEKLY_KPI 상수
 
-   ▎카피 수정 위치
+   ▎렌더 위치
    ─────────────────────────────────────────────────────────────────
-     · stepper → STEPPER_LABELS
-     · 페르소나 → PERSONAS
-     · QR / 채널 → LINK_BAR
-     · 사이드바 환자 → REVIEW_QUEUE
-     · 우측 통계 → STATS
+   components/sections/FeatureReviewBuilder.tsx 의 SmartMock fallback.
    ═══════════════════════════════════════════════════════════════════ */
 
 const STEPPER_LABELS = ["시작", "질문", "말투 선택", "편집", "전달"];
@@ -71,24 +68,68 @@ const PERSONAS = [
 const LINK_BAR = {
   label: "환자 전달 링크",
   url: "ieum.co/r/RREQ-30FEF3DC…",
-  channels: ["네이버 플레이스", "카카오맵", "강남언니"],
+  channels: ["네이버", "카카오", "강남언니"],
 };
 
-/* 좌 사이드바 — 후기 대상 환자분 리스트 (정적) */
-const REVIEW_QUEUE = [
-  { name: "홍서연", status: "초안 작성 중", time: "오늘", active: true },
-  { name: "김민지", status: "전달 완료", time: "어제", active: false },
-  { name: "박지영", status: "초안 검토", time: "2일 전", active: false },
-  { name: "이지수", status: "후기 게시", time: "3일 전", active: false },
+/* ─── col 1 사이드바: 후기 대기 환자 4명 ─── */
+type ReviewStatus = "작성중" | "대기" | "완료";
+
+const REVIEW_PATIENTS: Array<{
+  name: string;
+  detail: string;
+  status: ReviewStatus;
+  time: string;
+  active: boolean;
+}> = [
+  {
+    name: "홍서연",
+    detail: "눈밑지방재배치",
+    status: "작성중",
+    time: "방금",
+    active: true,
+  },
+  {
+    name: "김민지",
+    detail: "코필러",
+    status: "대기",
+    time: "5분 전",
+    active: false,
+  },
+  {
+    name: "박지영",
+    detail: "리프팅",
+    status: "완료",
+    time: "30분 전",
+    active: false,
+  },
+  {
+    name: "이지수",
+    detail: "윤곽주사",
+    status: "대기",
+    time: "1시간 전",
+    active: false,
+  },
 ];
 
-/* 우 사이드 — 이번 주 발송 통계 (정적) */
-const STATS = {
-  weekLabel: "이번 주 후기",
-  sent: { label: "전달", value: "12건" },
-  draft: { label: "작성 중", value: "4건" },
-  rate: { label: "도달율", value: "92%" },
+const STATUS_STYLE: Record<ReviewStatus, { bg: string; fg: string }> = {
+  작성중: { bg: "#E8F1FC", fg: "#1558B5" },
+  대기: { bg: "#F1F5F9", fg: "#64748B" },
+  완료: { bg: "#DCFCE7", fg: "#166534" },
 };
+
+/* ─── col 3 채널별 발송 통계 ─── */
+const CHANNEL_STATS = [
+  { name: "네이버 플레이스", count: 12, percent: 60 },
+  { name: "카카오맵", count: 8, percent: 40 },
+  { name: "강남언니", count: 4, percent: 20 },
+];
+
+/* ─── col 3 주간 KPI ─── */
+const WEEKLY_KPI = [
+  { label: "이번 주 발송", value: "4건" },
+  { label: "작성 완료", value: "3건" },
+  { label: "진행 중", value: "1건" },
+];
 
 const DURATIONS = {
   step1: 500,
@@ -127,17 +168,29 @@ export default function MockReviewBuilder() {
   const activeStepperCount = step === 0 ? 0 : step;
   const showPersonas = step >= 3 && step !== 0;
   const showHighlight = step >= 4 && step !== 0;
-  const showLinkBar = step >= 5 && step !== 0;
+  const showLinkActive = step >= 5 && step !== 0;
 
   return (
-    <WindowFrame title="이음 · 후기 만들기">
-      <div className="flex gap-4">
-        {/* ═══ 좌 사이드바 — 정적 ═══ */}
+    <div className="rounded-2xl bg-white overflow-hidden shadow-[0_30px_60px_-30px_rgba(15,23,42,0.25),0_0_0_1px_rgba(15,23,42,0.05)]">
+      {/* 윈도우 크롬 */}
+      <div className="flex items-center gap-1.5 px-3.5 py-2.5 border-b border-slate-100 bg-slate-50/60">
+        <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+        <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+        <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+        <div className="ml-3 text-[11px] text-slate-400 font-medium">
+          이음 · 후기 만들기
+        </div>
+        <div className="ml-auto hidden sm:flex items-center gap-1.5 text-[10px] text-slate-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+          실시간 동기화
+        </div>
+      </div>
+
+      <div className="flex">
         <ReviewSidebar />
 
-        {/* ═══ 가운데 메인 — cycle ═══ */}
-        <div className="flex-1 min-w-0">
-          {/* stepper — 3-state */}
+        <main className="flex-1 min-w-0 p-4 lg:p-5 flex flex-col">
+          {/* stepper */}
           <div className="flex items-center gap-2 text-[11px] mb-5 flex-wrap">
             {STEPPER_LABELS.map((s, i) => {
               const isCurrent = i === activeStepperCount - 1 && step !== 0;
@@ -171,19 +224,18 @@ export default function MockReviewBuilder() {
             })}
           </div>
 
-          {/* 페르소나 4 카드 */}
+          {/* 페르소나 카드 */}
           <motion.div
             animate={{ opacity: step === 0 ? 0 : 1 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-2 gap-2 mb-5 min-h-[170px]"
+            className="grid grid-cols-2 gap-2 min-h-[170px]"
           >
             {PERSONAS.map((p, i) => (
               <div
                 key={p.key}
-                className="rounded-xl border p-3 text-xs relative overflow-hidden min-h-[78px]"
+                className="rounded-xl border p-3 text-xs relative overflow-hidden"
                 style={{
-                  borderColor:
-                    showHighlight && i === 0 ? BRAND_BLUE : "#E2E8F0",
+                  borderColor: showHighlight && i === 0 ? BRAND_BLUE : "#E2E8F0",
                   boxShadow:
                     showHighlight && i === 0
                       ? `0 0 0 3px ${BRAND_BLUE_FAINT}`
@@ -222,7 +274,7 @@ export default function MockReviewBuilder() {
                       exit={{ opacity: 0 }}
                       className="space-y-2"
                     >
-                      <div className="h-3.5 w-14 bg-slate-100 rounded animate-pulse" />
+                      <div className="h-3 w-14 bg-slate-100 rounded animate-pulse" />
                       <div className="h-2 w-full bg-slate-100 rounded animate-pulse" />
                       <div className="h-2 w-3/4 bg-slate-100 rounded animate-pulse" />
                     </motion.div>
@@ -232,85 +284,69 @@ export default function MockReviewBuilder() {
             ))}
           </motion.div>
 
-          {/* QR + 링크 박스 — Step 5 진입 시 등장 */}
-          <div className="min-h-[80px]">
-            <AnimatePresence mode="popLayout">
-              {showLinkBar && (
-                <motion.div
-                  key="linkbar"
-                  initial={{ opacity: 0, y: 16, scale: 1.03 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200 p-3"
-                >
-                  <div
-                    className="w-14 h-14 rounded-md flex-shrink-0 flex items-center justify-center"
-                    style={{ backgroundColor: BRAND_BLUE_FAINT }}
-                  >
-                    <QrCode className="w-7 h-7" style={{ color: BRAND_BLUE }} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[11px] font-semibold text-slate-500 mb-0.5">
-                      {LINK_BAR.label}
-                    </div>
-                    <div className="text-xs text-slate-700 truncate font-mono">
-                      {LINK_BAR.url}
-                    </div>
-                    <div className="flex gap-1.5 mt-1.5 flex-wrap">
-                      {LINK_BAR.channels.map((c) => (
-                        <span
-                          key={c}
-                          className="px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-600"
-                        >
-                          {c}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+          {/* 하단 KPI bar */}
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+              <span className="text-slate-500 font-medium truncate">
+                초안 생성 04:12 · 페르소나 4안 자동
+              </span>
+            </div>
+            <div
+              className="font-semibold shrink-0"
+              style={{ color: BRAND_BLUE }}
+            >
+              중복 후기 0건
+            </div>
           </div>
-        </div>
+        </main>
 
-        {/* ═══ 우 사이드 — 정적 통계 ═══ */}
-        <ReviewStats />
+        <RightPanel showLinkActive={showLinkActive} />
       </div>
-    </WindowFrame>
+    </div>
   );
 }
 
-/* ─── 좌 사이드바: 후기 대상 환자 리스트 (lg+ 에서만 보임) ─── */
+/* ─── col 1 사이드바: 후기 대기 환자 (lg+ only) ─── */
 function ReviewSidebar() {
   return (
-    <aside className="hidden lg:flex flex-col w-[180px] shrink-0 border-r border-slate-100 pr-4">
-      <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mb-3">
-        후기 대상
+    <aside className="hidden lg:flex w-[170px] shrink-0 border-r border-slate-100 bg-slate-50/40 flex-col">
+      <div className="px-3 pt-3 pb-2 flex items-center justify-between">
+        <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase">
+          후기 대기
+        </div>
+        <span className="text-[10px] font-semibold text-slate-500">
+          {REVIEW_PATIENTS.length}
+        </span>
       </div>
-      <div className="space-y-1">
-        {REVIEW_QUEUE.map((p) => (
+      <div className="flex-1 overflow-hidden px-1.5 pb-3">
+        {REVIEW_PATIENTS.map((p) => (
           <div
             key={p.name}
-            className={`rounded-lg px-2 py-2 ${
-              p.active ? "bg-slate-50 ring-1 ring-slate-200" : ""
+            className={`rounded-lg px-2 py-2 mb-0.5 ${
+              p.active ? "bg-white shadow-sm ring-1 ring-slate-200" : ""
             }`}
           >
-            <div className="flex items-center justify-between mb-0.5">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[12px] font-semibold text-slate-900">
-                  {p.name}
-                </span>
-                {p.active && (
-                  <span
-                    className="w-1.5 h-1.5 rounded-full"
-                    style={{ backgroundColor: BRAND_BLUE }}
-                  />
-                )}
-              </div>
-              <span className="text-[9px] text-slate-400">{p.time}</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[12px] font-semibold text-slate-900 truncate">
+                {p.name}
+              </span>
+              <span
+                className="text-[8px] font-semibold px-1 py-0.5 rounded leading-none"
+                style={{
+                  backgroundColor: STATUS_STYLE[p.status].bg,
+                  color: STATUS_STYLE[p.status].fg,
+                }}
+              >
+                {p.status}
+              </span>
+              <span className="ml-auto text-[9px] text-slate-400">
+                {p.time}
+              </span>
             </div>
-            <p className="text-[10px] text-slate-500 truncate">{p.status}</p>
+            <p className="mt-1 text-[10px] text-slate-500 truncate">
+              {p.detail}
+            </p>
           </div>
         ))}
       </div>
@@ -318,54 +354,99 @@ function ReviewSidebar() {
   );
 }
 
-/* ─── 우 사이드: 이번 주 발송 통계 (lg+ 에서만 보임) ─── */
-function ReviewStats() {
+/* ─── col 3 우측 패널: QR + 채널 통계 + 주간 KPI (lg+ only) ─── */
+function RightPanel({ showLinkActive }: { showLinkActive: boolean }) {
   return (
-    <aside className="hidden lg:flex flex-col w-[160px] shrink-0 border-l border-slate-100 pl-4">
-      <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mb-3">
-        {STATS.weekLabel}
-      </div>
-      <div className="space-y-3">
-        <StatRow item={STATS.sent} accent />
-        <StatRow item={STATS.draft} />
-        <StatRow item={STATS.rate} />
-      </div>
-      {/* mini bar — 발송 추이 시각화 */}
-      <div className="mt-5">
-        <div className="text-[9px] text-slate-400 mb-2">최근 7일 추이</div>
-        <div className="flex items-end gap-1 h-12">
-          {[0.4, 0.6, 0.5, 0.8, 0.7, 0.9, 1.0].map((h, i) => (
-            <div
-              key={i}
-              className="flex-1 rounded-sm"
-              style={{
-                height: `${h * 100}%`,
-                backgroundColor: i === 6 ? BRAND_BLUE : BRAND_BLUE_FAINT,
-              }}
+    <aside className="hidden lg:flex w-[210px] shrink-0 border-l border-slate-100 flex-col p-3.5 gap-3.5">
+      {/* QR + 환자 전달 링크 */}
+      <div className="rounded-xl border border-slate-200 p-3">
+        <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mb-2">
+          {LINK_BAR.label}
+        </div>
+        <div className="flex items-center gap-2">
+          <motion.div
+            animate={{
+              backgroundColor: showLinkActive ? BRAND_BLUE_FAINT : "#F1F5F9",
+            }}
+            transition={{ duration: 0.4 }}
+            className="w-12 h-12 rounded-md flex-shrink-0 flex items-center justify-center"
+          >
+            <QrCode
+              className="w-6 h-6"
+              style={{ color: showLinkActive ? BRAND_BLUE : "#94A3B8" }}
             />
+          </motion.div>
+          <div className="flex-1 min-w-0">
+            <div className="text-[10px] text-slate-700 truncate font-mono">
+              {LINK_BAR.url}
+            </div>
+            <div className="flex gap-1 mt-1 flex-wrap">
+              {LINK_BAR.channels.map((c) => (
+                <span
+                  key={c}
+                  className="px-1 py-0.5 rounded text-[8px] bg-slate-100 text-slate-600"
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 채널별 발송 통계 */}
+      <div>
+        <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mb-2">
+          채널별 발송
+        </div>
+        <div className="space-y-1.5">
+          {CHANNEL_STATS.map((c) => (
+            <div key={c.name}>
+              <div className="flex items-center justify-between text-[10px] mb-0.5">
+                <span className="text-slate-600 truncate">{c.name}</span>
+                <span className="font-semibold text-slate-900">
+                  {c.count}건
+                </span>
+              </div>
+              <div className="h-1 w-full rounded-full bg-slate-100 overflow-hidden">
+                <div
+                  className="h-full rounded-full"
+                  style={{
+                    width: `${c.percent}%`,
+                    backgroundColor: BRAND_BLUE,
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 주간 KPI */}
+      <div
+        className="rounded-xl p-2.5 mt-auto"
+        style={{ backgroundColor: BRAND_BLUE_FAINT }}
+      >
+        <div
+          className="text-[10px] font-semibold tracking-wider uppercase mb-1.5"
+          style={{ color: BRAND_BLUE }}
+        >
+          이번 주 KPI
+        </div>
+        <div className="space-y-1">
+          {WEEKLY_KPI.map((k) => (
+            <div key={k.label} className="flex items-center justify-between">
+              <span className="text-[10px] text-slate-700">{k.label}</span>
+              <span
+                className="text-[11px] font-bold"
+                style={{ color: BRAND_BLUE }}
+              >
+                {k.value}
+              </span>
+            </div>
           ))}
         </div>
       </div>
     </aside>
-  );
-}
-
-function StatRow({
-  item,
-  accent = false,
-}: {
-  item: { label: string; value: string };
-  accent?: boolean;
-}) {
-  return (
-    <div>
-      <div className="text-[10px] text-slate-500">{item.label}</div>
-      <div
-        className="text-[15px] font-semibold mt-0.5"
-        style={{ color: accent ? BRAND_BLUE : "#0F172A" }}
-      >
-        {item.value}
-      </div>
-    </div>
   );
 }
