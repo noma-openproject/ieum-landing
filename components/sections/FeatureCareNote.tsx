@@ -58,14 +58,6 @@ export default function FeatureCareNote() {
                   </span>
                   <span className="text-[14px] text-slate-700 leading-relaxed">
                     {b.text}
-                    {b.status === "pilot" && (
-                      <span
-                        className="ml-2 text-xs italic"
-                        style={{ color: "#6B7280" }}
-                      >
-                        · {COPY.shared.pilotBadge}
-                      </span>
-                    )}
                   </span>
                 </li>
               ))}
