@@ -158,7 +158,7 @@ export default function MockReviewBuilder() {
         {PERSONAS.map((p, i) => (
           <div
             key={p.key}
-            className="rounded-xl border p-3 text-xs relative overflow-hidden"
+            className="rounded-xl border p-3 text-xs relative overflow-hidden min-h-[78px]"
             style={{
               borderColor: showHighlight && i === 0 ? BRAND_BLUE : "#E2E8F0",
               boxShadow:
@@ -199,7 +199,8 @@ export default function MockReviewBuilder() {
                   exit={{ opacity: 0 }}
                   className="space-y-2"
                 >
-                  <div className="h-3 w-14 bg-slate-100 rounded animate-pulse" />
+                  {/* placeholder height 를 실제 페르소나 카드와 일치 → layout shift 방지 */}
+                  <div className="h-3.5 w-14 bg-slate-100 rounded animate-pulse" />
                   <div className="h-2 w-full bg-slate-100 rounded animate-pulse" />
                   <div className="h-2 w-3/4 bg-slate-100 rounded animate-pulse" />
                 </motion.div>

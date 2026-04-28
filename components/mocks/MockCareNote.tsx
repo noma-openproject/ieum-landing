@@ -136,9 +136,10 @@ export default function MockCareNote() {
             {TIMELINE.map((it, i) => (
               <div key={`ph-${i}`} className="relative">
                 <span className="absolute -left-[11px] top-2.5 w-2.5 h-2.5 rounded-full bg-slate-200" />
-                <div className="rounded-xl border border-slate-200 p-3 bg-slate-50/30">
+                <div className="rounded-xl border border-slate-200 p-3 bg-slate-50/30 min-h-[60px]">
                   <div className="h-3 w-20 bg-slate-100 rounded mb-2 animate-pulse" />
-                  <div className="h-2.5 w-full bg-slate-100 rounded animate-pulse" />
+                  <div className="h-2.5 w-full bg-slate-100 rounded mb-1.5 animate-pulse" />
+                  <div className="h-2.5 w-2/3 bg-slate-100 rounded animate-pulse" />
                 </div>
               </div>
             ))}
