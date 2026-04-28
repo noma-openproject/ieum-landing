@@ -64,7 +64,7 @@ export default function MockCareNote() {
                     color: toneMap[it.tone].fg,
                   }}
                 >
-                  AI 트리아지 · {it.status}
+                  AI 분석 · {it.status}
                 </span>
               </div>
               <p className="text-[12px] text-slate-600">{it.note}</p>
