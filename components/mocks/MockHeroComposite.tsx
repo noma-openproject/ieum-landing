@@ -1,6 +1,9 @@
-import React from "react";
-import { Check, X } from "lucide-react";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
+import HeroAnimatedMain from "./HeroAnimatedMain";
 
 /* ═══════════════════════════════════════════════════════════════════
    MockHeroComposite — Hero 우측 합성 목업
@@ -10,31 +13,27 @@ import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
    • 좌측: 데스크톱 대시보드
        1) 윈도우 크롬 (상단 빨강·노랑·초록 점)
        2) 사이드바 — 오늘 환자분 리스트 (PATIENT_LIST 상수로 관리)
-       3) 메인 패널 — 단계 탭 + 환자 헤더 + 자동 carousel
-          · Screen 1: AI 가이드 카드 3개 (요구·권장·피해야 할 말)
-          · Screen 2: 환자분 시나리오 (발화 → 권장/피해야 할 응답)
+       3) 메인 패널 — 단계 탭 + HeroAnimatedMain (5단계 자동 애니메이션)
    • 우측: 카카오톡 스타일 모바일 폰 (lg 이상에서만 노출, KAKAO_MESSAGES)
 
    ▎이 mock 안의 카피를 수정하고 싶다면?
    ─────────────────────────────────────────────────────────────────
-   이 mock의 텍스트는 lib/copy.ts 에 없습니다 — 데모용 가공 데이터
-   라서 이 파일 안에 직접 작성되어 있어요. 수정하고 싶다면:
-     · 사이드바 환자 리스트 → 아래 PATIENT_LIST 상수 수정
-     · 카톡 메시지 → 아래 KAKAO_MESSAGES 상수 수정
-     · Screen 1 본문 → Screen1() 함수 안 카드 텍스트 수정
-     · Screen 2 시나리오 → Screen2() 함수 안 카드 텍스트 수정
+   이 mock의 텍스트는 lib/copy.ts 에 없습니다 — 데모용 가공 데이터.
+     · 사이드바 환자 리스트 → 아래 PATIENT_LIST 상수
+     · 카톡 메시지 → 아래 KAKAO_MESSAGES 상수
+     · 메인 패널의 카드/인디케이터 → HeroAnimatedMain.tsx 안
 
-   ▎carousel 동작
+   ▎애니메이션 동작
    ─────────────────────────────────────────────────────────────────
-   12초 주기로 Screen 1 ↔ Screen 2 가로 슬라이드 전환.
-   카톡 폰도 동기화되어 Screen 2 시점엔 fade out 됨.
-   keyframe 정의는 app/globals.css 의 .mock-hero-track / .mock-hero-phone.
+   메인 패널은 HeroAnimatedMain 컴포넌트가 담당. Framer Motion으로
+   6초 주기 5단계 자동 재생 (Step 1 분석 중 → Step 4 카드 등장 → Reset).
+   carousel·폰 fade keyframe 폐기됨 (이전 버전 → 단일 컴포넌트로 통합).
 
    ▎렌더 위치
    ─────────────────────────────────────────────────────────────────
-   components/sections/Hero.tsx 에서 SmartMock 의 fallback 으로 사용.
-   PNG 스크린샷 사용 시(constants.ts SCREENSHOTS.consultCoach 채움)
-   이 mock 은 무시되고 PNG 가 보임.
+   components/sections/Hero.tsx 의 SmartMock fallback.
+   PNG/MP4 사용 시(constants.ts SCREENSHOTS.consultCoach 채움)
+   이 mock 무시되고 미디어 파일이 보임.
    ═══════════════════════════════════════════════════════════════════ */
 
 const KAKAO_YELLOW = "#FEE500";
@@ -93,7 +92,24 @@ const KAKAO_MESSAGES: Array<{ from: "patient" | "clinic"; text: string }> = [
   },
 ];
 
+/* 카톡 폰 cycle: 0~1.5s visible → 1.5~2.0s 페이드아웃 + slide → 2~6s hidden → 6s reset */
+const PHONE_VISIBLE_MS = 1500;
+const PHONE_CYCLE_MS = 6000;
+
 export default function MockHeroComposite() {
+  const [phoneVisible, setPhoneVisible] = useState(true);
+
+  useEffect(() => {
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const cycle = () => {
+      setPhoneVisible(true);
+      timers.push(setTimeout(() => setPhoneVisible(false), PHONE_VISIBLE_MS));
+      timers.push(setTimeout(cycle, PHONE_CYCLE_MS));
+    };
+    cycle();
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
   return (
     <div className="relative">
       {/* ============ 데스크톱 대시보드 ============ */}
@@ -155,9 +171,9 @@ export default function MockHeroComposite() {
             </div>
           </aside>
 
-          {/* 메인 — 1차 상담 코치 (탭 + 환자 헤더 + 자동 carousel 콘텐츠) */}
+          {/* 메인 패널 — 단계 탭 + HeroAnimatedMain (자동 5단계 애니메이션) */}
           <main className="flex-1 min-w-0 p-4 overflow-hidden flex flex-col">
-            {/* 단계 탭 */}
+            {/* 단계 탭 (정적) */}
             <div className="flex items-center gap-1 mb-3 border-b border-slate-100 pb-2.5">
               <div
                 className="px-2.5 py-1 rounded-md text-[11px] font-semibold"
@@ -176,35 +192,25 @@ export default function MockHeroComposite() {
               </div>
             </div>
 
-            {/* 환자 헤더 (녹음 중 표시 제거됨) */}
-            <div className="rounded-lg bg-slate-50 px-3 py-2 mb-3">
-              <div className="text-[12px] font-semibold text-slate-900 leading-tight">
-                홍서연
-              </div>
-              <div className="text-[10px] text-slate-500 mt-0.5">
-                눈밑지방재배치 · P-F9A1279B
-              </div>
-            </div>
-
-            {/* 자동 carousel 영역 — 가로 트랙이 슬라이드해서 한 번에 한 화면만 보임 */}
-            <div className="relative flex-1 min-h-0 overflow-hidden">
-              <div className="mock-hero-track flex h-full">
-                <div className="w-1/2 shrink-0 pr-1">
-                  <Screen1 />
-                </div>
-                <div className="w-1/2 shrink-0 pl-1">
-                  <Screen2 />
-                </div>
-              </div>
+            {/* 환자 헤더 + 인디케이터 + 카드 영역 (Framer Motion 자동 애니메이션) */}
+            <div className="flex-1 min-h-0">
+              <HeroAnimatedMain />
             </div>
           </main>
         </div>
       </div>
 
-      {/* ============ 모바일 카톡 폰 (lg 이상에서만) ============ */}
-      {/* mock-hero-phone: carousel과 동기화 — Screen 1 시점만 보이고 Screen 2 시점엔 fade out */}
-      <div
-        className="mock-hero-phone hidden lg:block absolute -right-6 -bottom-10 w-[210px] select-none pointer-events-none"
+      {/* ============ 모바일 카톡 폰 (lg 이상에서만, 좌상단 시간 기반 페이드아웃) ============
+           cycle: 0~1.5s visible → 1.5~2.0s fade out + slide left → 2~6s hidden → 6s reset
+           "환자분 카톡 → AI 분석 → 카드" 인과 흐름을 시각화                                  */}
+      <motion.div
+        className="hidden lg:block absolute -left-4 -top-12 w-[180px] z-30 select-none pointer-events-none"
+        initial={{ opacity: 1, x: 0 }}
+        animate={{
+          opacity: phoneVisible ? 1 : 0,
+          x: phoneVisible ? 0 : -16,
+        }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         aria-hidden="true"
       >
         <div className="relative bg-white rounded-[28px] p-1.5 shadow-2xl shadow-black/20 ring-1 ring-slate-900/10">
@@ -279,108 +285,7 @@ export default function MockHeroComposite() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-}
-
-/* Screen 1 — AI 가이드 카드 3개 (요구·권장·피해야 할 말, 작은 카드 3개) */
-function Screen1() {
-  return (
-    <div className="space-y-2">
-      <div className="rounded-lg border border-slate-200 p-2.5">
-        <div className="text-[9px] font-semibold text-slate-400 tracking-wider mb-1">
-          환자분 핵심 요구
-        </div>
-        <p className="text-[11px] text-slate-700 leading-snug">
-          다크서클·애교살 자연스럽게, 회복기간 최소화 원함.
-        </p>
-      </div>
-      <div
-        className="rounded-lg border p-2.5"
-        style={{
-          borderColor: BRAND_BLUE_FAINT,
-          backgroundColor: "#F8FBFF",
-        }}
-      >
-        <div
-          className="text-[9px] font-semibold tracking-wider mb-1"
-          style={{ color: BRAND_BLUE }}
-        >
-          권장 멘트
-        </div>
-        <p className="text-[11px] text-slate-800 leading-snug">
-          &ldquo;재배치로 하시면 꺼짐 없이 자연스럽게 마무리됩니다.&rdquo;
-        </p>
-      </div>
-      <div className="rounded-lg border border-slate-200 p-2.5">
-        <div className="text-[9px] font-semibold text-rose-500 tracking-wider mb-1">
-          피해야 할 말
-        </div>
-        <p className="text-[11px] text-slate-600 leading-snug">
-          타 병원 시술 결과와 직접 비교하는 표현은 삼가주세요.
-        </p>
-      </div>
-    </div>
-  );
-}
-
-/* Screen 2 — 환자분 시나리오 형태 (환자 발화 + 권장 응답 큰 카드 + 피해야 할 응답 큰 카드) */
-function Screen2() {
-  return (
-    <div className="space-y-2.5">
-      {/* 환자 발화 */}
-      <div className="rounded-lg bg-slate-100 px-3 py-2">
-        <div className="text-[9px] font-semibold text-slate-500 tracking-wider mb-1">
-          환자분이 이렇게 물으시면…
-        </div>
-        <p className="text-[12px] text-slate-800 leading-snug font-medium">
-          &ldquo;다른 병원에서는 30만 원에 해준다는데, 여기는 왜 비싸요?&rdquo;
-        </p>
-      </div>
-
-      {/* 권장 응답 — 큰 카드 */}
-      <div
-        className="rounded-lg border p-2.5"
-        style={{
-          borderColor: BRAND_BLUE_FAINT,
-          backgroundColor: "#F8FBFF",
-        }}
-      >
-        <div className="flex items-center gap-1.5 mb-1.5">
-          <span
-            className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full"
-            style={{ backgroundColor: BRAND_BLUE }}
-          >
-            <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
-          </span>
-          <span
-            className="text-[10px] font-semibold tracking-wider"
-            style={{ color: BRAND_BLUE }}
-          >
-            이렇게 응대해 보세요
-          </span>
-        </div>
-        <p className="text-[11.5px] text-slate-800 leading-snug">
-          &ldquo;병원마다 사용하는 약품과 시술 디테일이 달라서 단순 비교가
-          어려워요. 환자분께 맞는 방식부터 같이 봐드릴게요.&rdquo;
-        </p>
-      </div>
-
-      {/* 피해야 할 응답 — 큰 카드 */}
-      <div className="rounded-lg border border-rose-100 bg-rose-50/40 p-2.5">
-        <div className="flex items-center gap-1.5 mb-1.5">
-          <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-rose-500">
-            <X className="w-2.5 h-2.5 text-white" strokeWidth={3} />
-          </span>
-          <span className="text-[10px] font-semibold tracking-wider text-rose-500">
-            이 답변은 피하세요
-          </span>
-        </div>
-        <p className="text-[11.5px] text-slate-700 leading-snug">
-          &ldquo;거기는 그 가격에 그만큼만 해주는 거예요.&rdquo;
-        </p>
-      </div>
+      </motion.div>
     </div>
   );
 }

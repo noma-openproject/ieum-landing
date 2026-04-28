@@ -87,7 +87,7 @@ export const COPY = {
      수정하면 보이는 곳: 첫 화면 좌측 큰 글씨 + 배지 + CTA 버튼
      렌더 컴포넌트: components/sections/Hero.tsx                      */
   hero: {
-    badge: "데모 사용 병원 모집 중", /* h1 위 작은 파란 알약 배지 */
+    badge: "초기 도입 병원 모집 중", /* h1 위 작은 파란 알약 배지 */
 
     /** h1Lines: 큰 헤드라인. 배열 안 각 항목이 한 줄로 표시됩니다.
         줄을 늘리려면 배열에 항목 추가, 줄을 합치려면 항목을 합치세요.
@@ -130,8 +130,8 @@ export const COPY = {
           "후기들이 쌓여 병원의 자산이 되는데, 만족하셨다고 하는 분들도 막상 글로 쓰기 어렵다며 잘 안 해주세요.",
       },
       {
-        /* 세 줄로 끊은 예시 */
-        title: "진료시간이 끝나고\n쉬지않고\n연락주시는 환자분들",
+        /* 두 줄로 정돈 — 다른 카드와 시각 균형 맞춤 */
+        title: "진료시간이 끝나고\n쉬지 않고 연락주시는 환자분들",
         quote:
           "진료시간이 끝나고 단순한 부작용인데도 너무 많이 연락이 와서 원장님도 힘들고 환자들은 불안과 불만이 쌓인 경험.",
       },
@@ -186,8 +186,9 @@ export const COPY = {
         /* 본문 아래 ✓ 체크리스트.
            status: "beta" 면 자동으로 "· 베타 운영 중" 회색 글씨가 붙습니다. */
         checklist: [
-          { text: "환자 별 특징을 파악하여 맞춤 질문 자동 생성" },
-          { text: "방문 목적·걱정·예산 자동 정리" },
+          { text: "환자분 핵심 요구 한 줄 요약" },
+          { text: "베테랑 권장 멘트 자동 작성 (병원 톤 반영)" },
+          { text: "피해야 할 표현 실시간 안내 (의료광고법·브랜드 톤)" },
           { text: "콜센터 통화 패턴 분석", status: "beta" as const },
         ],
         image: "",                       /* "" 면 HTML 목업 사용. 실제 PNG 경로 넣으면 PNG 사용. */
@@ -263,8 +264,8 @@ export const COPY = {
 
     /* ✓ 체크리스트 — 단순 문자열 배열 */
     bullets: [
-      "상담 경험 + 설문 기반 초안 자동 생성 (3안 비교)",
-      "4개 환자분 유형 × 길이 선택 (짧게 / 길게)",
+      "상담 경험 기반 초안 자동 생성 (환자분 유형별 4안 비교)",
+      "말투·길이 다듬기 — 환자분 보이스에 맞게",
       "QR · 카카오 · 네이버 · 강남언니 딥링크",
       "홈페이지 기록 + 중복 후기 자동 감지",
     ],
@@ -292,7 +293,7 @@ export const COPY = {
        status: "pilot" → "· 초기 도입 병원과 함께 개발 중" 회색 글씨 자동 부착 */
     bullets: [
       {
-        text: "사진 업로드 → AI 초안 답변 → 병원·원장 확인",
+        text: "사진·통증 업로드 → AI 응급도 자동 분류 → 의료진 확인",
         status: "ready" as const,
       },
       {
@@ -344,7 +345,7 @@ export const COPY = {
       },
       {
         iconName: "TrendingUp",
-        label: "환자분 만족도는 높은데\n후기는 안 쌓이는 병원",
+        label: "환자분 만족도는 높은데 후기 안 쌓이는 병원",
         quote: "분명 만족하셨는데 후기는 안 올리시네요",
         body: "환자분이 본인의 이야기를 쉽게 작성하실 수 있도록 이음이 도와드려요.",
       },
@@ -371,7 +372,7 @@ export const COPY = {
      렌더 컴포넌트: components/sections/PilotBanner.tsx               */
   pilotBanner: {
     badge: "EARLY ACCESS",
-    title: "지금은 데모 도입 병원을 모집하고 있어요.",
+    title: "초기 도입 병원과 함께 이음을 만들어가요.",
     subtitle: "실장님 1~2명 규모의 병원부터 함께 시작해요.",
     cta: "도입 문의하기",
   },
@@ -511,9 +512,17 @@ AI는 후기 초안만 만들어드리고,
       { label: "FAQ", href: "#faq" },
     ],
     companyMenuLabel: "COMPANY",                  /* 우측 컬럼 제목 */
+    /* 정책 페이지 준비 전 임시 — 클릭 시 메일로 자료 요청.
+       정책 페이지 준비되면 href 를 실제 페이지 경로로 교체. */
     companyMenu: [
-      { label: "이용약관", href: "#" },              /* href 가 # 이면 빈 링크 (페이지 준비 후 교체) */
-      { label: "개인정보처리방침", href: "#" },
+      {
+        label: "이용약관",
+        href: "mailto:idforshots@gmail.com?subject=이음 이용약관 자료 요청",
+      },
+      {
+        label: "개인정보처리방침",
+        href: "mailto:idforshots@gmail.com?subject=이음 개인정보처리방침 자료 요청",
+      },
     ],
     contactCta: "문의하기",
     kakaoLabel: "카카오톡",                       /* CONTACT.kakaoChannelUrl 있을 때만 노출 */
