@@ -87,7 +87,7 @@ export const COPY = {
      수정하면 보이는 곳: 첫 화면 좌측 큰 글씨 + 배지 + CTA 버튼
      렌더 컴포넌트: components/sections/Hero.tsx                      */
   hero: {
-    badge: "데모 사용 병원 모집 중", /* h1 위 작은 파란 알약 배지 */
+    badge: "초기 도입 병원 모집 중", /* h1 위 작은 파란 알약 배지 */
 
     /** h1Lines: 큰 헤드라인. 배열 안 각 항목이 한 줄로 표시됩니다.
         줄을 늘리려면 배열에 항목 추가, 줄을 합치려면 항목을 합치세요.
@@ -372,7 +372,7 @@ export const COPY = {
      렌더 컴포넌트: components/sections/PilotBanner.tsx               */
   pilotBanner: {
     badge: "EARLY ACCESS",
-    title: "지금은 데모 도입 병원을 모집하고 있어요.",
+    title: "초기 도입 병원과 함께 이음을 만들어가요.",
     subtitle: "실장님 1~2명 규모의 병원부터 함께 시작해요.",
     cta: "도입 문의하기",
   },
@@ -512,9 +512,17 @@ AI는 후기 초안만 만들어드리고,
       { label: "FAQ", href: "#faq" },
     ],
     companyMenuLabel: "COMPANY",                  /* 우측 컬럼 제목 */
+    /* 정책 페이지 준비 전 임시 — 클릭 시 메일로 자료 요청.
+       정책 페이지 준비되면 href 를 실제 페이지 경로로 교체. */
     companyMenu: [
-      { label: "이용약관", href: "#" },              /* href 가 # 이면 빈 링크 (페이지 준비 후 교체) */
-      { label: "개인정보처리방침", href: "#" },
+      {
+        label: "이용약관",
+        href: "mailto:idforshots@gmail.com?subject=이음 이용약관 자료 요청",
+      },
+      {
+        label: "개인정보처리방침",
+        href: "mailto:idforshots@gmail.com?subject=이음 개인정보처리방침 자료 요청",
+      },
     ],
     contactCta: "문의하기",
     kakaoLabel: "카카오톡",                       /* CONTACT.kakaoChannelUrl 있을 때만 노출 */
