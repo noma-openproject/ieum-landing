@@ -23,31 +23,3 @@ body {
   overflow-wrap: break-word;
 }
 
-/* Hero mockup 메인 패널 자동 carousel — 두 화면이 가로 트랙으로 늘어서고
-   transform translateX 로 슬라이드. 한 번에 한 화면만 보이고, 전환 시
-   슬라이드 효과로 깔끔하게 넘어감. 12초 주기 (4.8s 보임 + 1.2s 슬라이드 ×2). */
-@keyframes mockHeroTrack {
-  0%, 40% { transform: translateX(0); }
-  50%, 90% { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
-}
-.mock-hero-track {
-  width: 200%;
-  animation: mockHeroTrack 12s ease-in-out infinite;
-}
-
-/* 카톡 폰 오버레이는 Screen 1 일 때만 보이고, Screen 2(시나리오) 일 때는
-   살짝 오른쪽으로 빠지며 fade out — 시나리오 콘텐츠를 가리지 않도록. */
-@keyframes mockHeroPhone {
-  0%, 40% { opacity: 1; transform: translateX(0); }
-  50%, 90% { opacity: 0; transform: translateX(24px); }
-  100% { opacity: 1; transform: translateX(0); }
-}
-.mock-hero-phone {
-  animation: mockHeroPhone 12s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mock-hero-track { animation: none; transform: translateX(0); }
-  .mock-hero-phone { animation: none; opacity: 1; transform: translateX(0); }
-}
