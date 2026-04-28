@@ -100,9 +100,9 @@ export default function HeroAnimatedMain() {
         <Indicator step={step} />
       </div>
 
-      {/* 카드 영역 (스켈레톤 ↔ 카드 3개) — fixed min-h 로 layout shift 방지 */}
+      {/* 카드 영역 (스켈레톤 ↔ 카드 3개) — min-h + popLayout 으로 layout shift 방지 */}
       <div className="space-y-2 flex-1 min-h-[200px]">
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {step === 1 && (
             <motion.div
               key="skeleton"
@@ -119,7 +119,7 @@ export default function HeroAnimatedMain() {
           )}
         </AnimatePresence>
 
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {CARDS.map((card, i) =>
             isCardVisible(i) ? (
               <motion.div
