@@ -246,9 +246,10 @@ function Stage1Indicator({ step }: { step: 0 | 1 | 2 | 3 | 4 }) {
 
 function SkeletonRow() {
   return (
-    <div className="rounded-xl border border-slate-200 p-3.5 bg-slate-50/50">
+    <div className="rounded-xl border border-slate-200 p-3.5 bg-slate-50/50 min-h-[64px]">
       <div className="h-2.5 w-24 bg-slate-200 rounded mb-2 animate-pulse" />
-      <div className="h-2.5 w-full bg-slate-200/70 rounded animate-pulse" />
+      <div className="h-2.5 w-full bg-slate-200/70 rounded mb-1.5 animate-pulse" />
+      <div className="h-2.5 w-3/4 bg-slate-200/50 rounded animate-pulse" />
     </div>
   );
 }

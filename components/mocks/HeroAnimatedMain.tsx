@@ -100,8 +100,8 @@ export default function HeroAnimatedMain() {
         <Indicator step={step} />
       </div>
 
-      {/* 카드 영역 (스켈레톤 ↔ 카드 3개) */}
-      <div className="space-y-2 flex-1 min-h-0">
+      {/* 카드 영역 (스켈레톤 ↔ 카드 3개) — fixed min-h 로 layout shift 방지 */}
+      <div className="space-y-2 flex-1 min-h-[200px]">
         <AnimatePresence>
           {step === 1 && (
             <motion.div
@@ -182,12 +182,13 @@ function Indicator({ step }: { step: Step }) {
   );
 }
 
-/* ─── 스켈레톤 카드 (Step 1) ─── */
+/* ─── 스켈레톤 카드 (Step 1) — 실제 카드와 같은 height 로 layout shift 방지 ─── */
 function SkeletonCard() {
   return (
-    <div className="rounded-lg border border-slate-200 p-2.5 bg-slate-50/50">
+    <div className="rounded-lg border border-slate-200 p-2.5 bg-slate-50/50 min-h-[58px]">
       <div className="h-2 w-20 bg-slate-200 rounded mb-2 animate-pulse" />
-      <div className="h-2 w-full bg-slate-200/70 rounded animate-pulse" />
+      <div className="h-2 w-full bg-slate-200/70 rounded mb-1.5 animate-pulse" />
+      <div className="h-2 w-3/4 bg-slate-200/50 rounded animate-pulse" />
     </div>
   );
 }
