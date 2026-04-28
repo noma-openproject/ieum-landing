@@ -123,7 +123,7 @@ export default function MockConsultCoach({
         </div>
       </div>
 
-      <div className="flex">
+      <div className="flex min-h-[460px]">
         <PatientSidebar activeStage={stage} />
 
         <main className="flex-1 min-w-0 p-4 lg:p-5 flex flex-col">
