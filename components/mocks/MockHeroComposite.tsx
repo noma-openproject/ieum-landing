@@ -1,4 +1,7 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
 import HeroAnimatedMain from "./HeroAnimatedMain";
 
@@ -89,7 +92,24 @@ const KAKAO_MESSAGES: Array<{ from: "patient" | "clinic"; text: string }> = [
   },
 ];
 
+/* 카톡 폰 cycle: 0~1.5s visible → 1.5~2.0s 페이드아웃 + slide → 2~6s hidden → 6s reset */
+const PHONE_VISIBLE_MS = 1500;
+const PHONE_CYCLE_MS = 6000;
+
 export default function MockHeroComposite() {
+  const [phoneVisible, setPhoneVisible] = useState(true);
+
+  useEffect(() => {
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const cycle = () => {
+      setPhoneVisible(true);
+      timers.push(setTimeout(() => setPhoneVisible(false), PHONE_VISIBLE_MS));
+      timers.push(setTimeout(cycle, PHONE_CYCLE_MS));
+    };
+    cycle();
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
   return (
     <div className="relative">
       {/* ============ 데스크톱 대시보드 ============ */}
@@ -180,9 +200,17 @@ export default function MockHeroComposite() {
         </div>
       </div>
 
-      {/* ============ 모바일 카톡 폰 (lg 이상에서만, 항상 노출) ============ */}
-      <div
-        className="hidden lg:block absolute -right-48 -bottom-12 w-[200px] select-none pointer-events-none"
+      {/* ============ 모바일 카톡 폰 (lg 이상에서만, 좌상단 시간 기반 페이드아웃) ============
+           cycle: 0~1.5s visible → 1.5~2.0s fade out + slide left → 2~6s hidden → 6s reset
+           "환자분 카톡 → AI 분석 → 카드" 인과 흐름을 시각화                                  */}
+      <motion.div
+        className="hidden lg:block absolute -left-4 -top-12 w-[180px] z-30 select-none pointer-events-none"
+        initial={{ opacity: 1, x: 0 }}
+        animate={{
+          opacity: phoneVisible ? 1 : 0,
+          x: phoneVisible ? 0 : -16,
+        }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         aria-hidden="true"
       >
         <div className="relative bg-white rounded-[28px] p-1.5 shadow-2xl shadow-black/20 ring-1 ring-slate-900/10">
@@ -257,7 +285,7 @@ export default function MockHeroComposite() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
