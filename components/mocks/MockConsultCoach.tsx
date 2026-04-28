@@ -51,7 +51,7 @@ const TAB_ORDER: StageVariant[] = [1, 2, 3];
 
 const PATIENT = {
   name: "홍서연",
-  detail: "눈밑지방재배치 · P-F9A1279B",
+  detail: "눈밑지방재배치",
 };
 
 export default function MockConsultCoach({

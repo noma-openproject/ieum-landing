@@ -13,7 +13,7 @@ import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
 
    ▎무한 반복 시퀀스 (총 ~6.0초)
    ─────────────────────────────────────────────────────────────────
-   Step 1 (0~1.5s):  amber dot 깜빡 + "통화 내용 분석 중..." + 스켈레톤
+   Step 1 (0~1.5s):  amber dot 깜빡 + "상담 내용 분석 중..." + 스켈레톤
    Step 2 (1.5~2.0s): emerald dot + "정리 완료 08:23" + 1번 카드 fade-up
    Step 3 (2.0~2.5s): 2번 카드 fade-up + scale-up 강조 (1.05→1.0)
    Step 4 (2.5~5.5s): 3번 카드 fade-up + 3초 머무름
@@ -94,7 +94,7 @@ export default function HeroAnimatedMain() {
             홍서연
           </div>
           <div className="text-[10px] text-slate-500 mt-0.5">
-            눈밑지방재배치 · P-F9A1279B
+            눈밑지방재배치
           </div>
         </div>
         <Indicator step={step} />
@@ -163,7 +163,7 @@ function Indicator({ step }: { step: Step }) {
             <span className="absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75 animate-ping" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
           </span>
-          통화 내용 분석 중...
+          상담 내용 분석 중...
         </motion.div>
       ) : (
         <motion.div
