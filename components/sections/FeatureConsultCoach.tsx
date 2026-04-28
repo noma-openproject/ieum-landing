@@ -12,9 +12,10 @@ import { COPY } from "@/lib/copy";
 /* ═══════════════════════════════════════════════════════════════════
    FeatureConsultCoach — 0.1 CONSULT COACH 3-stage 섹션
    ═══════════════════════════════════════════════════════════════════
-   layout: 가운데 정렬 카피(상) → 풀폭 dashboard mock(하) — 상하 stack.
-   각 stage(1차/2차/3차)가 같은 패턴으로 stack. 좌우 grid 폐기.
-   0.2 ReviewBuilder / 0.3 CareNote와 layout 일관 (max-w-5xl mock).
+   layout: 좌우 grid + zigzag (orientation prop). stage 3개를 한 화면에
+   카피 + mock 같이 들어오게 컴팩트하게 표시.
+   풀폭 stack은 stage 3개 stack 시 페이지가 너무 길어져서 좌우 grid 유지.
+   (0.2/0.3은 mock 1개라 풀폭 stack OK)
    ═══════════════════════════════════════════════════════════════════ */
 
 type ConsultStage = (typeof COPY.consultCoach.stages)[number];
@@ -28,21 +29,23 @@ function stageVariant(key: string): 1 | 2 | 3 {
 }
 
 function StageBlock({ stage }: { stage: ConsultStage }) {
+  const textCol =
+    stage.orientation === "text-left" ? "lg:order-1" : "lg:order-2";
+  const mockCol =
+    stage.orientation === "text-left" ? "lg:order-2" : "lg:order-1";
+
   return (
-    <div>
-      {/* ─── 1. 가운데 정렬 카피 영역 ─── */}
-      <div className="text-center max-w-3xl mx-auto">
+    <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+      <div className={`lg:col-span-6 ${textCol}`}>
         <Reveal>
-          <div className="flex justify-center mb-5">
-            <div
-              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold"
-              style={{
-                backgroundColor: BRAND_BLUE_FAINT,
-                color: BRAND_BLUE,
-              }}
-            >
-              {stage.caption}
-            </div>
+          <div
+            className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold mb-5"
+            style={{
+              backgroundColor: BRAND_BLUE_FAINT,
+              color: BRAND_BLUE,
+            }}
+          >
+            {stage.caption}
           </div>
         </Reveal>
         <Reveal delay={80}>
@@ -55,7 +58,7 @@ function StageBlock({ stage }: { stage: ConsultStage }) {
             <p
               key={i}
               className={`text-[15.5px] text-slate-600 leading-[1.8] whitespace-pre-line ${
-                i === 0 ? "mt-6" : "mt-4"
+                i === 0 ? "mt-5" : "mt-4"
               }`}
             >
               {para}
@@ -63,11 +66,11 @@ function StageBlock({ stage }: { stage: ConsultStage }) {
           ))}
         </Reveal>
         <Reveal delay={240}>
-          <ul className="mt-8 inline-flex flex-wrap gap-x-6 gap-y-3 justify-center">
+          <ul className="mt-7 space-y-3">
             {stage.checklist.map((item) => (
-              <li key={item.text} className="flex items-center gap-2">
+              <li key={item.text} className="flex items-start gap-3">
                 <span
-                  className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                  className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
                   style={{ backgroundColor: BRAND_BLUE_FAINT }}
                 >
                   <Check
@@ -76,7 +79,7 @@ function StageBlock({ stage }: { stage: ConsultStage }) {
                     style={{ color: BRAND_BLUE }}
                   />
                 </span>
-                <span className="text-[14px] text-slate-700 leading-relaxed">
+                <span className="text-[14.5px] text-slate-700 leading-relaxed">
                   {item.text}
                   {"status" in item && item.status === "beta" && (
                     <span
@@ -93,8 +96,7 @@ function StageBlock({ stage }: { stage: ConsultStage }) {
         </Reveal>
       </div>
 
-      {/* ─── 2. mock 영역 (풀폭 max-w-5xl) ─── */}
-      <div className="mt-12 max-w-5xl mx-auto">
+      <div className={`lg:col-span-6 ${mockCol}`}>
         <Reveal delay={100}>
           <SmartMock
             screenshot={stage.image ?? SCREENSHOTS.consultCoach}
@@ -112,11 +114,9 @@ export default function FeatureConsultCoach() {
     <section className="py-20 lg:py-28 border-t border-slate-100">
       <div className="max-w-6xl mx-auto px-6">
         <Reveal>
-          <div className="flex justify-center">
-            <SectionLabel index={COPY.consultCoach.sectionIndex}>
-              {COPY.consultCoach.sectionLabel}
-            </SectionLabel>
-          </div>
+          <SectionLabel index={COPY.consultCoach.sectionIndex}>
+            {COPY.consultCoach.sectionLabel}
+          </SectionLabel>
         </Reveal>
 
         <div className="space-y-20 lg:space-y-28 mt-12">
