@@ -40,15 +40,19 @@ const stripped = src
 const QUOTED = /(["'])((?:(?!\1)[^\\\n]|\\.)*)\1/g;     /* 단일 라인 따옴표 */
 const BACKTICK = /`((?:[^`\\]|\\.)*)`/gs;                /* 백틱 멀티라인 */
 const HANGUL = /[가-힣]/;
+/* URL · 앵커 · 경로 패턴은 카피 아니라 메타데이터이므로 검사 제외 */
+const URL_PATTERN = /^(mailto:|https?:\/\/|tel:|\/[a-z]|#)/i;
 
 const candidates = [];
 let m;
 while ((m = QUOTED.exec(stripped)) !== null) {
   const s = m[2];
+  if (URL_PATTERN.test(s)) continue;
   if (s.length >= 8 && HANGUL.test(s)) candidates.push(s);
 }
 while ((m = BACKTICK.exec(stripped)) !== null) {
   const s = m[1];
+  if (URL_PATTERN.test(s)) continue;
   if (s.length >= 8 && HANGUL.test(s)) candidates.push(s);
 }
 
