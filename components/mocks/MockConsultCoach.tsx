@@ -545,32 +545,34 @@ function Stage2Animated() {
           ))}
         </div>
 
-        <AnimatePresence>
-          {isHandoverVisible && (
-            <motion.div
-              key="handover"
-              initial={{ opacity: 0, y: 16, scale: 1.03 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="rounded-xl border p-3.5"
-              style={{
-                borderColor: BRAND_BLUE_FAINT,
-                backgroundColor: "#F8FBFF",
-              }}
-            >
-              <div
-                className="text-[11px] font-semibold tracking-wider mb-1.5"
-                style={{ color: BRAND_BLUE }}
+        <div className="min-h-[120px]">
+          <AnimatePresence>
+            {isHandoverVisible && (
+              <motion.div
+                key="handover"
+                initial={{ opacity: 0, y: 16, scale: 1.03 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="rounded-xl border p-3.5"
+                style={{
+                  borderColor: BRAND_BLUE_FAINT,
+                  backgroundColor: "#F8FBFF",
+                }}
               >
-                {STAGE2_HANDOVER.label}
-              </div>
-              <p className="text-[13px] text-slate-800 leading-relaxed">
-                {STAGE2_HANDOVER.body}
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <div
+                  className="text-[11px] font-semibold tracking-wider mb-1.5"
+                  style={{ color: BRAND_BLUE }}
+                >
+                  {STAGE2_HANDOVER.label}
+                </div>
+                <p className="text-[13px] text-slate-800 leading-relaxed">
+                  {STAGE2_HANDOVER.body}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </motion.div>
     </>
   );
@@ -713,32 +715,34 @@ function Stage3Animated() {
           </div>
         </div>
 
-        <AnimatePresence>
-          {isScriptVisible && (
-            <motion.div
-              key="script"
-              initial={{ opacity: 0, y: 16, scale: 1.03 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="rounded-xl border p-3.5"
-              style={{
-                borderColor: BRAND_BLUE_FAINT,
-                backgroundColor: "#F8FBFF",
-              }}
-            >
-              <div
-                className="text-[11px] font-semibold tracking-wider mb-1.5"
-                style={{ color: BRAND_BLUE }}
+        <div className="min-h-[120px]">
+          <AnimatePresence>
+            {isScriptVisible && (
+              <motion.div
+                key="script"
+                initial={{ opacity: 0, y: 16, scale: 1.03 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="rounded-xl border p-3.5"
+                style={{
+                  borderColor: BRAND_BLUE_FAINT,
+                  backgroundColor: "#F8FBFF",
+                }}
               >
-                {STAGE3_SCRIPT.label}
-              </div>
-              <p className="text-[13px] text-slate-800 leading-relaxed">
-                {STAGE3_SCRIPT.body}
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <div
+                  className="text-[11px] font-semibold tracking-wider mb-1.5"
+                  style={{ color: BRAND_BLUE }}
+                >
+                  {STAGE3_SCRIPT.label}
+                </div>
+                <p className="text-[13px] text-slate-800 leading-relaxed">
+                  {STAGE3_SCRIPT.body}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </motion.div>
     </>
   );
