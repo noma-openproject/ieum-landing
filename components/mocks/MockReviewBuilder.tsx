@@ -76,11 +76,11 @@ const LINK_BAR = {
 };
 
 const DURATIONS = {
-  step1: 600,
-  step2: 600,
+  step1: 500,
+  step2: 500,
   step3: 1200,
-  step4: 600,
-  step5: 3000,
+  step4: 500,
+  step5: 2800,
   reset: 500,
 } as const;
 
@@ -116,16 +116,26 @@ export default function MockReviewBuilder() {
 
   return (
     <WindowFrame title="이음 · 후기 만들기">
+      {/* stepper — 3-state visual: completed(옅은 파랑), current(진한 파랑+scale), pending(회색) */}
       <div className="flex items-center gap-2 text-[11px] mb-5 flex-wrap">
         {STEPPER_LABELS.map((s, i) => {
-          const active = i < activeStepperCount;
+          const isCurrent = i === activeStepperCount - 1 && step !== 0;
+          const isCompleted = i < activeStepperCount - 1;
           return (
             <React.Fragment key={s}>
               <motion.span
                 animate={{
-                  backgroundColor: active ? BRAND_BLUE : "#F1F5F9",
-                  color: active ? "#FFFFFF" : "#94A3B8",
-                  scale: i === activeStepperCount - 1 && step !== 0 ? 1.06 : 1,
+                  backgroundColor: isCurrent
+                    ? BRAND_BLUE
+                    : isCompleted
+                      ? BRAND_BLUE_FAINT
+                      : "#F1F5F9",
+                  color: isCurrent
+                    ? "#FFFFFF"
+                    : isCompleted
+                      ? BRAND_BLUE
+                      : "#94A3B8",
+                  scale: isCurrent ? 1.08 : 1,
                 }}
                 transition={{ duration: 0.3 }}
                 className="px-2 py-1 rounded-md font-medium"

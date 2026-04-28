@@ -182,7 +182,7 @@ export default function MockHeroComposite() {
 
       {/* ============ 모바일 카톡 폰 (lg 이상에서만, 항상 노출) ============ */}
       <div
-        className="hidden lg:block absolute -right-6 -bottom-10 w-[210px] select-none pointer-events-none"
+        className="hidden lg:block absolute -right-48 -bottom-12 w-[200px] select-none pointer-events-none"
         aria-hidden="true"
       >
         <div className="relative bg-white rounded-[28px] p-1.5 shadow-2xl shadow-black/20 ring-1 ring-slate-900/10">

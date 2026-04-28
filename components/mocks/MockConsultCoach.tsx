@@ -315,9 +315,9 @@ const STAGE2_HANDOVER = {
 };
 
 const STAGE2_DURATIONS = {
-  step1: 800,
-  field: 400,
-  handover: 3000,
+  step1: 1200,
+  field: 600,
+  handover: 1700,
   reset: 500,
 } as const;
 
@@ -470,9 +470,9 @@ const STAGE3_SCRIPT = {
 };
 
 const STAGE3_DURATIONS = {
-  step1: 800,
+  step1: 1000,
   dot: 400,
-  script: 3000,
+  script: 2900,
   reset: 500,
 } as const;
 

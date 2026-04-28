@@ -74,7 +74,7 @@ const DURATIONS = {
   step1: 1000,
   step2: 500,
   step3: 500,
-  step4: 600,
+  step4: 500,
   step5: 3000,
   reset: 500,
 } as const;
