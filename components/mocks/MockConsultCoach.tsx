@@ -2,41 +2,34 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import WindowFrame from "../primitives/WindowFrame";
 import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
 
 /* ═══════════════════════════════════════════════════════════════════
-   MockConsultCoach — 0.1 CONSULT COACH 3 stage mock (Framer Motion 자동 재생)
+   MockConsultCoach — 0.1 CONSULT COACH 2-column dashboard mock
    ═══════════════════════════════════════════════════════════════════
-   ▎구성
+   ▎구성 (afterdoc 톤 — 좌측 환자 리스트 + 메인 stage cycle + 하단 KPI)
    ─────────────────────────────────────────────────────────────────
-   FeatureConsultCoach 섹션의 stage 1/2/3 영역에서 SmartMock fallback.
-   stage prop(1|2|3)에 따라 다른 자동 재생 시나리오 렌더:
-     · stage=1: 1차 온라인 상담 — AI 응대 가이드 카드 3개 차례 등장
-     · stage=2: 2차 현장 — 자동 정리 4필드 차례 채워짐 + 인계 박스
-     · stage=3: 3차 진료실 — 통합 타임라인 dot 차례 켜짐 + 진료 스크립트
+   • 윈도우 크롬 (이음 · 상담 코치 + 실시간 동기화 indicator)
+   • 2-column flex (lg+):
+       col 1: 진행 중 환자분 4명 (stage prop에 따라 active 변경)
+       col 2: 메인 — 단계 탭 + Stage1/2/3 cycle + 하단 KPI bar
 
-   ▎시나리오 (각 stage 무한 반복, 5~7s 주기)
-   ─────────────────────────────────────────────────────────────────
-   Stage 1: 분석 중 → 카드 1·2·3 차례 등장 (Hero와 같은 패턴)
-   Stage 2: 4 필드 차례 채워짐(typing 느낌) → 인계 박스 등장
-   Stage 3: 타임라인 dot 4개 차례 켜짐 → 강조 포인트 박스 등장
+   ▎모바일 (lg 미만): col 1 hidden, 메인만 노출
 
-   ▎이 mock 안의 카피를 수정하고 싶다면?
+   ▎stage prop (1·2·3) → 자동 재생 시나리오 + 사이드바 active 환자 + KPI 변경
+
+   ▎이 mock 안의 카피 수정
    ─────────────────────────────────────────────────────────────────
-   이 mock의 텍스트는 lib/copy.ts 에 없습니다 — 데모용 가공 데이터.
-     · stage1 카드 → STAGE1_CARDS 상수
-     · stage2 필드 → STAGE2_FIELDS 상수
-     · stage2 인계 박스 → STAGE2_HANDOVER 상수
-     · stage3 타임라인 → STAGE3_TIMELINE 상수
-     · stage3 강조 포인트 박스 → STAGE3_SCRIPT 상수
-     · 환자 이름·시술명 → PATIENT 상수
+     · 사이드바 → PATIENTS 상수
+     · stage별 KPI → STAGE_KPI 상수
+     · stage1 카드 → STAGE1_CARDS
+     · stage2 필드/인계 → STAGE2_FIELDS / STAGE2_HANDOVER
+     · stage3 타임라인/스크립트 → STAGE3_TIMELINE / STAGE3_SCRIPT
+     · 메인 환자 헤더 → PATIENT
 
    ▎렌더 위치
    ─────────────────────────────────────────────────────────────────
    components/sections/FeatureConsultCoach.tsx 의 SmartMock fallback.
-   PNG(constants.ts SCREENSHOTS.consultCoach 또는 stage.image) 채우면
-   이 mock 무시되고 PNG 가 보임.
    ═══════════════════════════════════════════════════════════════════ */
 
 type StageVariant = 1 | 2 | 3;
@@ -54,44 +47,184 @@ const PATIENT = {
   detail: "눈밑지방재배치",
 };
 
+/* ─── col 1 사이드바: 진행 중 환자 4명 (stage 매칭) ─── */
+const PATIENTS: Array<{
+  name: string;
+  stage: StageVariant | null;
+  chip: string;
+  chipBg: string;
+  chipFg: string;
+  detail: string;
+  time: string;
+}> = [
+  {
+    name: "홍서연",
+    stage: 1,
+    chip: "1차",
+    chipBg: "bg-amber-100",
+    chipFg: "text-amber-800",
+    detail: "눈밑지방재배치",
+    time: "08:23",
+  },
+  {
+    name: "김민지",
+    stage: 2,
+    chip: "2차",
+    chipBg: "bg-blue-100",
+    chipFg: "text-blue-800",
+    detail: "코필러 현장",
+    time: "10:15",
+  },
+  {
+    name: "박지영",
+    stage: 3,
+    chip: "3차",
+    chipBg: "bg-emerald-100",
+    chipFg: "text-emerald-800",
+    detail: "리프팅 진료",
+    time: "14:00",
+  },
+  {
+    name: "이지수",
+    stage: null,
+    chip: "케어",
+    chipBg: "bg-violet-100",
+    chipFg: "text-violet-800",
+    detail: "윤곽주사 D+3",
+    time: "어제",
+  },
+];
+
+/* ─── 하단 KPI bar — stage별 다른 운영 라인 ─── */
+const STAGE_KPI: Record<StageVariant, { left: string; right: string }> = {
+  1: { left: "통화 녹취 08:23 / 12:45", right: "응대 만족도 ↑ 23%" },
+  2: { left: "현장 정리 03:42", right: "필드 4/4 자동 채움" },
+  3: { left: "통합 타임라인 4 이력", right: "강조 포인트 1건" },
+};
+
 export default function MockConsultCoach({
   stage = 1,
 }: {
   stage?: StageVariant;
 } = {}) {
   return (
-    <WindowFrame title="이음 · 상담 코치">
-      {/* 단계 탭 */}
-      <div className="flex items-center gap-1 mb-4 border-b border-slate-100 pb-3">
-        {TAB_ORDER.map((s) => {
-          const active = s === stage;
+    <div className="rounded-2xl bg-white overflow-hidden shadow-[0_30px_60px_-30px_rgba(15,23,42,0.25),0_0_0_1px_rgba(15,23,42,0.05)]">
+      {/* 윈도우 크롬 */}
+      <div className="flex items-center gap-1.5 px-3.5 py-2.5 border-b border-slate-100 bg-slate-50/60">
+        <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+        <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+        <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+        <div className="ml-3 text-[11px] text-slate-400 font-medium">
+          이음 · 상담 코치
+        </div>
+        <div className="ml-auto hidden sm:flex items-center gap-1.5 text-[10px] text-slate-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+          실시간 동기화
+        </div>
+      </div>
+
+      <div className="flex">
+        <PatientSidebar activeStage={stage} />
+
+        <main className="flex-1 min-w-0 p-4 lg:p-5 flex flex-col">
+          {/* 단계 탭 */}
+          <div className="flex items-center gap-1 mb-4 border-b border-slate-100 pb-3 flex-wrap">
+            {TAB_ORDER.map((s) => {
+              const active = s === stage;
+              return (
+                <div
+                  key={s}
+                  className={
+                    active
+                      ? "px-3 py-1.5 rounded-md text-xs font-semibold"
+                      : "px-3 py-1.5 text-xs text-slate-400"
+                  }
+                  style={
+                    active
+                      ? {
+                          backgroundColor: BRAND_BLUE_FAINT,
+                          color: BRAND_BLUE,
+                        }
+                      : {}
+                  }
+                >
+                  {TAB_LABELS[s]}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* stage cycle 영역 */}
+          <div className="flex-1 min-h-0">
+            {stage === 1 && <Stage1Animated />}
+            {stage === 2 && <Stage2Animated />}
+            {stage === 3 && <Stage3Animated />}
+          </div>
+
+          {/* 하단 KPI bar (정적, stage별) */}
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+              <span className="text-slate-500 font-medium truncate">
+                {STAGE_KPI[stage].left}
+              </span>
+            </div>
+            <div
+              className="font-semibold shrink-0"
+              style={{ color: BRAND_BLUE }}
+            >
+              {STAGE_KPI[stage].right}
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
+
+/* ─── col 1 사이드바 (lg+ only, 정적) ─── */
+function PatientSidebar({ activeStage }: { activeStage: StageVariant }) {
+  return (
+    <aside className="hidden lg:flex w-[150px] shrink-0 border-r border-slate-100 bg-slate-50/40 flex-col">
+      <div className="px-3 pt-3 pb-2 flex items-center justify-between">
+        <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase">
+          진행 중
+        </div>
+        <span className="text-[10px] font-semibold text-slate-500">
+          {PATIENTS.length}
+        </span>
+      </div>
+      <div className="flex-1 px-1.5 pb-3">
+        {PATIENTS.map((p) => {
+          const isActive = p.stage === activeStage;
           return (
             <div
-              key={s}
-              className={
-                active
-                  ? "px-3 py-1.5 rounded-md text-xs font-semibold"
-                  : "px-3 py-1.5 text-xs text-slate-400"
-              }
-              style={
-                active
-                  ? {
-                      backgroundColor: BRAND_BLUE_FAINT,
-                      color: BRAND_BLUE,
-                    }
-                  : {}
-              }
+              key={p.name}
+              className={`rounded-lg px-2 py-2 mb-0.5 ${
+                isActive ? "bg-white shadow-sm ring-1 ring-slate-200" : ""
+              }`}
             >
-              {TAB_LABELS[s]}
+              <div className="flex items-center gap-1.5">
+                <span className="text-[12px] font-semibold text-slate-900 truncate">
+                  {p.name}
+                </span>
+                <span
+                  className={`text-[8px] font-semibold px-1 py-0.5 rounded leading-none ${p.chipBg} ${p.chipFg}`}
+                >
+                  {p.chip}
+                </span>
+                <span className="ml-auto text-[9px] text-slate-400">
+                  {p.time}
+                </span>
+              </div>
+              <p className="mt-1 text-[10px] text-slate-500 truncate">
+                {p.detail}
+              </p>
             </div>
           );
         })}
       </div>
-
-      {stage === 1 && <Stage1Animated />}
-      {stage === 2 && <Stage2Animated />}
-      {stage === 3 && <Stage3Animated />}
-    </WindowFrame>
+    </aside>
   );
 }
 
@@ -165,7 +298,7 @@ function Stage1Animated() {
       </div>
 
       <div className="space-y-3 min-h-[220px]">
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence>
           {step === 1 && (
             <motion.div
               key="skeleton"
@@ -182,7 +315,7 @@ function Stage1Animated() {
           )}
         </AnimatePresence>
 
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence>
           {STAGE1_CARDS.map((card, i) =>
             isCardVisible(i) ? (
               <motion.div
@@ -246,10 +379,9 @@ function Stage1Indicator({ step }: { step: 0 | 1 | 2 | 3 | 4 }) {
 
 function SkeletonRow() {
   return (
-    <div className="rounded-xl border border-slate-200 p-3.5 bg-slate-50/50 min-h-[64px]">
+    <div className="rounded-xl border border-slate-200 p-3.5 bg-slate-50/50">
       <div className="h-2.5 w-24 bg-slate-200 rounded mb-2 animate-pulse" />
-      <div className="h-2.5 w-full bg-slate-200/70 rounded mb-1.5 animate-pulse" />
-      <div className="h-2.5 w-3/4 bg-slate-200/50 rounded animate-pulse" />
+      <div className="h-2.5 w-full bg-slate-200/70 rounded animate-pulse" />
     </div>
   );
 }
@@ -413,7 +545,7 @@ function Stage2Animated() {
           ))}
         </div>
 
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence>
           {isHandoverVisible && (
             <motion.div
               key="handover"
@@ -581,7 +713,7 @@ function Stage3Animated() {
           </div>
         </div>
 
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence>
           {isScriptVisible && (
             <motion.div
               key="script"

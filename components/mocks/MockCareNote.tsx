@@ -3,39 +3,36 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Stethoscope, Image as ImageIcon } from "lucide-react";
-import WindowFrame from "../primitives/WindowFrame";
 import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
 
 /* ═══════════════════════════════════════════════════════════════════
-   MockCareNote — 0.3 CARE NOTE mock (dashboard 형식)
+   MockCareNote — 0.3 CARE NOTE 3-column dashboard mock
    ═══════════════════════════════════════════════════════════════════
-   ▎구성 (3-column dashboard, lg+에서만 사이드바·우측 보임)
+   ▎구성 (afterdoc 톤 — multi-area dashboard)
    ─────────────────────────────────────────────────────────────────
-   좌 사이드바 (정적): 케어 중 환자분 리스트 (D+N 진행 일자, 응급 1명 highlight)
-   가운데 메인 (cycle): 환자 헤더 + 타임라인 D+1·D+3·D+7 + 의료진 확인 알림
-   우 사이드 (정적): 환자 업로드 사진 썸네일 3장 + 응급도 분포 미니
+   • 윈도우 크롬 (이음 · 케어 노트 + 실시간 동기화 indicator)
+   • 3-column flex (lg+):
+       col 1: 케어 중 환자분 4명 (D+1·3·7·14 dot 색)
+       col 2: 메인 — 환자 헤더 + D+1/D+3/D+7 타임라인 cycle (기존)
+       col 3: 우측 — 환자 사진 썸네일 + 통증 추이 sparkline + 응급 알림
 
-   모바일: 좌·우 사이드 hidden, 메인만 표시.
+   ▎모바일 (lg 미만): col 1·3 hidden, 메인만 노출
 
-   ▎시나리오 (메인만 cycle, 6초 주기)
+   ▎이 mock 안의 카피 수정
    ─────────────────────────────────────────────────────────────────
-   Step 1 (0~1.0s):    헤더만, 타임라인 placeholder
-   Step 2 (1.0~1.5s):  D+1 카드 fade-up
-   Step 3 (1.5~2.0s):  D+3 카드
-   Step 4 (2.0~2.5s):  D+7 rose scale-up
-   Step 5 (2.5~5.5s):  의료진 알림 등장
-   Reset (5.5~6.0s):   페이드아웃
+     · 사이드바 → CARE_PATIENTS 상수
+     · 메인 환자 헤더 → PATIENT 상수
+     · 타임라인 → TIMELINE 상수
+     · 우측 사진 → UPLOADS 상수
+     · 통증 추이 → PAIN_TREND 상수
+     · 응급 알림 → ALERT 상수
 
-   ▎카피 수정 위치
+   ▎렌더 위치
    ─────────────────────────────────────────────────────────────────
-     · 환자 정보 → PATIENT
-     · 타임라인 카드 → TIMELINE
-     · 알림 박스 → ALERT
-     · 사이드바 환자 → CARE_QUEUE
-     · 우측 사진 → PHOTOS
+   components/sections/FeatureCareNote.tsx 의 SmartMock fallback.
    ═══════════════════════════════════════════════════════════════════ */
 
-type Tone = "amber" | "emerald" | "rose";
+type Tone = "amber" | "emerald" | "rose" | "slate";
 
 const PATIENT = {
   name: "홍서연",
@@ -67,45 +64,68 @@ const TONE_MAP: Record<Tone, { bg: string; fg: string }> = {
   amber: { bg: "#FEF3C7", fg: "#B45309" },
   emerald: { bg: "#DCFCE7", fg: "#166534" },
   rose: { bg: "#FFE4E6", fg: "#BE123C" },
+  slate: { bg: "#F1F5F9", fg: "#64748B" },
 };
 
-/* 좌 사이드바: 케어 중 환자 리스트 (정적) */
-const CARE_QUEUE: {
+/* ─── col 1 사이드바: 케어 중 환자 4명 ─── */
+const CARE_PATIENTS: Array<{
   name: string;
+  detail: string;
   day: string;
   tone: Tone;
-  note: string;
   active: boolean;
-}[] = [
+  upload: string;
+}> = [
   {
     name: "홍서연",
+    detail: "눈밑지방재배치",
     day: "D+7",
     tone: "rose",
-    note: "응급 확인 요청",
     active: true,
+    upload: "10분 전 사진",
   },
-  { name: "김민지", day: "D+3", tone: "emerald", note: "정상", active: false },
-  { name: "박지영", day: "D+1", tone: "amber", note: "관찰", active: false },
+  {
+    name: "김민지",
+    detail: "코필러",
+    day: "D+3",
+    tone: "emerald",
+    active: false,
+    upload: "어제 사진",
+  },
+  {
+    name: "박지영",
+    detail: "리프팅",
+    day: "D+1",
+    tone: "amber",
+    active: false,
+    upload: "오늘 새벽",
+  },
   {
     name: "이지수",
+    detail: "윤곽주사",
     day: "D+14",
-    tone: "emerald",
-    note: "회복 완료",
+    tone: "slate",
     active: false,
+    upload: "3일 전",
   },
 ];
 
-/* 우 사이드: 환자 업로드 사진 썸네일 (정적) */
-const PHOTOS = [
-  { label: "D+7 좌측", tint: "#FFE4E6" },
-  { label: "D+7 우측", tint: "#FEE2E2" },
-  { label: "D+3 정면", tint: "#DCFCE7" },
+/* ─── col 3 통증 추이 sparkline ─── */
+const PAIN_TREND = [
+  { day: "D+1", level: 3 },
+  { day: "D+2", level: 4 },
+  { day: "D+3", level: 2 },
+  { day: "D+5", level: 1 },
+  { day: "D+7", level: 3 },
 ];
 
-const SEVERITY = [
-  { label: "응급", count: 1, color: "#BE123C" },
-  { label: "관찰", count: 1, color: "#B45309" },
-  { label: "정상", count: 2, color: "#166534" },
+const PAIN_MAX = 5;
+
+/* ─── col 3 환자 업로드 사진 (placeholder) ─── */
+const UPLOADS = [
+  { day: "D+1", time: "오후 2:14" },
+  { day: "D+3", time: "오전 9:30" },
+  { day: "D+7", time: "10분 전" },
 ];
 
 const DURATIONS = {
@@ -146,29 +166,38 @@ export default function MockCareNote() {
   const isAlertVisible = step >= 5 && step !== 0;
 
   return (
-    <WindowFrame title="이음 · 케어 노트">
-      <div className="flex gap-4">
-        {/* ═══ 좌 사이드바 — 정적 ═══ */}
+    <div className="rounded-2xl bg-white overflow-hidden shadow-[0_30px_60px_-30px_rgba(15,23,42,0.25),0_0_0_1px_rgba(15,23,42,0.05)]">
+      {/* 윈도우 크롬 */}
+      <div className="flex items-center gap-1.5 px-3.5 py-2.5 border-b border-slate-100 bg-slate-50/60">
+        <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+        <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+        <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+        <div className="ml-3 text-[11px] text-slate-400 font-medium">
+          이음 · 케어 노트
+        </div>
+        <div className="ml-auto hidden sm:flex items-center gap-1.5 text-[10px] text-slate-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+          실시간 동기화
+        </div>
+      </div>
+
+      <div className="flex">
         <CareSidebar />
 
-        {/* ═══ 가운데 메인 — cycle ═══ */}
-        <div className="flex-1 min-w-0">
+        <main className="flex-1 min-w-0 p-4 lg:p-5 flex flex-col">
           {/* 환자 헤더 */}
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <div>
-                <div className="text-sm font-semibold text-slate-900 tracking-tight">
-                  {PATIENT.name}
-                </div>
-                <div className="text-[11px] text-slate-500 mt-0.5">
-                  {PATIENT.detail}
-                </div>
+            <div>
+              <div className="text-sm font-semibold text-slate-900 tracking-tight flex items-center gap-2">
+                {PATIENT.name}
+                <span
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ backgroundColor: TONE_MAP.rose.fg }}
+                />
               </div>
-              <span
-                className="w-2 h-2 rounded-full ml-1"
-                style={{ backgroundColor: TONE_MAP.rose.fg }}
-                aria-label="응급"
-              />
+              <div className="text-[11px] text-slate-500 mt-0.5">
+                {PATIENT.detail}
+              </div>
             </div>
             <div className="text-[10px] text-slate-400 font-medium">
               {PATIENT.uploads}
@@ -179,7 +208,7 @@ export default function MockCareNote() {
           <motion.div
             animate={{ opacity: step === 0 ? 0 : 1 }}
             transition={{ duration: 0.3 }}
-            className="relative pl-4 min-h-[230px]"
+            className="relative pl-4 flex-1 min-h-[230px]"
           >
             <div className="absolute left-[6px] top-1 bottom-1 w-px bg-slate-200" />
 
@@ -188,17 +217,16 @@ export default function MockCareNote() {
                 {TIMELINE.map((it, i) => (
                   <div key={`ph-${i}`} className="relative">
                     <span className="absolute -left-[11px] top-2.5 w-2.5 h-2.5 rounded-full bg-slate-200" />
-                    <div className="rounded-xl border border-slate-200 p-3 bg-slate-50/30 min-h-[60px]">
+                    <div className="rounded-xl border border-slate-200 p-3 bg-slate-50/30">
                       <div className="h-3 w-20 bg-slate-100 rounded mb-2 animate-pulse" />
-                      <div className="h-2.5 w-full bg-slate-100 rounded mb-1.5 animate-pulse" />
-                      <div className="h-2.5 w-2/3 bg-slate-100 rounded animate-pulse" />
+                      <div className="h-2.5 w-full bg-slate-100 rounded animate-pulse" />
                     </div>
                   </div>
                 ))}
               </div>
             )}
 
-            <AnimatePresence mode="popLayout">
+            <AnimatePresence>
               {step !== 1 &&
                 TIMELINE.map((it, i) =>
                   isCardVisible(i) ? (
@@ -244,75 +272,70 @@ export default function MockCareNote() {
             </AnimatePresence>
           </motion.div>
 
-          {/* 의료진 확인 알림 */}
-          <div className="mt-4 min-h-[44px]">
-            <AnimatePresence mode="popLayout">
-              {isAlertVisible && (
-                <motion.div
-                  key="alert"
-                  initial={{ opacity: 0, y: 12, scale: 1.03 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="rounded-xl p-3 flex items-center gap-2"
-                  style={{ backgroundColor: BRAND_BLUE_FAINT }}
-                >
-                  <Stethoscope
-                    className="w-4 h-4"
-                    style={{ color: BRAND_BLUE }}
-                  />
-                  <span
-                    className="text-[11px] font-semibold"
-                    style={{ color: BRAND_BLUE }}
-                  >
-                    {ALERT.text}
-                  </span>
-                </motion.div>
-              )}
-            </AnimatePresence>
+          {/* 하단 KPI bar */}
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+              <span className="text-slate-500 font-medium truncate">
+                케어 중 4명 · 응급 1 / 관찰 1 / 정상 2
+              </span>
+            </div>
+            <div
+              className="font-semibold shrink-0"
+              style={{ color: BRAND_BLUE }}
+            >
+              평균 응답 4분
+            </div>
           </div>
-        </div>
+        </main>
 
-        {/* ═══ 우 사이드 — 정적 사진 + 응급도 ═══ */}
-        <CarePhotos />
+        <CareRightPanel isAlertVisible={isAlertVisible} />
       </div>
-    </WindowFrame>
+    </div>
   );
 }
 
-/* ─── 좌 사이드바: 케어 중 환자 리스트 (lg+ 에서만 보임) ─── */
+/* ─── col 1 사이드바: 케어 중 환자 4명 (lg+ only) ─── */
 function CareSidebar() {
   return (
-    <aside className="hidden lg:flex flex-col w-[180px] shrink-0 border-r border-slate-100 pr-4">
-      <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mb-3">
-        케어 중
+    <aside className="hidden lg:flex w-[170px] shrink-0 border-r border-slate-100 bg-slate-50/40 flex-col">
+      <div className="px-3 pt-3 pb-2 flex items-center justify-between">
+        <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase">
+          케어 중
+        </div>
+        <span className="text-[10px] font-semibold text-slate-500">
+          {CARE_PATIENTS.length}
+        </span>
       </div>
-      <div className="space-y-1">
-        {CARE_QUEUE.map((p) => (
+      <div className="flex-1 overflow-hidden px-1.5 pb-3">
+        {CARE_PATIENTS.map((p) => (
           <div
             key={p.name}
-            className={`rounded-lg px-2 py-2 ${
-              p.active ? "bg-slate-50 ring-1 ring-slate-200" : ""
+            className={`rounded-lg px-2 py-2 mb-0.5 ${
+              p.active ? "bg-white shadow-sm ring-1 ring-slate-200" : ""
             }`}
           >
-            <div className="flex items-center justify-between mb-0.5">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[12px] font-semibold text-slate-900">
-                  {p.name}
-                </span>
-                <span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ backgroundColor: TONE_MAP[p.tone].fg }}
-                />
-              </div>
+            <div className="flex items-center gap-1.5">
               <span
-                className="text-[9px] font-semibold"
+                className="w-1.5 h-1.5 rounded-full shrink-0"
+                style={{ backgroundColor: TONE_MAP[p.tone].fg }}
+              />
+              <span className="text-[12px] font-semibold text-slate-900 truncate">
+                {p.name}
+              </span>
+              <span
+                className="ml-auto text-[9px] font-semibold"
                 style={{ color: TONE_MAP[p.tone].fg }}
               >
                 {p.day}
               </span>
             </div>
-            <p className="text-[10px] text-slate-500 truncate">{p.note}</p>
+            <p className="mt-1 text-[10px] text-slate-500 truncate">
+              {p.detail}
+            </p>
+            <p className="mt-0.5 text-[9px] text-slate-400 truncate">
+              {p.upload}
+            </p>
           </div>
         ))}
       </div>
@@ -320,50 +343,90 @@ function CareSidebar() {
   );
 }
 
-/* ─── 우 사이드: 환자 업로드 사진 + 응급도 분포 (lg+ 에서만 보임) ─── */
-function CarePhotos() {
+/* ─── col 3 우측 패널: 사진 + 통증 추이 + 응급 알림 (lg+ only) ─── */
+function CareRightPanel({ isAlertVisible }: { isAlertVisible: boolean }) {
   return (
-    <aside className="hidden lg:flex flex-col w-[160px] shrink-0 border-l border-slate-100 pl-4">
-      <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mb-3">
-        환자 업로드
-      </div>
-      <div className="grid grid-cols-3 gap-1.5 mb-4">
-        {PHOTOS.map((ph, i) => (
-          <div
-            key={i}
-            className="aspect-square rounded-md flex items-center justify-center"
-            style={{ backgroundColor: ph.tint }}
-            title={ph.label}
-          >
-            <ImageIcon
-              className="w-4 h-4"
-              style={{ color: "rgba(15, 23, 42, 0.4)" }}
-            />
-          </div>
-        ))}
-      </div>
+    <aside className="hidden lg:flex w-[200px] shrink-0 border-l border-slate-100 flex-col p-3.5 gap-3.5">
+      {/* 환자 업로드 사진 placeholder */}
       <div>
         <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mb-2">
-          응급도 분포
+          환자 업로드
         </div>
-        <div className="space-y-1.5">
-          {SEVERITY.map((s) => (
+        <div className="grid grid-cols-3 gap-1.5">
+          {UPLOADS.map((u) => (
             <div
-              key={s.label}
-              className="flex items-center justify-between text-[11px]"
+              key={u.day}
+              className="aspect-square rounded-md bg-slate-100 ring-1 ring-slate-200/50 flex flex-col items-center justify-center text-[8px] text-slate-400 gap-0.5"
             >
-              <div className="flex items-center gap-1.5">
-                <span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ backgroundColor: s.color }}
-                />
-                <span className="text-slate-600">{s.label}</span>
-              </div>
-              <span className="font-semibold text-slate-900">{s.count}</span>
+              <ImageIcon className="w-3 h-3" />
+              <span className="font-semibold text-slate-500">{u.day}</span>
             </div>
           ))}
         </div>
+        <p className="mt-1.5 text-[9px] text-slate-400">
+          최근 업로드 {UPLOADS[UPLOADS.length - 1].time}
+        </p>
       </div>
+
+      {/* 통증 추이 sparkline */}
+      <div>
+        <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mb-2">
+          통증 추이
+        </div>
+        <div className="flex items-end gap-1 h-12">
+          {PAIN_TREND.map((p) => {
+            const heightPercent = (p.level / PAIN_MAX) * 100;
+            const isHigh = p.level >= 3;
+            return (
+              <div key={p.day} className="flex-1 flex flex-col items-center">
+                <div className="w-full flex-1 flex items-end">
+                  <div
+                    className="w-full rounded-sm"
+                    style={{
+                      height: `${heightPercent}%`,
+                      backgroundColor: isHigh
+                        ? TONE_MAP.rose.fg
+                        : TONE_MAP.emerald.fg,
+                      opacity: isHigh ? 1 : 0.6,
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex gap-1 mt-1">
+          {PAIN_TREND.map((p) => (
+            <span
+              key={p.day}
+              className="flex-1 text-center text-[8px] text-slate-400"
+            >
+              {p.day}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* 응급 알림 */}
+      <motion.div
+        animate={{
+          backgroundColor: isAlertVisible ? BRAND_BLUE_FAINT : "#F8FAFC",
+          opacity: isAlertVisible ? 1 : 0.6,
+        }}
+        transition={{ duration: 0.4 }}
+        className="rounded-xl p-2.5 flex items-center gap-2 mt-auto"
+      >
+        <Stethoscope
+          className="w-4 h-4 shrink-0"
+          style={{ color: BRAND_BLUE }}
+        />
+        <span
+          className="text-[11px] font-semibold leading-tight"
+          style={{ color: BRAND_BLUE }}
+        >
+          {ALERT.text}
+        </span>
+      </motion.div>
     </aside>
   );
 }
