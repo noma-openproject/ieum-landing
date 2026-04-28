@@ -12,10 +12,26 @@ import {
 } from "../constants";
 import { COPY } from "@/lib/copy";
 
+/* ═══════════════════════════════════════════════════════════════════
+   Hero — 상하 stack + 풀폭 dashboard (afterdoc.ai 톤 참고)
+   ═══════════════════════════════════════════════════════════════════
+   ▎layout
+   ─────────────────────────────────────────────────────────────────
+   1. 가운데 정렬 텍스트 (badge → h1 2줄 → sub + productName → CTA)
+   2. 그 아래 풀폭 dashboard mock (4-column: 환자 / 메인 / 카톡 / 응급 케어)
+
+   ▎fold 처리 (1280px viewport 기준)
+   ─────────────────────────────────────────────────────────────────
+   첫 화면에 텍스트+CTA + dashboard 첫 1/3 들어옴.
+     · py 축소 (pt-14 pb-12)
+     · h1 살짝 축소 (52px) + 2줄
+     · sub + productName 컴팩트
+   ═══════════════════════════════════════════════════════════════════ */
+
 export default function Hero() {
   return (
     <section className="relative overflow-hidden">
-      {/* 배경 도트 */}
+      {/* 배경 도트 — 가운데 정렬 layout 에 맞춰 mask 중앙으로 */}
       <div
         className="absolute inset-0 opacity-[0.5] pointer-events-none"
         style={{
@@ -23,17 +39,18 @@ export default function Hero() {
             "radial-gradient(circle at 1px 1px, #CBD5E1 1px, transparent 0)",
           backgroundSize: "24px 24px",
           maskImage:
-            "radial-gradient(ellipse at 30% 40%, black 0%, transparent 70%)",
+            "radial-gradient(ellipse at 50% 30%, black 0%, transparent 70%)",
           WebkitMaskImage:
-            "radial-gradient(ellipse at 30% 40%, black 0%, transparent 70%)",
+            "radial-gradient(ellipse at 50% 30%, black 0%, transparent 70%)",
         }}
       />
 
-      <div className="max-w-6xl mx-auto px-6 pt-20 pb-24 lg:pt-28 lg:pb-32 grid lg:grid-cols-12 gap-12 items-center relative">
-        <div className="lg:col-span-7">
+      <div className="max-w-7xl mx-auto px-6 pt-14 pb-12 lg:pt-20 lg:pb-16 relative">
+        {/* ─── 1. 가운데 정렬 텍스트 영역 ─── */}
+        <div className="text-center max-w-3xl mx-auto">
           <Reveal>
             <div
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-6"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-5"
               style={{
                 backgroundColor: BRAND_BLUE_FAINT,
                 color: BRAND_BLUE,
@@ -48,7 +65,7 @@ export default function Hero() {
           </Reveal>
 
           <Reveal delay={80}>
-            <h1 className="font-display text-[40px] sm:text-5xl lg:text-[56px] leading-[1.15] tracking-[-0.03em] font-extrabold text-slate-900">
+            <h1 className="font-display text-[36px] sm:text-[44px] lg:text-[52px] leading-[1.15] tracking-[-0.03em] font-extrabold text-slate-900">
               {COPY.hero.h1Lines.map((line, i) => (
                 <React.Fragment key={i}>
                   {i === COPY.hero.h1HighlightLineIndex ? (
@@ -63,10 +80,10 @@ export default function Hero() {
           </Reveal>
 
           <Reveal delay={180}>
-            <p className="mt-7 text-[17px] text-slate-600 leading-[1.7] max-w-xl whitespace-pre-line">
+            <p className="mt-6 text-[16px] text-slate-600 leading-[1.7] whitespace-pre-line">
               {COPY.hero.sub}
             </p>
-            <p className="mt-4 text-[17px] leading-[1.7] max-w-xl">
+            <p className="mt-2 text-[16px] leading-[1.7]">
               <span className="font-semibold text-slate-800">
                 {COPY.hero.productName}
               </span>
@@ -74,7 +91,7 @@ export default function Hero() {
           </Reveal>
 
           <Reveal delay={280}>
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-wrap justify-center gap-3">
               {CONTACT.showBrochureButton ? (
                 <>
                   <PrimaryButton href={ctaHref(COPY.ctaSubject.brochure)}>
@@ -95,11 +112,13 @@ export default function Hero() {
           </Reveal>
         </div>
 
-        <div className="lg:col-span-5">
+        {/* ─── 2. 풀폭 dashboard mock ─── */}
+        <div className="mt-10 lg:mt-12">
           <Reveal delay={160}>
             <div className="relative">
+              {/* 부드러운 그라데이션 글로우 */}
               <div
-                className="absolute -inset-6 rounded-3xl -z-10 blur-2xl opacity-30"
+                className="absolute -inset-8 rounded-3xl -z-10 blur-3xl opacity-25"
                 style={{
                   background:
                     "linear-gradient(135deg, #1E6FD9 0%, #8FC2FF 100%)",
