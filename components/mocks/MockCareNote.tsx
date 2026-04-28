@@ -146,7 +146,7 @@ export default function MockCareNote() {
           </div>
         )}
 
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {step !== 1 &&
             TIMELINE.map((it, i) =>
               isCardVisible(i) ? (
@@ -193,7 +193,7 @@ export default function MockCareNote() {
       </motion.div>
 
       <div className="mt-4 min-h-[44px]">
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {isAlertVisible && (
             <motion.div
               key="alert"

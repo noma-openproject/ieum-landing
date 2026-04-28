@@ -165,7 +165,7 @@ function Stage1Animated() {
       </div>
 
       <div className="space-y-3 min-h-[220px]">
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {step === 1 && (
             <motion.div
               key="skeleton"
@@ -182,7 +182,7 @@ function Stage1Animated() {
           )}
         </AnimatePresence>
 
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {STAGE1_CARDS.map((card, i) =>
             isCardVisible(i) ? (
               <motion.div
@@ -413,7 +413,7 @@ function Stage2Animated() {
           ))}
         </div>
 
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {isHandoverVisible && (
             <motion.div
               key="handover"
@@ -581,7 +581,7 @@ function Stage3Animated() {
           </div>
         </div>
 
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {isScriptVisible && (
             <motion.div
               key="script"

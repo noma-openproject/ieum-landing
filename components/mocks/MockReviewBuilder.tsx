@@ -211,7 +211,7 @@ export default function MockReviewBuilder() {
       </motion.div>
 
       <div className="min-h-[80px]">
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {showLinkBar && (
             <motion.div
               key="linkbar"
