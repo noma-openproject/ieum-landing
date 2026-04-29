@@ -22,8 +22,10 @@ import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
    ─────────────────────────────────────────────────────────────────
      · 사이드바 → PATIENTS 상수
      · stage별 KPI → STAGE_KPI 상수
-     · stage1 카드 → STAGE1_CARDS
-     · stage2 필드/인계 → STAGE2_FIELDS / STAGE2_HANDOVER
+     · stage1 카드 (4개) → STAGE1_CARDS
+     · stage2 흐름 stepper → STAGE2_STEPPER
+     · stage2 필드 (6개) → STAGE2_FIELDS
+     · stage2 인계 → STAGE2_HANDOVER
      · stage3 타임라인/스크립트 → STAGE3_TIMELINE / STAGE3_SCRIPT
      · 메인 환자 헤더 → PATIENT
 
@@ -98,7 +100,7 @@ const PATIENTS: Array<{
 /* ─── 하단 KPI bar — stage별 다른 운영 라인 (right는 optional, stage 1에선 우측 비움) ─── */
 const STAGE_KPI: Record<StageVariant, { left: string; right?: string }> = {
   1: { left: "상담 내용 정리 중 08:23 / 12:45" },
-  2: { left: "현장 정리 03:42", right: "필드 4/4 자동 채움" },
+  2: { left: "현장 정리 03:42", right: "필드 6/6 자동 채움" },
   3: { left: "통합 타임라인 4 이력", right: "강조 포인트 1건" },
 };
 
@@ -154,9 +156,9 @@ export default function MockConsultCoach({
             })}
           </div>
 
-          {/* stage cycle 영역 — min-h-[520px]로 컨텐츠 max(505)+안전 마진 강제,
-              cycle 안 변동(skeleton↔cards 동시 DOM 등)이 외부로 새어나가지 않게 차단 */}
-          <div className="min-h-[520px]">
+          {/* stage cycle 영역 — min-h-[600px]로 Stage 1 4-card reset 폭증 (~522px) +
+              Stage 2 stepper+6필드+handover (~474px) 모두 안전 마진 확보. 흔들림 0. */}
+          <div className="min-h-[600px]">
             {stage === 1 && <Stage1Animated />}
             {stage === 2 && <Stage2Animated />}
             {stage === 3 && <Stage3Animated />}
@@ -232,7 +234,7 @@ function PatientSidebar({ activeStage }: { activeStage: StageVariant }) {
 }
 
 /* ════════════════════════════════════════════════════════════
-   Stage 1 — 1차 온라인 상담: 카드 3개 차례 등장
+   Stage 1 — 1차 온라인 상담: 카드 4개 차례 등장 (스크립트 예시 포함)
    ════════════════════════════════════════════════════════════ */
 
 const STAGE1_CARDS = [
@@ -251,18 +253,24 @@ const STAGE1_CARDS = [
     body: "타 병원 시술 결과와 직접 비교하는 표현은 삼가주세요.",
     tone: "danger" as const,
   },
+  {
+    label: "상담 스크립트 예시",
+    body: "“○○○님, 재배치로 하시면 꺼짐 없이 자연스럽게 마무리되고요. 회복도 5일이면 충분하셔서 출근 일정에 무리 없으실 거예요. 어떠세요?”",
+    tone: "neutral" as const,
+  },
 ];
 
 const STAGE1_DURATIONS = {
   step1: 1500,
   step2: 500,
   step3: 500,
-  step4: 3000,
+  step4: 500,
+  step5: 2500,
   reset: 500,
 } as const;
 
 function Stage1Animated() {
-  type Step = 0 | 1 | 2 | 3 | 4;
+  type Step = 0 | 1 | 2 | 3 | 4 | 5;
   const [step, setStep] = useState<Step>(1);
 
   useEffect(() => {
@@ -273,11 +281,13 @@ function Stage1Animated() {
       const t2 = t1 + STAGE1_DURATIONS.step2;
       const t3 = t2 + STAGE1_DURATIONS.step3;
       const t4 = t3 + STAGE1_DURATIONS.step4;
-      const tEnd = t4 + STAGE1_DURATIONS.reset;
+      const t5 = t4 + STAGE1_DURATIONS.step5;
+      const tEnd = t5 + STAGE1_DURATIONS.reset;
       timers.push(setTimeout(() => setStep(2), t1));
       timers.push(setTimeout(() => setStep(3), t2));
       timers.push(setTimeout(() => setStep(4), t3));
-      timers.push(setTimeout(() => setStep(0), t4));
+      timers.push(setTimeout(() => setStep(5), t4));
+      timers.push(setTimeout(() => setStep(0), t5));
       timers.push(setTimeout(cycle, tEnd));
     };
     cycle();
@@ -300,7 +310,7 @@ function Stage1Animated() {
         <Stage1Indicator step={step} />
       </div>
 
-      <div className="space-y-3 min-h-[220px]">
+      <div className="space-y-3 min-h-[280px]">
         <AnimatePresence>
           {step === 1 && (
             <motion.div
@@ -345,7 +355,7 @@ function Stage1Animated() {
   );
 }
 
-function Stage1Indicator({ step }: { step: 0 | 1 | 2 | 3 | 4 }) {
+function Stage1Indicator({ step }: { step: 0 | 1 | 2 | 3 | 4 | 5 }) {
   return (
     <AnimatePresence mode="wait">
       {step === 1 || step === 0 ? (
@@ -435,13 +445,26 @@ function Stage1Card({ card }: { card: Stage1CardData }) {
 }
 
 /* ════════════════════════════════════════════════════════════
-   Stage 2 — 2차 현장: 4 필드 차례 채워짐 + 인계 박스
+   Stage 2 — 2차 현장: 4-step 흐름 stepper + 6 필드 차례 채워짐 + 인계 박스
    ════════════════════════════════════════════════════════════ */
+
+/* 정적 stepper — cycle 안 돌지 않음 (흔들림 0). "1차→현장→차트→원장님" 흐름 시각화. */
+const STAGE2_STEPPER: Array<{
+  label: string;
+  state: "done" | "active" | "pending";
+}> = [
+  { label: "1차 인계", state: "done" },
+  { label: "현장 설문", state: "active" },
+  { label: "차트 반영", state: "pending" },
+  { label: "원장님 인계", state: "pending" },
+];
 
 const STAGE2_FIELDS = [
   { label: "방문 목적", value: "다크서클 + 애교살 라인 정리" },
+  { label: "방문 경로", value: "친구 추천 + 광고 카톡" },
   { label: "가장 큰 걱정", value: "회복 기간 (5일 안에 출근 복귀)" },
   { label: "예산 범위", value: "200만 원 이내" },
+  { label: "시술 이력", value: "타원 보톡스 1회 (3년 전)" },
   { label: "결정 우선순위", value: "자연스러움 > 빠른 회복" },
 ];
 
@@ -452,13 +475,13 @@ const STAGE2_HANDOVER = {
 
 const STAGE2_DURATIONS = {
   step1: 1200,
-  field: 600,
+  field: 500,
   handover: 1700,
   reset: 500,
 } as const;
 
 function Stage2Animated() {
-  type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
   const [step, setStep] = useState<Step>(1);
 
   useEffect(() => {
@@ -470,24 +493,51 @@ function Stage2Animated() {
       const t3 = t2 + STAGE2_DURATIONS.field;
       const t4 = t3 + STAGE2_DURATIONS.field;
       const t5 = t4 + STAGE2_DURATIONS.field;
-      const t6 = t5 + STAGE2_DURATIONS.handover;
+      const t6 = t5 + STAGE2_DURATIONS.field;
+      const t7 = t6 + STAGE2_DURATIONS.field;
+      const t8 = t7 + STAGE2_DURATIONS.handover;
       timers.push(setTimeout(() => setStep(2), t1));
       timers.push(setTimeout(() => setStep(3), t2));
       timers.push(setTimeout(() => setStep(4), t3));
       timers.push(setTimeout(() => setStep(5), t4));
       timers.push(setTimeout(() => setStep(6), t5));
-      timers.push(setTimeout(() => setStep(0), t6));
-      timers.push(setTimeout(cycle, t6 + STAGE2_DURATIONS.reset));
+      timers.push(setTimeout(() => setStep(7), t6));
+      timers.push(setTimeout(() => setStep(8), t7));
+      timers.push(setTimeout(() => setStep(0), t8));
+      timers.push(setTimeout(cycle, t8 + STAGE2_DURATIONS.reset));
     };
     cycle();
     return () => timers.forEach(clearTimeout);
   }, []);
 
   const isFieldFilled = (i: number) => step !== 0 && step >= i + 2;
-  const isHandoverVisible = step >= 6 && step !== 0;
+  const isHandoverVisible = step >= 8 && step !== 0;
 
   return (
     <>
+      {/* NEW: 4-step 흐름 stepper (정적) */}
+      <div className="flex items-center gap-1.5 text-[10px] mb-4 flex-wrap">
+        {STAGE2_STEPPER.map((s, i) => (
+          <React.Fragment key={s.label}>
+            <span
+              className="px-2 py-0.5 rounded font-medium"
+              style={
+                s.state === "active"
+                  ? { backgroundColor: BRAND_BLUE, color: "#FFFFFF" }
+                  : s.state === "done"
+                    ? { backgroundColor: BRAND_BLUE_FAINT, color: BRAND_BLUE }
+                    : { backgroundColor: "#F1F5F9", color: "#94A3B8" }
+              }
+            >
+              {i + 1}. {s.label}
+            </span>
+            {i < STAGE2_STEPPER.length - 1 && (
+              <span className="text-slate-300">—</span>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+
       <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 mb-4">
         <div>
           <div className="text-sm font-semibold text-slate-900 tracking-tight">
@@ -513,7 +563,7 @@ function Stage2Animated() {
       <motion.div
         animate={{ opacity: step === 0 ? 0 : 1 }}
         transition={{ duration: 0.3 }}
-        className="space-y-3 min-h-[260px]"
+        className="space-y-3 min-h-[330px]"
       >
         <div className="rounded-xl border border-slate-200 divide-y divide-slate-100 overflow-hidden">
           {STAGE2_FIELDS.map((f, i) => (
