@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ImageIcon } from "lucide-react";
 import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -664,6 +665,19 @@ const STAGE3_DURATIONS = {
   reset: 500,
 } as const;
 
+const STAGE3_PHOTOS = [
+  {
+    label: "환자 원하는 결과",
+    caption: "다크서클 자연스럽게 정리",
+    tone: "patient" as const,
+  },
+  {
+    label: "원장님 추천 케이스",
+    caption: "재배치 · 5일 회복 일정",
+    tone: "doctor" as const,
+  },
+];
+
 function Stage3Animated() {
   type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6;
   const [step, setStep] = useState<Step>(1);
@@ -797,6 +811,50 @@ function Stage3Animated() {
           </AnimatePresence>
         </div>
       </motion.div>
+
+      {/* 사진 영역 — 정적 (cycle 안 돌지 않음, 흔들림 0 보장).
+          환자 원하는 결과 + 원장님 추천 케이스 2칸 비교 placeholder. */}
+      <div className="grid grid-cols-2 gap-2 mt-3">
+        {STAGE3_PHOTOS.map((p) => (
+          <div
+            key={p.label}
+            className="rounded-xl border p-2.5"
+            style={{
+              borderColor:
+                p.tone === "doctor" ? BRAND_BLUE_FAINT : "#E2E8F0",
+              backgroundColor:
+                p.tone === "doctor" ? "#F8FBFF" : "#FAFBFC",
+            }}
+          >
+            <div
+              className="aspect-[4/3] rounded-lg flex items-center justify-center mb-1.5"
+              style={{
+                backgroundColor:
+                  p.tone === "doctor" ? "#EFF5FF" : "#F1F5F9",
+              }}
+            >
+              <ImageIcon
+                className="w-6 h-6"
+                strokeWidth={1.5}
+                style={{
+                  color: p.tone === "doctor" ? BRAND_BLUE : "#94A3B8",
+                }}
+              />
+            </div>
+            <div
+              className="text-[10px] font-semibold tracking-wider mb-0.5"
+              style={{
+                color: p.tone === "doctor" ? BRAND_BLUE : "#64748B",
+              }}
+            >
+              {p.label}
+            </div>
+            <p className="text-[10.5px] text-slate-600 leading-snug">
+              {p.caption}
+            </p>
+          </div>
+        ))}
+      </div>
     </>
   );
 }
