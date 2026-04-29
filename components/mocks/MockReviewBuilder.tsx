@@ -185,8 +185,8 @@ export default function MockReviewBuilder() {
           })}
         </div>
 
-        {/* 5칸 가로 grid */}
-        <div className="grid grid-cols-5 gap-2 mb-5">
+        {/* 5칸 가로 grid — auto-rows-[170px]로 모든 row 강제 같은 height (흔들림 0) */}
+        <div className="grid grid-cols-5 gap-2 mb-5 auto-rows-[170px]">
           <Cell visible={isCellVisible(0)} active={step === 1}>
             <CellHeader idx={1} label="시작" />
             <div className="text-[10.5px] font-bold text-slate-900 leading-tight mb-1">
@@ -273,11 +273,11 @@ export default function MockReviewBuilder() {
           <Cell visible={isCellVisible(4)} active={step === 5}>
             <CellHeader idx={5} label="전달" />
             <div
-              className="aspect-square rounded mb-1.5 flex items-center justify-center"
+              className="h-12 rounded mb-1.5 flex items-center justify-center"
               style={{ backgroundColor: BRAND_BLUE_FAINT }}
             >
               <QrCode
-                className="w-7 h-7"
+                className="w-6 h-6"
                 style={{ color: BRAND_BLUE }}
                 strokeWidth={1.5}
               />
@@ -299,8 +299,8 @@ export default function MockReviewBuilder() {
           </Cell>
         </div>
 
-        {/* 하단 완성 영역 — 항상 reserved (min-h) */}
-        <div className="min-h-[140px]">
+        {/* 하단 완성 영역 — 항상 reserved (min-h-[180px] 안전 마진) */}
+        <div className="min-h-[180px]">
           <AnimatePresence>
             {isCompleteVisible && (
               <motion.div
@@ -407,7 +407,7 @@ function Cell({
 }) {
   return (
     <div
-      className="rounded-lg border p-2 min-h-[150px] relative overflow-hidden bg-white"
+      className="rounded-lg border p-2 h-full relative overflow-hidden bg-white"
       style={{
         borderColor: active ? BRAND_BLUE : "#E2E8F0",
         boxShadow: active ? `0 0 0 3px ${BRAND_BLUE_FAINT}` : "none",
