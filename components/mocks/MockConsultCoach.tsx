@@ -95,9 +95,9 @@ const PATIENTS: Array<{
   },
 ];
 
-/* ─── 하단 KPI bar — stage별 다른 운영 라인 ─── */
-const STAGE_KPI: Record<StageVariant, { left: string; right: string }> = {
-  1: { left: "통화 녹취 08:23 / 12:45", right: "응대 만족도 ↑ 23%" },
+/* ─── 하단 KPI bar — stage별 다른 운영 라인 (right는 optional, stage 1에선 우측 비움) ─── */
+const STAGE_KPI: Record<StageVariant, { left: string; right?: string }> = {
+  1: { left: "상담 내용 정리 중 08:23 / 12:45" },
   2: { left: "현장 정리 03:42", right: "필드 4/4 자동 채움" },
   3: { left: "통합 타임라인 4 이력", right: "강조 포인트 1건" },
 };
@@ -170,12 +170,14 @@ export default function MockConsultCoach({
                 {STAGE_KPI[stage].left}
               </span>
             </div>
-            <div
-              className="font-semibold shrink-0"
-              style={{ color: BRAND_BLUE }}
-            >
-              {STAGE_KPI[stage].right}
-            </div>
+            {STAGE_KPI[stage].right && (
+              <div
+                className="font-semibold shrink-0"
+                style={{ color: BRAND_BLUE }}
+              >
+                {STAGE_KPI[stage].right}
+              </div>
+            )}
           </div>
         </main>
       </div>
@@ -445,7 +447,7 @@ const STAGE2_FIELDS = [
 
 const STAGE2_HANDOVER = {
   label: "원장님 인계 한 줄 요약",
-  body: "자연스러움과 빠른 회복 두 가지 모두 중요. 재배치 추천 시 회복 일정 먼저 안내해 주세요.",
+  body: "자연스러움과 빠른 회복 두 가지 모두 중요해요. 재배치 추천 시 회복 일정 먼저 안내해 주세요.",
 };
 
 const STAGE2_DURATIONS = {

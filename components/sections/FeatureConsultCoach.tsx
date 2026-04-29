@@ -39,7 +39,7 @@ function StageBlock({ stage }: { stage: ConsultStage }) {
       <div className={`lg:col-span-6 ${textCol}`}>
         <Reveal>
           <div
-            className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold mb-5"
+            className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold mb-5"
             style={{
               backgroundColor: BRAND_BLUE_FAINT,
               color: BRAND_BLUE,
