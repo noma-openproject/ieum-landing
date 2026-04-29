@@ -156,9 +156,9 @@ export default function MockConsultCoach({
             })}
           </div>
 
-          {/* stage cycle 영역 — min-h-[600px]로 Stage 1 4-card reset 폭증 (~522px) +
-              Stage 2 stepper+6필드+handover (~474px) 모두 안전 마진 확보. 흔들림 0. */}
-          <div className="min-h-[600px]">
+          {/* stage cycle 영역 — min-h-[640px]로 Stage 1 옵션C 카드(긴 풀 대본) reset 폭증 +
+              Stage 2 stepper+6필드+handover 모두 안전 마진 확보. 흔들림 0. */}
+          <div className="min-h-[640px]">
             {stage === 1 && <Stage1Animated />}
             {stage === 2 && <Stage2Animated />}
             {stage === 3 && <Stage3Animated />}
@@ -255,7 +255,7 @@ const STAGE1_CARDS = [
   },
   {
     label: "상담 스크립트 예시",
-    body: "“○○○님, 재배치로 하시면 꺼짐 없이 자연스럽게 마무리되고요. 회복도 5일이면 충분하셔서 출근 일정에 무리 없으실 거예요. 어떠세요?”",
+    body: "“안녕하세요 ○○○님, 어제 카톡 주신 다크서클·애교살 라인 건이세요. 환자분께서 자연스러움하고 회복 기간 두 가지 모두 신경 쓰신다고 하셨는데, 재배치로 진행하시면 꺼짐 없이 부드럽게 마무리되고 5일 안에 출근 일정 맞추실 수 있어요. 일정 잡아드릴까요?”",
     tone: "neutral" as const,
   },
 ];
