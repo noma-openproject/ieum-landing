@@ -35,7 +35,7 @@ function StageBlock({ stage }: { stage: ConsultStage }) {
     stage.orientation === "text-left" ? "lg:order-2" : "lg:order-1";
 
   return (
-    <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+    <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
       <div className={`lg:col-span-6 ${textCol}`}>
         <Reveal>
           <div
