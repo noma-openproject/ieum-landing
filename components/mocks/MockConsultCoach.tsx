@@ -154,8 +154,9 @@ export default function MockConsultCoach({
             })}
           </div>
 
-          {/* stage cycle 영역 */}
-          <div className="flex-1 min-h-0">
+          {/* stage cycle 영역 — min-h-[520px]로 컨텐츠 max(505)+안전 마진 강제,
+              cycle 안 변동(skeleton↔cards 동시 DOM 등)이 외부로 새어나가지 않게 차단 */}
+          <div className="min-h-[520px]">
             {stage === 1 && <Stage1Animated />}
             {stage === 2 && <Stage2Animated />}
             {stage === 3 && <Stage3Animated />}
