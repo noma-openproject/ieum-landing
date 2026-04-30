@@ -8,7 +8,6 @@ import FeatureReviewBuilder from "./sections/FeatureReviewBuilder";
 import MidCTA from "./sections/MidCTA";
 import FeatureCareNote from "./sections/FeatureCareNote";
 import Audience from "./sections/Audience";
-import PilotBanner from "./sections/PilotBanner";
 import FAQ from "./sections/FAQ";
 import FinalCTA from "./sections/FinalCTA";
 import Footer from "./sections/Footer";
@@ -49,7 +48,6 @@ export default function IeumLanding() {
       <MidCTA />
       <FeatureCareNote />
       <Audience />
-      <PilotBanner />
       <FAQ />
       <FinalCTA />
       <Footer />
