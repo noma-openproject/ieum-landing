@@ -1,5 +1,6 @@
 import React from "react";
 import Reveal from "../primitives/Reveal";
+import NoCopy from "../primitives/NoCopy";
 import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
 import { COPY } from "@/lib/copy";
 
@@ -36,12 +37,14 @@ export default function ProblemIntro() {
               <h3 className="text-lg font-bold text-slate-900 leading-snug tracking-tight whitespace-pre-line">
                 {p.title}
               </h3>
-              <blockquote
-                className="mt-4 pl-4 text-[15px] text-slate-700 leading-[1.7] italic whitespace-pre-line"
-                style={{ borderLeft: `3px solid ${BRAND_BLUE_FAINT}` }}
-              >
-                “{p.quote}”
-              </blockquote>
+              <NoCopy className="mt-4">
+                <blockquote
+                  className="pl-4 text-[15px] text-slate-700 leading-[1.7] italic whitespace-pre-line"
+                  style={{ borderLeft: `3px solid ${BRAND_BLUE_FAINT}` }}
+                >
+                  “{p.quote}”
+                </blockquote>
+              </NoCopy>
             </div>
           </Reveal>
         ))}
@@ -49,20 +52,22 @@ export default function ProblemIntro() {
 
       <div className="max-w-3xl mx-auto px-6 mt-16 text-center">
         <Reveal>
-          <p className="text-[17px] text-slate-700 leading-[1.8]">
-            {COPY.problem.footer.line1}
-            <br />
-            {COPY.problem.footer.line2Pre}
-            <span className="font-semibold">
-              {COPY.problem.footer.line2Highlight}
-            </span>
-            {COPY.problem.footer.line2Post}
-          </p>
-          <p className="mt-5 text-[17px] leading-[1.8]">
-            <span style={{ color: BRAND_BLUE }} className="font-semibold">
-              {COPY.problem.footer.line3Highlight}
-            </span>
-          </p>
+          <NoCopy>
+            <p className="text-[17px] text-slate-700 leading-[1.8]">
+              {COPY.problem.footer.line1}
+              <br />
+              {COPY.problem.footer.line2Pre}
+              <span className="font-semibold">
+                {COPY.problem.footer.line2Highlight}
+              </span>
+              {COPY.problem.footer.line2Post}
+            </p>
+            <p className="mt-5 text-[17px] leading-[1.8]">
+              <span style={{ color: BRAND_BLUE }} className="font-semibold">
+                {COPY.problem.footer.line3Highlight}
+              </span>
+            </p>
+          </NoCopy>
         </Reveal>
       </div>
     </section>

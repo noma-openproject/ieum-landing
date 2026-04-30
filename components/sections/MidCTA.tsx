@@ -1,11 +1,16 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { BRAND_BLUE, BRAND_BLUE_DARK, ctaHref } from "../constants";
+import DemoContactModal from "../primitives/DemoContactModal";
 import { COPY } from "@/lib/copy";
 
 export default function MidCTA() {
   const href = ctaHref(COPY.ctaSubject.demo);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   if (!href) return null;
+  const isMailto = href.startsWith("mailto:");
   return (
     <section className="py-6">
       <div className="max-w-6xl mx-auto px-6">
@@ -45,17 +50,36 @@ export default function MidCTA() {
             </h3>
           </div>
           <div className="relative z-10">
-            <a
-              href={href}
-              className="inline-flex items-center gap-2 bg-white px-5 py-3 rounded-lg text-sm font-medium tracking-tight hover:bg-slate-50 transition whitespace-nowrap"
-              style={{ color: BRAND_BLUE }}
-            >
-              {COPY.midCta.cta}
-              <ArrowRight className="w-4 h-4" />
-            </a>
+            {isMailto ? (
+              <button
+                type="button"
+                onClick={() => setModalOpen(true)}
+                className="inline-flex items-center gap-2 bg-white px-5 py-3 rounded-lg text-sm font-medium tracking-tight hover:bg-slate-50 transition whitespace-nowrap"
+                style={{ color: BRAND_BLUE }}
+              >
+                {COPY.midCta.cta}
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            ) : (
+              <a
+                href={href}
+                className="inline-flex items-center gap-2 bg-white px-5 py-3 rounded-lg text-sm font-medium tracking-tight hover:bg-slate-50 transition whitespace-nowrap"
+                style={{ color: BRAND_BLUE }}
+              >
+                {COPY.midCta.cta}
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            )}
           </div>
         </div>
       </div>
+      {isMailto && (
+        <DemoContactModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          mailtoHref={href}
+        />
+      )}
     </section>
   );
 }

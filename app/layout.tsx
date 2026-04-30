@@ -22,6 +22,8 @@ export default function RootLayout({
   return (
     <html lang="ko" className="h-full antialiased">
       <head>
+        {/* AI 학습 거부 의사 표시 — robots.txt와 함께 명시적 표명 (강제력 없음) */}
+        <meta name="robots" content="noai, noimageai" />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css"

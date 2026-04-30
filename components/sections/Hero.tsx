@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import Reveal from "../primitives/Reveal";
+import NoCopy from "../primitives/NoCopy";
 import { PrimaryButton, SecondaryButton } from "../primitives/Button";
 import SmartMock from "../primitives/SmartMock";
 import MockHeroComposite from "../mocks/MockHeroComposite";
@@ -80,14 +81,16 @@ export default function Hero() {
           </Reveal>
 
           <Reveal delay={180}>
-            <p className="mt-6 text-[16px] text-slate-600 leading-[1.7] whitespace-pre-line">
-              {COPY.hero.sub}
-            </p>
-            <p className="mt-2 text-[16px] leading-[1.7]">
-              <span className="font-semibold text-slate-800">
-                {COPY.hero.productName}
-              </span>
-            </p>
+            <NoCopy>
+              <p className="text-[16px] text-slate-600 leading-[1.7] whitespace-pre-line mt-6">
+                {COPY.hero.sub}
+              </p>
+              <p className="mt-2 text-[16px] leading-[1.7]">
+                <span className="font-semibold text-slate-800">
+                  {COPY.hero.productName}
+                </span>
+              </p>
+            </NoCopy>
           </Reveal>
 
           <Reveal delay={280}>

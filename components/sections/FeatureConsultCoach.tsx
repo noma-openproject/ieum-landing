@@ -3,6 +3,7 @@
 import React from "react";
 import { Check } from "lucide-react";
 import Reveal from "../primitives/Reveal";
+import NoCopy from "../primitives/NoCopy";
 import SectionLabel from "../primitives/SectionLabel";
 import SmartMock from "../primitives/SmartMock";
 import MockConsultCoach from "../mocks/MockConsultCoach";
@@ -54,16 +55,18 @@ function StageBlock({ stage }: { stage: ConsultStage }) {
           </h3>
         </Reveal>
         <Reveal delay={160}>
-          {stage.body.split("\n\n").map((para, i) => (
-            <p
-              key={i}
-              className={`text-[15.5px] text-slate-600 leading-[1.8] whitespace-pre-line ${
-                i === 0 ? "mt-5" : "mt-4"
-              }`}
-            >
-              {para}
-            </p>
-          ))}
+          <NoCopy>
+            {stage.body.split("\n\n").map((para, i) => (
+              <p
+                key={i}
+                className={`text-[15.5px] text-slate-600 leading-[1.8] whitespace-pre-line ${
+                  i === 0 ? "mt-5" : "mt-4"
+                }`}
+              >
+                {para}
+              </p>
+            ))}
+          </NoCopy>
         </Reveal>
         <Reveal delay={240}>
           <ul className="mt-7 space-y-3">
