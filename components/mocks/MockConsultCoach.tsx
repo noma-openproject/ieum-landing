@@ -240,18 +240,18 @@ function PatientSidebar({ activeStage }: { activeStage: StageVariant }) {
 
 const STAGE1_CARDS = [
   {
-    label: "환자분 핵심 요구",
-    body: "다크서클·애교살 라인 자연스럽게, 회복 기간 최소화를 원함.",
+    label: "AI 핵심 니즈 요약",
+    body: "다크서클과 애교살 개선을 원하지만, 회복기간과 자연스러운 결과를 가장 걱정하고 있어요.",
     tone: "neutral" as const,
   },
   {
-    label: "권장 멘트",
-    body: "“재배치로 하시면 꺼짐 없이 자연스럽게 마무리됩니다.”",
+    label: "AI 권장 상담 멘트",
+    body: "“눈 밑이 자연스럽게 정리되는 방향을 원하시는 만큼, 회복기간과 기존 인상을 함께 고려해서 상담 도와드릴게요.”",
     tone: "brand" as const,
   },
   {
-    label: "피해야 할 말",
-    body: "타 병원 시술 결과와 직접 비교하는 표현은 삼가주세요.",
+    label: "주의할 표현",
+    body: "“무조건 자연스러워요”, “부작용 없어요”, “다른 병원보다 낫습니다”처럼 단정·보장·비교 표현은 피해주세요.",
     tone: "danger" as const,
   },
   {
@@ -372,7 +372,7 @@ function Stage1Indicator({ step }: { step: 0 | 1 | 2 | 3 | 4 | 5 }) {
             <span className="absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75 animate-ping" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
           </span>
-          정리 중 08:23
+          AI 상담 가이드 생성 중 08:23
         </motion.div>
       ) : (
         <motion.div
@@ -384,7 +384,7 @@ function Stage1Indicator({ step }: { step: 0 | 1 | 2 | 3 | 4 | 5 }) {
           className="flex items-center gap-2 text-xs font-medium text-emerald-600"
         >
           <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
-          정리 완료 08:23
+          AI 상담 가이드 생성 완료 08:23
         </motion.div>
       )}
     </AnimatePresence>
