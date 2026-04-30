@@ -204,9 +204,9 @@ export default function MockCareNote() {
             </div>
           </div>
 
-          {/* 타임라인 */}
+          {/* 타임라인 — opacity 항상 1 (cycle reset 시 들썩임 방지). 카드 자체는 AnimatePresence로 in/out */}
           <motion.div
-            animate={{ opacity: step === 0 ? 0 : 1 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
             className="relative pl-4 flex-1 min-h-[230px]"
           >

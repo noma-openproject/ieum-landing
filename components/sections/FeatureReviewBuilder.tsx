@@ -66,8 +66,9 @@ export default function FeatureReviewBuilder() {
         </div>
 
         {/* ─── 2. mock 영역 (상하 stack 의 아래쪽, 더 큰 사이즈) ─── */}
+        {/* distance={0}: mock cycle 시작 시 들썩임 방지 (fade-only) */}
         <div className="mt-16 max-w-5xl mx-auto">
-          <Reveal delay={100}>
+          <Reveal delay={100} distance={0}>
             <SmartMock
               screenshot={SCREENSHOTS.reviewBuilder}
               fallback={<MockReviewBuilder />}
