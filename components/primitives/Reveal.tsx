@@ -31,10 +31,13 @@ export default function Reveal({
   children,
   delay = 0,
   className = "",
+  distance = 16,
 }: {
   children: React.ReactNode;
   delay?: number;
   className?: string;
+  /** translateY 거리(px). 0이면 fade-only (mock 영역 들썩임 방지). */
+  distance?: number;
 }) {
   const { ref, visible } = useRevealOnScroll();
   return (
@@ -43,7 +46,7 @@ export default function Reveal({
       className={className}
       style={{
         opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(16px)",
+        transform: visible ? "translateY(0)" : `translateY(${distance}px)`,
         transition: `opacity 700ms ease-out ${delay}ms, transform 700ms cubic-bezier(0.22,0.9,0.35,1) ${delay}ms`,
       }}
     >

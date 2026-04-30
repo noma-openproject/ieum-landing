@@ -57,7 +57,8 @@ export default function ProblemIntro() {
               {COPY.problem.footer.line2Highlight}
             </span>
             {COPY.problem.footer.line2Post}
-            <br />
+          </p>
+          <p className="mt-5 text-[17px] leading-[1.8]">
             <span style={{ color: BRAND_BLUE }} className="font-semibold">
               {COPY.problem.footer.line3Highlight}
             </span>

@@ -80,18 +80,17 @@ const DURATIONS = {
 export default function MockReviewBuilder() {
   /** step 의미:
    *  -1: reset 페이드아웃 중
-   *   0: 모두 skeleton
-   *   1~5: 1~5칸 차례 채워짐 (active 칸 강조)
+   *   1~5: 1~5칸 차례 채워짐 (active 칸 강조). 페이지 진입 시 1부터 시작 (skeleton 스킵)
    *   6: 모든 칸 완료 + 하단 "후기 등록 완료" 등장
    */
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(1);
 
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
     const cycle = () => {
-      setStep(0);
-      let t = DURATIONS.initial;
-      [1, 2, 3, 4, 5].forEach((s) => {
+      setStep(1); // skeleton 스킵 — 즉시 1번 cell 채워진 상태로 시작
+      let t = DURATIONS.step;
+      [2, 3, 4, 5].forEach((s) => {
         timers.push(setTimeout(() => setStep(s), t));
         t += DURATIONS.step;
       });
