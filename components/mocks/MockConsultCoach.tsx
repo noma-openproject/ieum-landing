@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ImageIcon } from "lucide-react";
+import { Check } from "lucide-react";
 import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -157,9 +157,9 @@ export default function MockConsultCoach({
             })}
           </div>
 
-          {/* stage cycle 영역 — min-h-[640px]로 Stage 1 옵션C 카드(긴 풀 대본) reset 폭증 +
-              Stage 2 stepper+6필드+handover 모두 안전 마진 확보. 흔들림 0. */}
-          <div className="min-h-[640px]">
+          {/* stage cycle 영역 — min-h-[720px]로 Stage 1 4 카드 + Stage 2 fields/guide/handover
+              3카드 + Stage 3 timeline/emphasis/photos/opening 모두 안전 마진 확보. 흔들림 0. */}
+          <div className="min-h-[720px]">
             {stage === 1 && <Stage1Animated />}
             {stage === 2 && <Stage2Animated />}
             {stage === 3 && <Stage3Animated />}
@@ -206,12 +206,31 @@ function PatientSidebar({ activeStage }: { activeStage: StageVariant }) {
           return (
             <div
               key={p.name}
-              className={`rounded-lg px-2 py-2 mb-0.5 ${
-                isActive ? "bg-white shadow-sm ring-1 ring-slate-200" : ""
+              className={`relative rounded-lg px-2 py-2 mb-0.5 ${
+                isActive ? "bg-white shadow-sm" : ""
               }`}
+              style={
+                isActive
+                  ? {
+                      boxShadow: `0 1px 3px rgba(15,23,42,0.05), 0 0 0 1.5px ${BRAND_BLUE}`,
+                    }
+                  : {}
+              }
             >
+              {isActive && (
+                <span
+                  className="absolute left-0 top-2 bottom-2 w-[3px] rounded-r"
+                  style={{ backgroundColor: BRAND_BLUE }}
+                />
+              )}
               <div className="flex items-center gap-1.5">
-                <span className="text-[12px] font-semibold text-slate-900 truncate">
+                <span
+                  className={`text-[12px] truncate ${
+                    isActive
+                      ? "font-bold text-slate-900"
+                      : "font-semibold text-slate-900"
+                  }`}
+                >
                   {p.name}
                 </span>
                 <span
@@ -256,18 +275,22 @@ const STAGE1_CARDS = [
   },
   {
     label: "상담 스크립트 예시",
-    body: "“안녕하세요 ○○○님, 어제 카톡 주신 다크서클·애교살 라인 건이세요. 환자분께서 자연스러움하고 회복 기간 두 가지 모두 신경 쓰신다고 하셨는데, 재배치로 진행하시면 꺼짐 없이 부드럽게 마무리되고 5일 안에 출근 일정 맞추실 수 있어요. 일정 잡아드릴까요?”",
-    tone: "neutral" as const,
+    body: `“안녕하세요 ○○○님, 어제 카톡 주신 다크서클·애교살 라인 건이세요.”
+
+“환자분께서 자연스러움하고 회복 기간 두 가지 모두 신경 쓰신다고 하셨는데, 재배치로 진행하시면 꺼짐 없이 부드럽게 마무리되고 5일 안에 출근 일정 맞추실 수 있어요.”
+
+“일정 잡아드릴까요?”`,
+    tone: "script" as const,
   },
 ];
 
 const STAGE1_DURATIONS = {
-  step1: 1500,
-  step2: 500,
-  step3: 500,
-  step4: 500,
-  step5: 2500,
-  reset: 500,
+  step1: 2000,
+  step2: 850,
+  step3: 850,
+  step4: 850,
+  step5: 4200,
+  reset: 700,
 } as const;
 
 function Stage1Animated() {
@@ -311,7 +334,7 @@ function Stage1Animated() {
         <Stage1Indicator step={step} />
       </div>
 
-      <div className="space-y-3 min-h-[280px]">
+      <div className="space-y-4 min-h-[420px]">
         <AnimatePresence>
           {step === 1 && (
             <motion.div
@@ -320,7 +343,7 @@ function Stage1Animated() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="space-y-3"
+              className="space-y-4"
             >
               {[0, 1, 2].map((i) => (
                 <SkeletonRow key={i} />
@@ -337,12 +360,14 @@ function Stage1Animated() {
                 initial={{
                   opacity: 0,
                   y: 16,
-                  scale: card.tone === "brand" ? 1.05 : 1,
+                  scale:
+                    card.tone === "brand" || card.tone === "script" ? 1.04 : 1,
                 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{
-                  duration: card.tone === "brand" ? 0.5 : 0.4,
+                  duration:
+                    card.tone === "brand" || card.tone === "script" ? 0.5 : 0.4,
                   ease: "easeOut",
                 }}
               >
@@ -366,25 +391,25 @@ function Stage1Indicator({ step }: { step: 0 | 1 | 2 | 3 | 4 | 5 }) {
           animate={{ opacity: step === 0 ? 0 : 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="flex items-center gap-2 text-xs font-medium text-amber-600"
+          className="flex items-center gap-2 text-[12px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full"
         >
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75 animate-ping" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
           </span>
-          AI 상담 가이드 생성 중 08:23
+          AI 상담 가이드 생성 중
         </motion.div>
       ) : (
         <motion.div
           key="completed"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="flex items-center gap-2 text-xs font-medium text-emerald-600"
+          className="flex items-center gap-2 text-[12px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full"
         >
           <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
-          AI 상담 가이드 생성 완료 08:23
+          AI 상담 가이드 생성 완료
         </motion.div>
       )}
     </AnimatePresence>
@@ -425,11 +450,44 @@ function Stage1Card({ card }: { card: Stage1CardData }) {
   }
   if (card.tone === "danger") {
     return (
-      <div className="rounded-xl border border-slate-200 p-3.5">
-        <div className="text-[11px] font-semibold text-rose-500 tracking-wider mb-1.5">
+      <div
+        className="rounded-xl border p-3.5"
+        style={{
+          borderColor: "#FECACA",
+          backgroundColor: "#FFF5F5",
+        }}
+      >
+        <div className="text-[11px] font-semibold text-rose-600 tracking-wider mb-1.5">
           {card.label}
         </div>
-        <p className="text-[13px] text-slate-600 leading-relaxed">
+        <p className="text-[13px] text-slate-700 leading-relaxed">
+          {card.body}
+        </p>
+      </div>
+    );
+  }
+  if (card.tone === "script") {
+    return (
+      <div
+        className="rounded-xl border p-4"
+        style={{
+          borderColor: "#CBD5E1",
+          backgroundColor: "#FFFFFF",
+          boxShadow: "0 4px 12px -4px rgba(15,23,42,0.08)",
+        }}
+      >
+        <div className="flex items-center gap-1.5 mb-2">
+          <span
+            className="text-[11px] font-semibold tracking-wider"
+            style={{ color: BRAND_BLUE }}
+          >
+            {card.label}
+          </span>
+          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">
+            대화체
+          </span>
+        </div>
+        <p className="text-[13px] text-slate-800 leading-[1.7] whitespace-pre-line">
           {card.body}
         </p>
       </div>
@@ -474,15 +532,25 @@ const STAGE2_HANDOVER = {
   body: "자연스러움과 빠른 회복 두 가지 모두 중요해요. 재배치 추천 시 회복 일정 먼저 안내해 주세요.",
 };
 
+const STAGE2_GUIDE = {
+  label: "현장 상담 가이드",
+  questions: [
+    "회복 5일 안에 가능한 케이스 먼저 안내드릴까요?",
+    "기존 자연스러운 인상 유지 방향이 우선이실까요?",
+    "재배치 vs 지방제거 선택 기준 함께 설명드릴게요.",
+  ],
+};
+
 const STAGE2_DURATIONS = {
-  step1: 1200,
-  field: 500,
-  handover: 1700,
-  reset: 500,
+  step1: 1700,
+  field: 750,
+  guide: 1500,
+  handover: 2700,
+  reset: 700,
 } as const;
 
 function Stage2Animated() {
-  type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+  type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
   const [step, setStep] = useState<Step>(1);
 
   useEffect(() => {
@@ -496,7 +564,8 @@ function Stage2Animated() {
       const t5 = t4 + STAGE2_DURATIONS.field;
       const t6 = t5 + STAGE2_DURATIONS.field;
       const t7 = t6 + STAGE2_DURATIONS.field;
-      const t8 = t7 + STAGE2_DURATIONS.handover;
+      const t8 = t7 + STAGE2_DURATIONS.guide;
+      const t9 = t8 + STAGE2_DURATIONS.handover;
       timers.push(setTimeout(() => setStep(2), t1));
       timers.push(setTimeout(() => setStep(3), t2));
       timers.push(setTimeout(() => setStep(4), t3));
@@ -504,15 +573,17 @@ function Stage2Animated() {
       timers.push(setTimeout(() => setStep(6), t5));
       timers.push(setTimeout(() => setStep(7), t6));
       timers.push(setTimeout(() => setStep(8), t7));
-      timers.push(setTimeout(() => setStep(0), t8));
-      timers.push(setTimeout(cycle, t8 + STAGE2_DURATIONS.reset));
+      timers.push(setTimeout(() => setStep(9), t8));
+      timers.push(setTimeout(() => setStep(0), t9));
+      timers.push(setTimeout(cycle, t9 + STAGE2_DURATIONS.reset));
     };
     cycle();
     return () => timers.forEach(clearTimeout);
   }, []);
 
   const isFieldFilled = (i: number) => step !== 0 && step >= i + 2;
-  const isHandoverVisible = step >= 8 && step !== 0;
+  const isGuideVisible = step >= 8 && step !== 0;
+  const isHandoverVisible = step >= 9 && step !== 0;
 
   return (
     <>
@@ -564,42 +635,103 @@ function Stage2Animated() {
       <motion.div
         animate={{ opacity: step === 0 ? 0 : 1 }}
         transition={{ duration: 0.3 }}
-        className="space-y-3 min-h-[330px]"
+        className="space-y-3 min-h-[520px]"
       >
         <div className="rounded-xl border border-slate-200 divide-y divide-slate-100 overflow-hidden">
-          {STAGE2_FIELDS.map((f, i) => (
-            <div key={f.label} className="flex items-start gap-3 px-3.5 py-2.5">
-              <div className="text-[11px] font-semibold text-slate-400 tracking-wider w-[68px] shrink-0 pt-[2px]">
-                {f.label}
+          <div className="px-3.5 py-2 bg-slate-50/70 text-[10px] font-semibold text-slate-500 tracking-wider">
+            방문 정보 요약
+          </div>
+          {STAGE2_FIELDS.map((f, i) => {
+            const isPriority = f.label === "가장 큰 걱정" || f.label === "결정 우선순위";
+            return (
+              <div
+                key={f.label}
+                className="flex items-start gap-3 px-3.5 py-2.5"
+              >
+                <div
+                  className={`text-[11px] tracking-wider w-[68px] shrink-0 pt-[2px] ${
+                    isPriority
+                      ? "font-bold text-slate-600"
+                      : "font-semibold text-slate-400"
+                  }`}
+                >
+                  {f.label}
+                </div>
+                <div className="flex-1 min-h-[18px]">
+                  <AnimatePresence mode="wait">
+                    {isFieldFilled(i) ? (
+                      <motion.span
+                        key="filled"
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.35, ease: "easeOut" }}
+                        className={`text-[13px] leading-snug block ${
+                          isPriority
+                            ? "font-semibold text-slate-900"
+                            : "text-slate-700"
+                        }`}
+                      >
+                        {f.value}
+                      </motion.span>
+                    ) : (
+                      <motion.span
+                        key="placeholder"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="block h-2 w-2/3 bg-slate-100 rounded animate-pulse mt-1.5"
+                      />
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
-              <div className="flex-1 min-h-[18px]">
-                <AnimatePresence mode="wait">
-                  {isFieldFilled(i) ? (
-                    <motion.span
-                      key="filled"
-                      initial={{ opacity: 0, y: 4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.35, ease: "easeOut" }}
-                      className="text-[13px] text-slate-700 leading-snug block"
-                    >
-                      {f.value}
-                    </motion.span>
-                  ) : (
-                    <motion.span
-                      key="placeholder"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="block h-2 w-2/3 bg-slate-100 rounded animate-pulse mt-1.5"
-                    />
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        <div className="min-h-[120px]">
+        <div className="min-h-[140px]">
+          <AnimatePresence>
+            {isGuideVisible && (
+              <motion.div
+                key="guide"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
+                className="rounded-xl border p-3.5"
+                style={{
+                  borderColor: BRAND_BLUE_FAINT,
+                  backgroundColor: "#F8FBFF",
+                }}
+              >
+                <div
+                  className="text-[11px] font-semibold tracking-wider mb-2"
+                  style={{ color: BRAND_BLUE }}
+                >
+                  {STAGE2_GUIDE.label}
+                </div>
+                <ul className="space-y-1.5">
+                  {STAGE2_GUIDE.questions.map((q, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-2 text-[12.5px] text-slate-700 leading-snug"
+                    >
+                      <span
+                        className="text-[10px] font-bold mt-0.5 shrink-0"
+                        style={{ color: BRAND_BLUE }}
+                      >
+                        Q{i + 1}.
+                      </span>
+                      <span>{q}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <div className="min-h-[100px]">
           <AnimatePresence>
             {isHandoverVisible && (
               <motion.div
@@ -608,16 +740,10 @@ function Stage2Animated() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="rounded-xl border p-3.5"
-                style={{
-                  borderColor: BRAND_BLUE_FAINT,
-                  backgroundColor: "#F8FBFF",
-                }}
+                className="rounded-xl border p-3.5 bg-white"
+                style={{ borderColor: "#CBD5E1" }}
               >
-                <div
-                  className="text-[11px] font-semibold tracking-wider mb-1.5"
-                  style={{ color: BRAND_BLUE }}
-                >
+                <div className="text-[11px] font-semibold tracking-wider mb-1.5 text-slate-500">
                   {STAGE2_HANDOVER.label}
                 </div>
                 <p className="text-[13px] text-slate-800 leading-relaxed">
@@ -658,28 +784,57 @@ const STAGE3_SCRIPT = {
   body: "회복 5일 안에 출근하셔야 한다는 점이 가장 큰 걱정. 자연스러움은 기본이고, 일정부터 안심시켜드리는 게 핵심이에요.",
 };
 
+const STAGE3_OPENING = {
+  label: "원장님 상담 첫마디",
+  body: `“환자분, 카톡으로 다크서클·애교살 라인 정리 문의 주신 분이시죠. 5일 안에 출근하셔야 한다는 점 잘 알고 있어요.”
+
+“오늘은 자연스러움 우선 방향으로, 재배치 진행 시 어떻게 마무리되는지부터 같이 보실게요.”`,
+};
+
 const STAGE3_DURATIONS = {
-  step1: 1000,
-  dot: 400,
-  script: 2900,
-  reset: 500,
+  step1: 1500,
+  dot: 700,
+  script: 2400,
+  opening: 3600,
+  reset: 700,
 } as const;
 
 const STAGE3_PHOTOS = [
   {
-    label: "환자 원하는 결과",
-    caption: "다크서클 자연스럽게 정리",
+    label: "환자 희망 결과",
+    caption: "자연스럽게 정리된 눈 밑 라인",
+    sub: "과한 변화 없이 인상 유지",
     tone: "patient" as const,
   },
   {
     label: "원장님 추천 케이스",
-    caption: "재배치 · 5일 회복 일정",
+    caption: "유사 고민 환자 · 재배치",
+    sub: "5일 회복 일정 고려 케이스",
     tone: "doctor" as const,
   },
 ];
 
+/* ─── 눈 밑 일러스트 — public/illustrations/ PNG 사용.
+   patient = 피치 배경 / doctor = 블루 배경 + 점선 마킹. */
+function EyeAreaIllustration({ tone }: { tone: "patient" | "doctor" }) {
+  const src =
+    tone === "doctor"
+      ? "/illustrations/eye-doctor.png"
+      : "/illustrations/eye-patient.png";
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt=""
+      aria-hidden="true"
+      className="absolute inset-0 w-full h-full object-cover"
+      draggable={false}
+    />
+  );
+}
+
 function Stage3Animated() {
-  type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
   const [step, setStep] = useState<Step>(1);
 
   useEffect(() => {
@@ -692,13 +847,15 @@ function Stage3Animated() {
       const t4 = t3 + STAGE3_DURATIONS.dot;
       const t5 = t4 + STAGE3_DURATIONS.dot;
       const t6 = t5 + STAGE3_DURATIONS.script;
+      const t7 = t6 + STAGE3_DURATIONS.opening;
       timers.push(setTimeout(() => setStep(2), t1));
       timers.push(setTimeout(() => setStep(3), t2));
       timers.push(setTimeout(() => setStep(4), t3));
       timers.push(setTimeout(() => setStep(5), t4));
       timers.push(setTimeout(() => setStep(6), t5));
-      timers.push(setTimeout(() => setStep(0), t6));
-      timers.push(setTimeout(cycle, t6 + STAGE3_DURATIONS.reset));
+      timers.push(setTimeout(() => setStep(7), t6));
+      timers.push(setTimeout(() => setStep(0), t7));
+      timers.push(setTimeout(cycle, t7 + STAGE3_DURATIONS.reset));
     };
     cycle();
     return () => timers.forEach(clearTimeout);
@@ -706,6 +863,8 @@ function Stage3Animated() {
 
   const isDotActive = (i: number) => step !== 0 && step >= i + 2;
   const isScriptVisible = step >= 6 && step !== 0;
+  const isOpeningGenerating = step === 6;
+  const isOpeningVisible = step >= 7 && step !== 0;
 
   return (
     <>
@@ -813,7 +972,8 @@ function Stage3Animated() {
       </motion.div>
 
       {/* 사진 영역 — 정적 (cycle 안 돌지 않음, 흔들림 0 보장).
-          환자 원하는 결과 + 원장님 추천 케이스 2칸 비교 placeholder. */}
+          환자 희망 결과 + 원장님 추천 케이스 2칸 비교 + 캡션 2줄.
+          실제 사진 대신 추상 SVG 일러스트 (의료광고법 + 디자인 톤 안전). */}
       <div className="grid grid-cols-2 gap-2 mt-3">
         {STAGE3_PHOTOS.map((p) => (
           <div
@@ -827,33 +987,108 @@ function Stage3Animated() {
             }}
           >
             <div
-              className="aspect-[4/3] rounded-lg flex items-center justify-center mb-1.5"
+              className="relative aspect-[4/3] rounded-lg overflow-hidden mb-2"
               style={{
                 backgroundColor:
-                  p.tone === "doctor" ? "#EFF5FF" : "#F1F5F9",
+                  p.tone === "doctor" ? "#EFF5FF" : "#FDF2F0",
               }}
             >
-              <ImageIcon
-                className="w-6 h-6"
-                strokeWidth={1.5}
-                style={{
-                  color: p.tone === "doctor" ? BRAND_BLUE : "#94A3B8",
-                }}
-              />
+              <EyeAreaIllustration tone={p.tone} />
+              {p.tone === "doctor" && (
+                <span
+                  className="absolute top-1.5 right-1.5 inline-flex items-center gap-0.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full text-white"
+                  style={{ backgroundColor: BRAND_BLUE }}
+                >
+                  <Check className="w-2.5 h-2.5" strokeWidth={3.5} />
+                  추천
+                </span>
+              )}
+              {p.tone === "patient" && (
+                <span className="absolute top-1.5 right-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-white/90 text-slate-600 border border-slate-200">
+                  희망
+                </span>
+              )}
             </div>
             <div
-              className="text-[10px] font-semibold tracking-wider mb-0.5"
+              className="text-[10px] font-semibold tracking-wider mb-1"
               style={{
                 color: p.tone === "doctor" ? BRAND_BLUE : "#64748B",
               }}
             >
               {p.label}
             </div>
-            <p className="text-[10.5px] text-slate-600 leading-snug">
+            <p className="text-[11px] font-medium text-slate-700 leading-snug">
               {p.caption}
+            </p>
+            <p className="text-[10px] text-slate-500 leading-snug mt-0.5">
+              {p.sub}
             </p>
           </div>
         ))}
+      </div>
+
+      {/* 원장님 상담 첫마디 카드 — 진료 참고 카드형. step 6 = 생성 중, step 7 = 완료. */}
+      <div className="min-h-[140px] mt-3">
+        <AnimatePresence mode="wait">
+          {isOpeningGenerating && (
+            <motion.div
+              key="opening-loading"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="rounded-xl border border-slate-200 p-3.5 bg-slate-50/60"
+            >
+              <div className="flex items-center gap-2 text-[12px] font-semibold text-slate-600">
+                <span className="relative flex h-2 w-2">
+                  <span
+                    className="absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping"
+                    style={{ backgroundColor: BRAND_BLUE }}
+                  />
+                  <span
+                    className="relative inline-flex h-2 w-2 rounded-full"
+                    style={{ backgroundColor: BRAND_BLUE }}
+                  />
+                </span>
+                원장님 스크립트 생성 중
+              </div>
+              <div className="mt-2.5 space-y-1.5">
+                <div className="h-2 w-full bg-slate-200 rounded animate-pulse" />
+                <div className="h-2 w-5/6 bg-slate-200 rounded animate-pulse" />
+              </div>
+            </motion.div>
+          )}
+          {isOpeningVisible && (
+            <motion.div
+              key="opening-final"
+              initial={{ opacity: 0, y: 16, scale: 1.03 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="rounded-xl border p-4"
+              style={{
+                borderColor: BRAND_BLUE,
+                backgroundColor: "#FFFFFF",
+                boxShadow: `0 4px 14px -4px ${BRAND_BLUE_FAINT}, 0 0 0 1px ${BRAND_BLUE_FAINT}`,
+              }}
+            >
+              <div className="flex items-center gap-1.5 mb-2">
+                <span
+                  className="text-[11px] font-bold tracking-wider"
+                  style={{ color: BRAND_BLUE }}
+                >
+                  {STAGE3_OPENING.label}
+                </span>
+                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">
+                  진료 참고용
+                </span>
+              </div>
+              <p className="text-[13px] text-slate-800 leading-[1.7] whitespace-pre-line">
+                {STAGE3_OPENING.body}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </>
   );
