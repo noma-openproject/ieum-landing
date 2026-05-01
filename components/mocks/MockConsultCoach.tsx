@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, Copy, NotebookPen } from "lucide-react";
 import { BRAND_BLUE, BRAND_BLUE_FAINT } from "../constants";
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -157,9 +157,9 @@ export default function MockConsultCoach({
             })}
           </div>
 
-          {/* stage cycle 영역 — min-h-[720px]로 Stage 1 4 카드 + Stage 2 fields/guide/handover
-              3카드 + Stage 3 timeline/emphasis/photos/opening 모두 안전 마진 확보. 흔들림 0. */}
-          <div className="min-h-[720px]">
+          {/* stage cycle 영역 — min-h-[880px]로 Stage 1 4 카드 + Stage 2 fields/guide/handover
+              3카드 + Stage 3 timeline/briefing/photos/script-3step/buttons 모두 안전 마진 확보. */}
+          <div className="min-h-[880px]">
             {stage === 1 && <Stage1Animated />}
             {stage === 2 && <Stage2Animated />}
             {stage === 3 && <Stage3Animated />}
@@ -759,45 +759,43 @@ function Stage2Animated() {
 }
 
 /* ════════════════════════════════════════════════════════════
-   Stage 3 — 3차 진료실: 타임라인 dot 차례 켜짐 + 진료 스크립트
+   Stage 3 — 3차 진료실: 9-step 흐름
+   상담 흐름 요약 → 브리핑 → 사진 비교 → 스크립트 3-step → 액션 버튼
    ════════════════════════════════════════════════════════════ */
 
 const STAGE3_TIMELINE = [
-  { date: "3/1", channel: "카톡", note: "다크서클 상담 문의", highlight: false },
-  {
-    date: "3/2",
-    channel: "통화",
-    note: "1차 응대 · 시술 종류 안내 (08:23)",
-    highlight: false,
-  },
-  {
-    date: "3/5",
-    channel: "현장",
-    note: "2차 상담 · 재배치 방향 결정",
-    highlight: true,
-  },
+  { date: "3/1", channel: "카톡", note: "다크서클·애교살 상담 문의", highlight: false },
+  { date: "3/2", channel: "통화", note: "회복기간 문의 · 1차 응대", highlight: false },
+  { date: "3/5", channel: "현장", note: "눈밑재배치 방향 상담", highlight: true },
   { date: "오늘", channel: "진료", note: "원장님 상담 예정", highlight: false },
 ];
 
-const STAGE3_SCRIPT = {
-  label: "오늘 강조하실 포인트",
-  body: "회복 5일 안에 출근하셔야 한다는 점이 가장 큰 걱정. 자연스러움은 기본이고, 일정부터 안심시켜드리는 게 핵심이에요.",
+const STAGE3_BRIEFING = {
+  label: "오늘 상담 브리핑",
+  lines: [
+    "가장 큰 걱정은 출근 전까지 붓기와 멍이 빠질지입니다.",
+    "자연스러운 변화는 기본이고,",
+    "회복 일정과 유사 케이스를 먼저 보여주는 것이 중요합니다.",
+  ],
 };
 
-const STAGE3_OPENING = {
-  label: "원장님 상담 첫마디",
-  body: `“환자분, 카톡으로 다크서클·애교살 라인 정리 문의 주신 분이시죠. 5일 안에 출근하셔야 한다는 점 잘 알고 있어요.”
-
-“오늘은 자연스러움 우선 방향으로, 재배치 진행 시 어떻게 마무리되는지부터 같이 보실게요.”`,
-};
-
-const STAGE3_DURATIONS = {
-  step1: 1500,
-  dot: 700,
-  script: 2400,
-  opening: 3600,
-  reset: 700,
-} as const;
+const STAGE3_SCRIPT_STEPS = [
+  {
+    title: "공감으로 시작",
+    body: `“카톡으로 다크서클과 애교살 라인 고민을 남겨주셨고,
+5일 안에 출근하셔야 한다는 점도 확인했습니다.”`,
+  },
+  {
+    title: "사진 비교로 설명",
+    body: `“왼쪽은 원하시는 자연스러운 눈 밑 라인이고,
+오른쪽은 비슷한 고민을 가진 환자분의 재배치 케이스입니다.”`,
+  },
+  {
+    title: "회복 일정 안내",
+    body: `“오늘은 이 정도 변화가 가능한지와
+출근 일정에 맞춘 회복 계획을 함께 설명드리겠습니다.”`,
+  },
+];
 
 const STAGE3_PHOTOS = [
   {
@@ -808,11 +806,23 @@ const STAGE3_PHOTOS = [
   },
   {
     label: "원장님 추천 케이스",
-    caption: "유사 고민 환자 · 재배치",
+    caption: "유사 고민 환자 · 눈밑재배치",
     sub: "5일 회복 일정 고려 케이스",
     tone: "doctor" as const,
   },
 ];
+
+const STAGE3_DURATIONS = {
+  initial: 700,
+  timeline: 1700,
+  briefing: 1700,
+  patientPhoto: 1300,
+  doctorPhoto: 1700,
+  scriptGen: 1500,
+  scriptItem: 1300,
+  hold: 3500,
+  reset: 800,
+} as const;
 
 /* ─── 눈 밑 일러스트 — public/illustrations/ PNG 사용.
    patient = 피치 배경 / doctor = 블루 배경 + 점선 마킹. */
@@ -834,41 +844,53 @@ function EyeAreaIllustration({ tone }: { tone: "patient" | "doctor" }) {
 }
 
 function Stage3Animated() {
-  type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
   const [step, setStep] = useState<Step>(1);
 
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
     const cycle = () => {
       setStep(1);
-      const t1 = STAGE3_DURATIONS.step1;
-      const t2 = t1 + STAGE3_DURATIONS.dot;
-      const t3 = t2 + STAGE3_DURATIONS.dot;
-      const t4 = t3 + STAGE3_DURATIONS.dot;
-      const t5 = t4 + STAGE3_DURATIONS.dot;
-      const t6 = t5 + STAGE3_DURATIONS.script;
-      const t7 = t6 + STAGE3_DURATIONS.opening;
+      const t1 = STAGE3_DURATIONS.initial;
+      const t2 = t1 + STAGE3_DURATIONS.timeline;
+      const t3 = t2 + STAGE3_DURATIONS.briefing;
+      const t4 = t3 + STAGE3_DURATIONS.patientPhoto;
+      const t5 = t4 + STAGE3_DURATIONS.doctorPhoto;
+      const t6 = t5 + STAGE3_DURATIONS.scriptGen;
+      const t7 = t6 + STAGE3_DURATIONS.scriptItem;
+      const t8 = t7 + STAGE3_DURATIONS.scriptItem;
+      const t9 = t8 + STAGE3_DURATIONS.hold;
       timers.push(setTimeout(() => setStep(2), t1));
       timers.push(setTimeout(() => setStep(3), t2));
       timers.push(setTimeout(() => setStep(4), t3));
       timers.push(setTimeout(() => setStep(5), t4));
       timers.push(setTimeout(() => setStep(6), t5));
       timers.push(setTimeout(() => setStep(7), t6));
-      timers.push(setTimeout(() => setStep(0), t7));
-      timers.push(setTimeout(cycle, t7 + STAGE3_DURATIONS.reset));
+      timers.push(setTimeout(() => setStep(8), t7));
+      timers.push(setTimeout(() => setStep(9), t8));
+      timers.push(setTimeout(() => setStep(0), t9));
+      timers.push(setTimeout(cycle, t9 + STAGE3_DURATIONS.reset));
     };
     cycle();
     return () => timers.forEach(clearTimeout);
   }, []);
 
-  const isDotActive = (i: number) => step !== 0 && step >= i + 2;
-  const isScriptVisible = step >= 6 && step !== 0;
-  const isOpeningGenerating = step === 6;
-  const isOpeningVisible = step >= 7 && step !== 0;
+  const visible = step !== 0;
+  const isTimelineVisible = visible && step >= 2;
+  const isBriefingVisible = visible && step >= 3;
+  const isPatientPhotoVisible = visible && step >= 4;
+  const isDoctorPhotoVisible = visible && step >= 5;
+  const isCompareVisible = visible && step >= 5;
+  const isScriptBoxVisible = visible && step >= 6;
+  const isScriptGenerating = step === 6;
+  const isScriptItemVisible = (i: number) => visible && step >= 7 + i;
+  const areButtonsVisible = visible && step >= 9;
+  const isReady = step >= 9;
 
   return (
     <>
-      <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 mb-4">
+      {/* 헤더: 환자 + 브리핑 상태 배지 */}
+      <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 mb-3">
         <div>
           <div className="text-sm font-semibold text-slate-900 tracking-tight">
             {PATIENT.name}
@@ -877,48 +899,66 @@ function Stage3Animated() {
             {PATIENT.detail}
           </div>
         </div>
-        <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-          <span className="w-2 h-2 rounded-full bg-slate-400" />
-          진료실 입실 직전
-        </div>
+        <AnimatePresence mode="wait">
+          {isReady ? (
+            <motion.div
+              key="ready"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex items-center gap-1.5 text-[12px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full"
+            >
+              <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
+              브리핑 준비 완료
+            </motion.div>
+          ) : (
+            <motion.div
+              key="prep"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: visible ? 1 : 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex items-center gap-1.5 text-[12px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75 animate-ping" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
+              </span>
+              브리핑 준비 중
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      <motion.div
-        animate={{ opacity: step === 0 ? 0 : 1 }}
-        transition={{ duration: 0.3 }}
-        className="space-y-3 min-h-[260px]"
-      >
-        <div className="rounded-xl border border-slate-200 p-3">
-          <div className="text-[11px] font-semibold text-slate-400 tracking-wider mb-2">
-            환자분 통합 타임라인
-          </div>
-          <div className="relative pl-3.5 space-y-2">
-            <div className="absolute left-[5px] top-1 bottom-1 w-px bg-slate-200" />
-            {STAGE3_TIMELINE.map((t, i) => {
-              const active = isDotActive(i);
-              return (
-                <div key={t.date + t.channel} className="relative">
-                  <motion.span
-                    className="absolute -left-[10px] top-1.5 w-2 h-2 rounded-full"
-                    initial={false}
-                    animate={{
-                      backgroundColor: active
-                        ? t.highlight
-                          ? BRAND_BLUE
-                          : "#64748B"
-                        : "#E2E8F0",
-                      scale: active && t.highlight ? 1.3 : 1,
-                    }}
-                    transition={{ duration: 0.3 }}
-                  />
-                  <motion.div
-                    initial={false}
-                    animate={{
-                      opacity: active ? 1 : 0.35,
-                    }}
-                    transition={{ duration: 0.3 }}
-                    className="flex items-baseline gap-2"
+      {/* ① 상담 흐름 요약 */}
+      <div className="min-h-[148px] mb-3">
+        <AnimatePresence>
+          {isTimelineVisible && (
+            <motion.div
+              key="timeline"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="rounded-xl border border-slate-200 p-3"
+            >
+              <div className="text-[11px] font-semibold text-slate-400 tracking-wider mb-2">
+                상담 흐름 요약
+              </div>
+              <div className="relative pl-3.5 space-y-1.5">
+                <div className="absolute left-[5px] top-1 bottom-1 w-px bg-slate-200" />
+                {STAGE3_TIMELINE.map((t) => (
+                  <div
+                    key={t.date + t.channel}
+                    className="relative flex items-baseline gap-2"
                   >
+                    <span
+                      className="absolute -left-[10px] top-1.5 w-2 h-2 rounded-full"
+                      style={{
+                        backgroundColor: t.highlight ? BRAND_BLUE : "#94A3B8",
+                      }}
+                    />
                     <span className="text-[11px] font-semibold text-slate-500 w-7 shrink-0">
                       {t.date}
                     </span>
@@ -927,169 +967,300 @@ function Stage3Animated() {
                     </span>
                     <span
                       className={`text-[12px] leading-snug ${
-                        t.highlight && active
+                        t.highlight
                           ? "font-semibold text-slate-900"
                           : "text-slate-600"
                       }`}
                     >
                       {t.note}
                     </span>
-                  </motion.div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="min-h-[120px]">
-          <AnimatePresence>
-            {isScriptVisible && (
-              <motion.div
-                key="script"
-                initial={{ opacity: 0, y: 16, scale: 1.03 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="rounded-xl border p-3.5"
-                style={{
-                  borderColor: BRAND_BLUE_FAINT,
-                  backgroundColor: "#F8FBFF",
-                }}
-              >
-                <div
-                  className="text-[11px] font-semibold tracking-wider mb-1.5"
-                  style={{ color: BRAND_BLUE }}
-                >
-                  {STAGE3_SCRIPT.label}
-                </div>
-                <p className="text-[13px] text-slate-800 leading-relaxed">
-                  {STAGE3_SCRIPT.body}
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </motion.div>
-
-      {/* 사진 영역 — 정적 (cycle 안 돌지 않음, 흔들림 0 보장).
-          환자 희망 결과 + 원장님 추천 케이스 2칸 비교 + 캡션 2줄.
-          실제 사진 대신 추상 SVG 일러스트 (의료광고법 + 디자인 톤 안전). */}
-      <div className="grid grid-cols-2 gap-2 mt-3">
-        {STAGE3_PHOTOS.map((p) => (
-          <div
-            key={p.label}
-            className="rounded-xl border p-2.5"
-            style={{
-              borderColor:
-                p.tone === "doctor" ? BRAND_BLUE_FAINT : "#E2E8F0",
-              backgroundColor:
-                p.tone === "doctor" ? "#F8FBFF" : "#FAFBFC",
-            }}
-          >
-            <div
-              className="relative aspect-[4/3] rounded-lg overflow-hidden mb-2"
-              style={{
-                backgroundColor:
-                  p.tone === "doctor" ? "#EFF5FF" : "#FDF2F0",
-              }}
-            >
-              <EyeAreaIllustration tone={p.tone} />
-              {p.tone === "doctor" && (
-                <span
-                  className="absolute top-1.5 right-1.5 inline-flex items-center gap-0.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full text-white"
-                  style={{ backgroundColor: BRAND_BLUE }}
-                >
-                  <Check className="w-2.5 h-2.5" strokeWidth={3.5} />
-                  추천
-                </span>
-              )}
-              {p.tone === "patient" && (
-                <span className="absolute top-1.5 right-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-white/90 text-slate-600 border border-slate-200">
-                  희망
-                </span>
-              )}
-            </div>
-            <div
-              className="text-[10px] font-semibold tracking-wider mb-1"
-              style={{
-                color: p.tone === "doctor" ? BRAND_BLUE : "#64748B",
-              }}
-            >
-              {p.label}
-            </div>
-            <p className="text-[11px] font-medium text-slate-700 leading-snug">
-              {p.caption}
-            </p>
-            <p className="text-[10px] text-slate-500 leading-snug mt-0.5">
-              {p.sub}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      {/* 원장님 상담 첫마디 카드 — 진료 참고 카드형. step 6 = 생성 중, step 7 = 완료. */}
-      <div className="min-h-[140px] mt-3">
-        <AnimatePresence mode="wait">
-          {isOpeningGenerating && (
-            <motion.div
-              key="opening-loading"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="rounded-xl border border-slate-200 p-3.5 bg-slate-50/60"
-            >
-              <div className="flex items-center gap-2 text-[12px] font-semibold text-slate-600">
-                <span className="relative flex h-2 w-2">
-                  <span
-                    className="absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping"
-                    style={{ backgroundColor: BRAND_BLUE }}
-                  />
-                  <span
-                    className="relative inline-flex h-2 w-2 rounded-full"
-                    style={{ backgroundColor: BRAND_BLUE }}
-                  />
-                </span>
-                원장님 스크립트 생성 중
-              </div>
-              <div className="mt-2.5 space-y-1.5">
-                <div className="h-2 w-full bg-slate-200 rounded animate-pulse" />
-                <div className="h-2 w-5/6 bg-slate-200 rounded animate-pulse" />
+                  </div>
+                ))}
               </div>
             </motion.div>
           )}
-          {isOpeningVisible && (
+        </AnimatePresence>
+      </div>
+
+      {/* ② 오늘 상담 브리핑 */}
+      <div className="min-h-[110px] mb-3">
+        <AnimatePresence>
+          {isBriefingVisible && (
             <motion.div
-              key="opening-final"
-              initial={{ opacity: 0, y: 16, scale: 1.03 }}
+              key="briefing"
+              initial={{ opacity: 0, y: 10, scale: 0.99 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="rounded-xl border p-4"
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="rounded-xl border p-3.5"
+              style={{
+                borderColor: BRAND_BLUE_FAINT,
+                backgroundColor: "#F8FBFF",
+              }}
+            >
+              <div
+                className="text-[11px] font-semibold tracking-wider mb-1.5"
+                style={{ color: BRAND_BLUE }}
+              >
+                {STAGE3_BRIEFING.label}
+              </div>
+              <div className="space-y-0.5">
+                {STAGE3_BRIEFING.lines.map((line, i) => (
+                  <p
+                    key={i}
+                    className={`text-[12.5px] leading-[1.7] ${
+                      i === 0
+                        ? "font-semibold text-slate-900"
+                        : "text-slate-700"
+                    }`}
+                  >
+                    {line}
+                  </p>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* ③④⑤⑥ 사진 비교: 환자 희망(좌) ↔ 원장님 추천(우) */}
+      <div className="relative grid grid-cols-2 gap-2 mb-3 min-h-[180px]">
+        {STAGE3_PHOTOS.map((p, idx) => {
+          const photoVisible =
+            idx === 0 ? isPatientPhotoVisible : isDoctorPhotoVisible;
+          if (!photoVisible) {
+            return (
+              <div
+                key={p.label}
+                className="rounded-xl border border-dashed border-slate-200 bg-slate-50/40"
+              />
+            );
+          }
+          return (
+            <motion.div
+              key={p.label}
+              initial={{ opacity: 0, x: idx === 0 ? -10 : 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="rounded-xl border p-2.5"
+              style={{
+                borderColor:
+                  p.tone === "doctor" ? BRAND_BLUE_FAINT : "#E2E8F0",
+                backgroundColor:
+                  p.tone === "doctor" ? "#F8FBFF" : "#FAFBFC",
+              }}
+            >
+              <div
+                className="relative aspect-[4/3] rounded-lg overflow-hidden mb-2"
+                style={{
+                  backgroundColor:
+                    p.tone === "doctor" ? "#EFF5FF" : "#FDF2F0",
+                }}
+              >
+                <EyeAreaIllustration tone={p.tone} />
+                {p.tone === "doctor" && (
+                  <span
+                    className="absolute top-1.5 right-1.5 inline-flex items-center gap-0.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full text-white"
+                    style={{ backgroundColor: BRAND_BLUE }}
+                  >
+                    <Check className="w-2.5 h-2.5" strokeWidth={3.5} />
+                    추천
+                  </span>
+                )}
+                {p.tone === "patient" && (
+                  <span className="absolute top-1.5 right-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-white/90 text-slate-600 border border-slate-200">
+                    희망
+                  </span>
+                )}
+              </div>
+              <div
+                className="text-[10px] font-semibold tracking-wider mb-1"
+                style={{
+                  color: p.tone === "doctor" ? BRAND_BLUE : "#64748B",
+                }}
+              >
+                {p.label}
+              </div>
+              <p className="text-[11px] font-medium text-slate-700 leading-snug">
+                {p.caption}
+              </p>
+              <p className="text-[10px] text-slate-500 leading-snug mt-0.5">
+                {p.sub}
+              </p>
+            </motion.div>
+          );
+        })}
+        {/* 비교 인디케이터 — 두 사진 사이 가운데 */}
+        <AnimatePresence>
+          {isCompareVisible && (
+            <motion.div
+              key="compare"
+              initial={{ opacity: 0, scale: 0.6 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut", delay: 0.15 }}
+              className="absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2 z-10 px-2 py-1 rounded-full text-[10px] font-bold text-white pointer-events-none whitespace-nowrap"
+              style={{
+                backgroundColor: BRAND_BLUE,
+                boxShadow: `0 0 0 4px #FFFFFF`,
+              }}
+            >
+              ↔ 비교
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* ⑦⑧⑨ 원장님 상담 스크립트 — 1·2·3 차례 등장 + 액션 버튼 */}
+      <div className="min-h-[280px]">
+        <AnimatePresence>
+          {isScriptBoxVisible && (
+            <motion.div
+              key="script-box"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="rounded-xl border p-3.5"
               style={{
                 borderColor: BRAND_BLUE,
                 backgroundColor: "#FFFFFF",
                 boxShadow: `0 4px 14px -4px ${BRAND_BLUE_FAINT}, 0 0 0 1px ${BRAND_BLUE_FAINT}`,
               }}
             >
-              <div className="flex items-center gap-1.5 mb-2">
+              <div className="flex items-center gap-1.5 mb-2.5">
                 <span
                   className="text-[11px] font-bold tracking-wider"
                   style={{ color: BRAND_BLUE }}
                 >
-                  {STAGE3_OPENING.label}
+                  원장님 상담 스크립트
                 </span>
                 <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">
-                  진료 참고용
+                  1·2차 상담 기반
                 </span>
+                {isScriptGenerating && (
+                  <span className="ml-auto flex items-center gap-1.5 text-[10.5px] font-semibold text-slate-500">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span
+                        className="absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping"
+                        style={{ backgroundColor: BRAND_BLUE }}
+                      />
+                      <span
+                        className="relative inline-flex h-1.5 w-1.5 rounded-full"
+                        style={{ backgroundColor: BRAND_BLUE }}
+                      />
+                    </span>
+                    생성 중
+                  </span>
+                )}
               </div>
-              <p className="text-[13px] text-slate-800 leading-[1.7] whitespace-pre-line">
-                {STAGE3_OPENING.body}
-              </p>
+              <div className="space-y-2.5">
+                {STAGE3_SCRIPT_STEPS.map((s, i) => (
+                  <ScriptItem
+                    key={i}
+                    idx={i + 1}
+                    title={s.title}
+                    body={s.body}
+                    visible={isScriptItemVisible(i)}
+                    pending={isScriptGenerating && !isScriptItemVisible(i)}
+                  />
+                ))}
+              </div>
+              <div className="mt-3 pt-3 border-t border-slate-100 min-h-[36px]">
+                <AnimatePresence>
+                  {areButtonsVisible && (
+                    <motion.div
+                      key="buttons"
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.35, ease: "easeOut" }}
+                      className="flex items-center gap-2"
+                    >
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-md text-white"
+                        style={{ backgroundColor: BRAND_BLUE }}
+                      >
+                        <Copy className="w-3 h-3" strokeWidth={2.5} />
+                        스크립트 복사
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-md border text-slate-700 bg-white"
+                        style={{ borderColor: "#CBD5E1" }}
+                      >
+                        <NotebookPen className="w-3 h-3" strokeWidth={2.5} />
+                        진료 메모에 추가
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
     </>
+  );
+}
+
+function ScriptItem({
+  idx,
+  title,
+  body,
+  visible,
+  pending,
+}: {
+  idx: number;
+  title: string;
+  body: string;
+  visible: boolean;
+  pending: boolean;
+}) {
+  return (
+    <div className="flex items-start gap-2.5 min-h-[58px]">
+      <span
+        className="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-[10px] font-bold mt-0.5"
+        style={{
+          backgroundColor: visible ? BRAND_BLUE : "#E2E8F0",
+          color: visible ? "#FFFFFF" : "#94A3B8",
+          transition: "background-color 0.3s, color 0.3s",
+        }}
+      >
+        {idx}
+      </span>
+      <div className="flex-1 min-w-0">
+        <AnimatePresence mode="wait">
+          {visible ? (
+            <motion.div
+              key="content"
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            >
+              <div className="text-[11.5px] font-bold text-slate-900 mb-0.5">
+                {title}
+              </div>
+              <p className="text-[12px] text-slate-700 leading-[1.6] whitespace-pre-line">
+                {body}
+              </p>
+            </motion.div>
+          ) : pending ? (
+            <motion.div
+              key="pending"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="space-y-1.5 pt-1"
+            >
+              <div className="h-2 w-1/3 bg-slate-200 rounded animate-pulse" />
+              <div className="h-2 w-full bg-slate-100 rounded animate-pulse" />
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+      </div>
+    </div>
   );
 }

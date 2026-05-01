@@ -129,12 +129,12 @@ const UPLOADS = [
 ];
 
 const DURATIONS = {
-  step1: 1000,
-  step2: 500,
-  step3: 500,
-  step4: 500,
-  step5: 3000,
-  reset: 500,
+  step1: 1500,
+  step2: 850,
+  step3: 850,
+  step4: 850,
+  step5: 4500,
+  reset: 700,
 } as const;
 
 type Step = 0 | 1 | 2 | 3 | 4 | 5;
