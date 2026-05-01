@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import CopyGuard from "@/components/primitives/CopyGuard";
 
 export const metadata: Metadata = {
   title: "이음 — 상담 어시스턴트",
@@ -35,7 +36,10 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
         />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <CopyGuard />
+        {children}
+      </body>
     </html>
   );
 }
