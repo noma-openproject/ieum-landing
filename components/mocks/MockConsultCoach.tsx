@@ -101,7 +101,7 @@ const PATIENTS: Array<{
 /* ─── 하단 KPI bar — stage별 다른 운영 라인 (right는 optional, stage 1에선 우측 비움) ─── */
 const STAGE_KPI: Record<StageVariant, { left: string; right?: string }> = {
   1: { left: "상담 내용 정리 중 08:23 / 12:45" },
-  2: { left: "현장 정리 03:42", right: "필드 6/6 자동 채움" },
+  2: { left: "내원 상담 준비 완료 03:42", right: "필드 6/6 자동 채움" },
   3: { left: "통합 타임라인 4 이력", right: "강조 포인트 1건" },
 };
 
@@ -519,25 +519,39 @@ const STAGE2_STEPPER: Array<{
 ];
 
 const STAGE2_FIELDS = [
-  { label: "방문 목적", value: "다크서클 + 애교살 라인 정리" },
-  { label: "방문 경로", value: "친구 추천 + 광고 카톡" },
-  { label: "가장 큰 걱정", value: "회복 기간 (5일 안에 출근 복귀)" },
+  { label: "방문 목적", value: "눈 밑 다크서클·애교살 라인 개선" },
+  { label: "방문 경로", value: "지인 추천 후 카카오톡 문의" },
+  { label: "가장 큰 걱정", value: "출근 전까지 붓기와 멍이 빠질지" },
   { label: "예산 범위", value: "200만 원 이내" },
-  { label: "시술 이력", value: "타원 보톡스 1회 (3년 전)" },
-  { label: "결정 우선순위", value: "자연스러움 > 빠른 회복" },
+  { label: "시술 이력", value: "타원 보톡스 1회" },
+  { label: "결정 우선순위", value: "자연스러움 > 회복기간 > 비용" },
 ];
 
 const STAGE2_HANDOVER = {
-  label: "원장님 인계 한 줄 요약",
-  body: "자연스러움과 빠른 회복 두 가지 모두 중요해요. 재배치 추천 시 회복 일정 먼저 안내해 주세요.",
+  label: "원장님 인계 브리핑",
+  body: `자연스러운 변화를 원하고,
+출근 일정 때문에 회복기간에 민감한 환자분입니다.
+상담 시 회복 일정과 유사 케이스를 먼저 설명해주시면 좋습니다.`,
 };
 
 const STAGE2_GUIDE = {
-  label: "현장 상담 가이드",
-  questions: [
-    "회복 5일 안에 가능한 케이스 먼저 안내드릴까요?",
-    "기존 자연스러운 인상 유지 방향이 우선이실까요?",
-    "재배치 vs 지방제거 선택 기준 함께 설명드릴게요.",
+  label: "현장 확인 질문",
+  items: [
+    {
+      title: "Q1. 일정 확인",
+      body: `“회복기간이 가장 걱정되신다고 하셨는데,
+혹시 꼭 피해야 하는 일정이 있으실까요?”`,
+    },
+    {
+      title: "Q2. 기대 결과 확인",
+      body: `“자연스러운 변화를 원하신다고 하셔서,
+지금 가장 원하시는 느낌을 먼저 같이 확인해볼게요.”`,
+    },
+    {
+      title: "Q3. 원장님 상담 전 정리",
+      body: `“회복기간, 예산, 결과 느낌 중
+가장 중요하게 보시는 부분을 먼저 정리해드릴게요.”`,
+    },
   ],
 };
 
@@ -628,7 +642,7 @@ function Stage2Animated() {
             <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
           </span>
-          현장 정리 03:42
+          내원 상담 준비 완료 03:42
         </motion.div>
       </div>
 
@@ -689,7 +703,7 @@ function Stage2Animated() {
           })}
         </div>
 
-        <div className="min-h-[140px]">
+        <div className="min-h-[230px]">
           <AnimatePresence>
             {isGuideVisible && (
               <motion.div
@@ -710,19 +724,18 @@ function Stage2Animated() {
                 >
                   {STAGE2_GUIDE.label}
                 </div>
-                <ul className="space-y-1.5">
-                  {STAGE2_GUIDE.questions.map((q, i) => (
-                    <li
-                      key={i}
-                      className="flex items-start gap-2 text-[12.5px] text-slate-700 leading-snug"
-                    >
-                      <span
-                        className="text-[10px] font-bold mt-0.5 shrink-0"
+                <ul className="space-y-2.5">
+                  {STAGE2_GUIDE.items.map((item, i) => (
+                    <li key={i} className="leading-snug">
+                      <div
+                        className="text-[11.5px] font-bold mb-0.5"
                         style={{ color: BRAND_BLUE }}
                       >
-                        Q{i + 1}.
-                      </span>
-                      <span>{q}</span>
+                        {item.title}
+                      </div>
+                      <p className="text-[12px] text-slate-700 leading-[1.6] whitespace-pre-line">
+                        {item.body}
+                      </p>
                     </li>
                   ))}
                 </ul>
